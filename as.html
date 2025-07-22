@@ -2,9 +2,8 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <!-- Perbaiki viewport agar responsive dan tidak nge-zoom -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Kalkulator Resistansi Konduktor IEC v3</title>
+  <title>Kalkulator Resistansi Konduktor AS/NZS v3</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
   <style>
     :root {
@@ -196,7 +195,13 @@
       margin-bottom: 3px;
       display: block;
     }
-
+    .spek-info {
+      text-align: center;
+      font-size: 0.98rem;
+      color: #1976d2;
+      margin-top: -12px;
+      margin-bottom: 16px;
+    }
     /* --- BUTTONS GRID --- */
     .btn-section {
       margin-top: 32px;
@@ -326,7 +331,7 @@
 </head>
 <body>
   <div class="container-main">
-    <div class="title-main">Kalkulator Resistansi Konduktor IEC</div>
+    <div class="title-main">Kalkulator Resistansi Konduktor AS/NZS v3</div>
     <div class="divider"></div>
 
     <div class="form-row">
@@ -370,11 +375,6 @@
         <label class="form-label" for="luas">Penampang</label>
         <select class="form-input" id="luas">
           <option value="0.5">0,5 mm²</option>
-          <option value="0.75">0,75 mm²</option>
-          <option value="1.0">1,0 mm²</option>
-          <option value="1.5">1,5 mm²</option>
-          <option value="2.5">2,5 mm²</option>
-          <option value="4">4 mm²</option>
           <option value="300">300 mm²</option>
         </select>
       </div>
@@ -388,6 +388,7 @@
       <div id="hasil-nilai"></div>
       <div id="hasil-status"></div>
     </div>
+    <div class="spek-info" id="spekInfo"></div>
 
     <!-- Button Section in Grid Layout -->
     <div class="btn-section" id="btnSection">
@@ -571,21 +572,19 @@
     const hasilEl = document.getElementById("hasil");
     const alatEl = document.getElementById("alat");
     const alatSatuanEl = document.getElementById("alat-satuan");
+    const spekInfoEl = document.getElementById('spekInfo');
 
     let laporanPengujian = [];
 
     const specData = {
       CU: { 
-        "0.5": "36,0", "0.75": "24,5", "1.0": "18,1", "1.5": "12,1", "2.5": "7,41", "4": "4,61",
-        "300": "0.0601"
+        "0.5": "36,0","300": "0.0601"
       },
       AL: { 
-        "0.5": "-", "0.75": "-", "1.0": "-", "1.5": "-", "2.5": "-", "4": "-", 
-        "300": "0.100"
+        "0.5": "-","300": "0.100"
       },
       TCU: { 
-        "0.5": "36,7", "0.75": "24,8", "1.0": "18,2", "1.5": "12,2", "2.5": "7,56", "4": "4,70",
-        "300": "0.0607"
+        "0.5": "36,7","300": "0.0607"
       }
     };
 
@@ -593,26 +592,33 @@
       CU: {
         21: "0,9961",
         21.1: "0.9957",
-        22: "0,9922",
-        23: "0,9883",
-        24: "0,9845",
         25: "0,9807"
       },
       TCU: {
         21: "0,9961",
         21.1: "0.9957",
-        22: "0,9922",
-        23: "0,9883",
-        24: "0,9845",
         25: "0,9807"
       },
       AL: {
         21: "0.9960",
         21.1: "0.9956",
-        22: "0.9920",
-        23: "0.9880",
-        24: "0.9841",
         25: "0.9802"
+      }
+    };
+
+    // Data Spek Single dan Multi Core
+    const spekCoreData = {
+      CU: {
+        "0.5": { single: 5465484, multi: "555" },
+        "300": { single: "oke", multi: 16666 }
+      },
+      AL: {
+        "0.5": { single: 5649626, multi: "-" },
+        "300": { single: "kiyy", multi: 7684526 }
+      },
+      TCU: {
+        "0.5": { single: 764012, multi: "-" },
+        "300": { single: "rokk", multi: 8451323 }
       }
     };
 
@@ -636,6 +642,15 @@
       const luas = getLuasValue();
       spesifikasiEl.value = specData[bahan]?.[luas] || "";
       hitungHasil();
+      updateSpekCoreInfo();
+    }
+
+    function updateSpekCoreInfo() {
+      const bahan = bahanEl.value;
+      const luas = getLuasValue();
+      const data = spekCoreData[bahan]?.[luas] || { single: "-", multi: "-" };
+      let infoText = `Spek. jika Single Core : ${data.single} | Multi Core : ${data.multi}`;
+      spekInfoEl.textContent = infoText;
     }
 
     function updateFaktor() {
@@ -807,6 +822,7 @@
       luasEl.value = "0.5";
       updateSpec();
       updateFaktor();
+      updateSpekCoreInfo();
       alatEl.focus();
       showGreetingHint();
       collapseInfoArea();
