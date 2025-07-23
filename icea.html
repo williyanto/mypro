@@ -2,9 +2,8 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <!-- Perbaikan viewport agar fit di semua device -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Kalkulator Resistansi Konduktor ICEA v9</title>
+  <title>Kalkulator Resistansi Konduktor ICEA v10</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
   <style>
     :root {
@@ -38,7 +37,7 @@
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      padding: 0; /* Atasi zoom berlebih pada mobile */
+      padding: 0;
       font-family: 'Inter', sans-serif;
       background: var(--bg-color);
       color: var(--text-color);
@@ -47,7 +46,6 @@
       justify-content: center;
       min-height: 100vh;
       width: 100vw;
-      /* Hilangkan overflow agar tidak scroll horizontal */
       overflow-x: hidden;
     }
     .container-main {
@@ -59,7 +57,7 @@
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
       border: 1px solid var(--border-color);
       position: relative;
-      margin: 0 auto; /* Selalu fit tengah */
+      margin: 0 auto;
     }
     .title-main {
       text-align: center;
@@ -282,10 +280,15 @@
       background: var(--divider);
       margin-bottom: 12px;
     }
+    /* Tambahkan padding kanan kiri pada layar mobile */
     @media (max-width: 600px) {
+      body {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
       .container-main {
-        padding: 16px 4px;
-        border-radius: 0;
+        padding: 16px 8px;
+        border-radius: 10px;
         max-width: 100vw;
       }
     }
@@ -323,7 +326,7 @@
 </head>
 <body>
   <div class="container-main">
-    <div class="title-main">Kalkulator Resistansi Konduktor ICEA v9</div>
+    <div class="title-main">Kalkulator Resistansi Konduktor ICEA v10</div>
     <div class="divider"></div>
 
     <div class="form-row">
