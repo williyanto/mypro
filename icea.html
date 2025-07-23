@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Kalkulator Resistansi Konduktor ICEA v10</title>
+  <title>Kalkulator Resistansi Konduktor ICEA v7</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
   <style>
     :root {
@@ -299,11 +299,12 @@
       background: var(--divider);
       margin-bottom: 12px;
     }
+    /* Removed fixed unit span, now it's dynamically inserted */
     #hasil-nilai {
-        display: flex; /* Menggunakan flexbox untuk mensejajarkan teks dan satuan */
-        justify-content: center; /* Pusatkan konten horizontal */
-        align-items: baseline; /* Sejajarkan berdasarkan baseline teks */
-        gap: 5px; /* Jarak antara angka dan satuan */
+        display: flex;
+        justify-content: center;
+        align-items: baseline;
+        gap: 5px;
     }
 
 
@@ -348,7 +349,7 @@
 </head>
 <body>
   <div class="container-main">
-    <div class="title-main">Kalkulator Resistansi Konduktor ICEA v10</div>
+    <div class="title-main">Kalkulator Resistansi Konduktor ICEA v7</div>
     <div class="divider"></div>
 
     <div class="form-row">
@@ -359,14 +360,14 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="form-label" for="panjang">Panjang</label>
+        <label class="form-label" for="panjang">Panjang (Feet)</label>
         <input type="text" class="form-input" id="panjang" inputmode="decimal" pattern="[0-9]*" placeholder="dalam satuan feet" />
       </div>
     </div>
 
     <div class="form-row">
       <div class="form-group">
-        <label class="form-label" for="suhu">Suhu</label>
+        <label class="form-label" for="suhu">Suhu (°C)</label>
         <input type="text" class="form-input" id="suhu" inputmode="decimal" pattern="[0-9]*" placeholder="dalam °C" />
       </div>
       <div class="form-group">
@@ -400,7 +401,6 @@
     <div class="result-box" id="hasil">
       <div id="hasil-nilai">
         <span id="nilai-utama"></span>
-        <span style="color:var(--text-color);">Ω/kft</span>
       </div>
       <div id="hasil-status"></div>
     </div>
@@ -688,6 +688,8 @@
       nilaiUtamaEl.textContent = ""; // Kosongkan nilai utama
       hasilEl.style.color = "inherit";
       specTabelDisplay.textContent = ""; // Kosongkan juga ini
+      // Hide the unit when inputs are not complete
+      hasilNilai.innerHTML = `<span id="nilai-utama"></span><span id="unit-text"></span>`;
     }
 
     function hitungHasil() {
@@ -703,12 +705,16 @@
 
       if (!isInputLengkap()) {
         showGreetingHint();
+        // Hide the unit when inputs are not complete
+        hasilNilai.innerHTML = `<span id="nilai-utama"></span><span style="color:var(--text-color);" id="unit-text"></span>`;
         return;
       }
 
       if (!isNaN(alatNumber) && !isNaN(panjang) && !isNaN(faktor) && panjang !== 0) {
         const hasil = (alatNumber / panjang) * faktor;
         nilaiUtamaEl.textContent = hasil.toFixed(5); // Hanya nilai numerik di sini
+        // Display the unit when there's a valid result
+        hasilNilai.innerHTML = `<span id="nilai-utama">${hasil.toFixed(5)}</span> <span style="color:var(--text-color);">Ω/kft</span>`;
 
         if (!isNaN(spec)) {
           if (hasil < spec) {
@@ -727,6 +733,8 @@
         }
       } else {
         showGreetingHint();
+        // Hide the unit when calculation is not possible
+        hasilNilai.innerHTML = `<span id="nilai-utama"></span><span style="color:var(--text-color);" id="unit-text"></span>`;
       }
     }
 
