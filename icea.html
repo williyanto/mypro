@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Kalkulator Resistansi Konduktor ICEA v5</title>
+  <title>Kalkulator Resistansi Konduktor ICEA v6</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
   <style>
     :root {
@@ -195,6 +195,17 @@
       margin-bottom: 3px;
       display: block;
     }
+    .green-text { /* CSS untuk teks hijau */
+        color: green;
+        font-weight: 600;
+    }
+    #spec-tabel-display {
+        font-size: 0.88rem;
+        margin-top: 10px; /* Margin atas untuk memisahkan dari result-box */
+        color: var(--text-color);
+        text-align: left; /* Rata kiri */
+        font-weight: normal; /* Tidak tebal */
+    }
 
     /* --- BUTTONS GRID --- */
     .btn-section {
@@ -325,7 +336,7 @@
 </head>
 <body>
   <div class="container-main">
-    <div class="title-main">Kalkulator Resistansi Konduktor ICEA v5</div>
+    <div class="title-main">Kalkulator Resistansi Konduktor ICEA v6</div>
     <div class="divider"></div>
 
     <div class="form-row">
@@ -336,7 +347,7 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="form-label" for="panjang">Panjang (Meter)</label>
+        <label class="form-label" for="panjang">Panjang (Feet)</label>
         <input type="text" class="form-input" id="panjang" inputmode="decimal" pattern="[0-9]*" />
       </div>
     </div>
@@ -378,6 +389,8 @@
       <div id="hasil-nilai"></div>
       <div id="hasil-status"></div>
     </div>
+
+    <div id="spec-tabel-display"></div> 
 
     <div class="btn-section" id="btnSection">
       <div class="btn-row1">
@@ -559,9 +572,11 @@
     const hasilStatus = document.getElementById("hasil-status");
     const hasilEl = document.getElementById("hasil");
     const alatEl = document.getElementById("alat");
+    const specTabelDisplay = document.getElementById("spec-tabel-display");
 
     let laporanPengujian = [];
 
+    // Data spesifikasi untuk perbandingan perhitungan (tidak berubah)
     const specData = {
       CU: { 
         "4/0AWG": "0.05202",
@@ -573,6 +588,20 @@
         "250KCMIL": "0.07211",
         "750KCMIL": "0.02407" 
       }
+    };
+
+    // Data spesifikasi untuk tampilan "Spek sesuai tabel" (baru)
+    const tabelSpecData = {
+      CU: {
+        "4/0AWG": "0,0510",
+        "250KCMIL": "0,0431",
+        "750KCMIL": "0,0144",
+      },
+      AL: {
+        "4/0AWG": "0,0836",
+        "250KCMIL": "0,0707",
+        "750KCMIL": "0,0236",
+      },
     };
 
     const suhuData = {
@@ -641,6 +670,7 @@
       }
       hasilNilai.textContent = "";
       hasilEl.style.color = "inherit";
+      specTabelDisplay.textContent = ""; // Kosongkan juga ini
     }
 
     function hitungHasil() {
@@ -652,13 +682,14 @@
       const specRaw = specData[bahan]?.[luas]?.replace(",", ".");
       const spec = parseFloat(specRaw);
 
+      updateTabelSpecDisplay(); // Panggil ini untuk memperbarui teks spec sesuai tabel
+
       if (!isInputLengkap()) {
         showGreetingHint();
         return;
       }
 
       if (!isNaN(alatNumber) && !isNaN(panjang) && !isNaN(faktor) && panjang !== 0) {
-        // RUMUS BARU: (Pembacaan Alat / Panjang) * Faktor Koreksi Suhu
         const hasil = (alatNumber / panjang) * faktor;
         hasilNilai.textContent = hasil.toFixed(5); 
 
@@ -682,6 +713,20 @@
       }
     }
 
+    function updateTabelSpecDisplay() {
+      const bahan = bahanEl.value;
+      const luasValue = getLuasValue(); // e.g., "4/0AWG"
+      
+      const specFromTable = tabelSpecData[bahan]?.[luasValue];
+
+      if (specFromTable) {
+        specTabelDisplay.innerHTML = `Spek sesuai tabel : <span class="green-text">${luasEl.options[luasEl.selectedIndex].text} adalah ${specFromTable}</span>`;
+      } else {
+        specTabelDisplay.textContent = "Spek sesuai tabel : N/A";
+      }
+    }
+
+
     function simpanPengujian() {
       const alat = alatEl.value || "-";
       const alatSatuan = "mΩ (diasumsikan)"; 
@@ -693,11 +738,13 @@
       const spesifikasi = spesifikasiEl.value || "-";
       const hasil = hasilNilai.textContent || "-"; 
       const status = hasilStatus.textContent || "-";
+      const specTabel = specTabelDisplay.textContent || "-"; // Ambil teks dari elemen baru
+
       const now = new Date();
       const jamPengujian = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
       const tanggalPengujian = now.toLocaleDateString('id-ID');
       laporanPengujian.push({
-        alat, alatSatuan, panjang, suhu, faktor, bahan, luas, spesifikasi, hasil, status,
+        alat, alatSatuan, panjang, suhu, faktor, bahan, luas, spesifikasi, hasil, status, specTabel,
         tanggal: tanggalPengujian,
         jam: jamPengujian
       });
@@ -709,10 +756,14 @@
     bahanEl.addEventListener('change', () => {
       updateSpec();
       updateFaktor(); 
+      updateTabelSpecDisplay(); // Panggil juga untuk perubahan bahan
     });
-    luasEl.addEventListener('change', updateSpec);
+    luasEl.addEventListener('change', () => {
+        updateSpec();
+        updateTabelSpecDisplay(); // Panggil juga untuk perubahan luas
+    });
     suhuEl.addEventListener('input', updateFaktor);
-    document.getElementById("panjang").addEventListener("input", hitungHasil); // Mengembalikan pemicu hitungHasil
+    document.getElementById("panjang").addEventListener("input", hitungHasil); 
 
     document.getElementById("btn-laporan").addEventListener("click", () => {
       if (laporanPengujian.length === 0) {
@@ -729,13 +780,14 @@
         isiLaporan += `Jam   : ${uji.jam}\n\n`;
         isiLaporan += `Input:\n`;
         isiLaporan += `- Pembacaan Alat: ${uji.alat} ${uji.alatSatuan}\n`;
-        isiLaporan += `- Panjang (Meter): ${uji.panjang}\n`;
+        isiLaporan += `- Panjang (Feet): ${uji.panjang}\n`; 
         isiLaporan += `- Suhu (°C): ${uji.suhu}\n`;
         isiLaporan += `- Faktor Koreksi Suhu: ${uji.faktor}\n\n`;
         isiLaporan += `Data Konduktor:\n`;
         isiLaporan += `- Jenis Konduktor: ${uji.bahan}\n`;
         isiLaporan += `- Penampang: ${uji.luas}\n`;
-        isiLaporan += `- Spesifikasi Standar: ${uji.spesifikasi}\n\n`;
+        isiLaporan += `- Spesifikasi Standar: ${uji.spesifikasi}\n`;
+        isiLaporan += `- Spek sesuai tabel: ${uji.specTabel}\n\n`; // Tambahan di laporan
         isiLaporan += `Hasil Perhitungan:\n`;
         isiLaporan += `- Resistansi: ${uji.hasil} Ω/km\n`; 
         isiLaporan += `- Status Pengujian: ${uji.status}\n\n`;
@@ -770,8 +822,9 @@
       suhuEl.value = "30"; 
       updateSpec();
       updateFaktor();
+      updateTabelSpecDisplay(); // Panggil ini saat DOMContentLoaded
       alatEl.focus();
-      hitungHasil(); // Panggil hitungHasil saat halaman dimuat pertama kali
+      hitungHasil();
     });
   </script>
 </body>
