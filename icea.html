@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Kalkulator Resistansi Konduktor ICEA v5</title>
+  <title>Kalkulator Resistansi Konduktor ICEA v9</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
   <style>
     :root {
@@ -294,6 +294,13 @@
       background: var(--divider);
       margin-bottom: 12px;
     }
+    #hasil-nilai {
+        display: flex; /* Menggunakan flexbox untuk mensejajarkan teks dan satuan */
+        justify-content: center; /* Pusatkan konten horizontal */
+        align-items: baseline; /* Sejajarkan berdasarkan baseline teks */
+        gap: 5px; /* Jarak antara angka dan satuan */
+    }
+
 
     @media (max-width: 480px) {
       .container-main {
@@ -336,7 +343,7 @@
 </head>
 <body>
   <div class="container-main">
-    <div class="title-main">Kalkulator Resistansi Konduktor ICEA v5</div>
+    <div class="title-main">Kalkulator Resistansi Konduktor ICEA v9</div>
     <div class="divider"></div>
 
     <div class="form-row">
@@ -386,7 +393,10 @@
     </div>
 
     <div class="result-box" id="hasil">
-      <div id="hasil-nilai"></div>
+      <div id="hasil-nilai">
+        <span id="nilai-utama"></span>
+        <span style="color:var(--text-color);">Ω/kft</span>
+      </div>
       <div id="hasil-status"></div>
     </div>
 
@@ -569,6 +579,7 @@
     const suhuEl = document.getElementById('suhu');
     const faktorEl = document.getElementById('faktor');
     const hasilNilai = document.getElementById("hasil-nilai");
+    const nilaiUtamaEl = document.getElementById("nilai-utama"); // Elemen baru untuk nilai numerik
     const hasilStatus = document.getElementById("hasil-status");
     const hasilEl = document.getElementById("hasil");
     const alatEl = document.getElementById("alat");
@@ -668,7 +679,7 @@
       } else {
         hasilStatus.innerHTML = `<span class="hint-green">Mohon lengkapi data, untuk memulai aplikasi ini.</span>`;
       }
-      hasilNilai.textContent = "";
+      nilaiUtamaEl.textContent = ""; // Kosongkan nilai utama
       hasilEl.style.color = "inherit";
       specTabelDisplay.textContent = ""; // Kosongkan juga ini
     }
@@ -691,7 +702,7 @@
 
       if (!isNaN(alatNumber) && !isNaN(panjang) && !isNaN(faktor) && panjang !== 0) {
         const hasil = (alatNumber / panjang) * faktor;
-        hasilNilai.textContent = hasil.toFixed(5); 
+        nilaiUtamaEl.textContent = hasil.toFixed(5); // Hanya nilai numerik di sini
 
         if (!isNaN(spec)) {
           if (hasil < spec) {
@@ -736,7 +747,7 @@
       const bahan = bahanEl.options[bahanEl.selectedIndex].text || "-";
       const luas = luasEl.options[luasEl.selectedIndex].text || "-";
       const spesifikasi = spesifikasiEl.value || "-";
-      const hasil = hasilNilai.textContent || "-"; 
+      const hasil = nilaiUtamaEl.textContent || "-"; // Ambil nilai numerik saja
       const status = hasilStatus.textContent || "-";
       const specTabel = specTabelDisplay.textContent || "-"; // Ambil teks dari elemen baru
 
@@ -744,7 +755,7 @@
       const jamPengujian = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
       const tanggalPengujian = now.toLocaleDateString('id-ID');
       laporanPengujian.push({
-        alat, alatSatuan, panjang, suhu, faktor, bahan, luas, spesifikasi, hasil, status, specTabel,
+        alat, alatSatuan, panjang, suhu, faktor, bahan, luas, spesifikasi, hasil: hasil + " Ω/kft", status, specTabel, // Tambahkan satuan di sini
         tanggal: tanggalPengujian,
         jam: jamPengujian
       });
@@ -789,7 +800,7 @@
         isiLaporan += `- Spesifikasi Standar: ${uji.spesifikasi}\n`;
         isiLaporan += `- Spek sesuai tabel: ${uji.specTabel}\n\n`; // Tambahan di laporan
         isiLaporan += `Hasil Perhitungan:\n`;
-        isiLaporan += `- Resistansi: ${uji.hasil} Ω/km\n`; 
+        isiLaporan += `- Resistansi: ${uji.hasil}\n`; // Di sini sudah ada satuan dari simpanPengujian()
         isiLaporan += `- Status Pengujian: ${uji.status}\n\n`;
       });
 
