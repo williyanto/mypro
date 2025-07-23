@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Kalkulator Resistansi Konduktor IEC v5</title>
+  <title>Kalkulator Resistansi Konduktor IEC v6</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
   <style>
     :root {
@@ -348,7 +348,7 @@
 </head>
 <body>
   <div class="container-main">
-    <div class="title-main">Kalkulator Resistansi Konduktor IEC v5</div>
+    <div class="title-main">Kalkulator Resistansi Konduktor IEC v6</div>
     <div class="divider"></div>
 
     <div class="form-row">
@@ -381,7 +381,7 @@
         <select class="form-input" id="bahan">
           <option value="CU">CU</option>
           <option value="AL">AL</option>
-        </select>
+          <option value="TCU">TCU</option> </select>
       </div>
       <div class="form-group">
         <label class="form-label" for="luas">Penampang</label>
@@ -404,8 +404,7 @@
     <div class="result-box" id="hasil">
       <div id="hasil-nilai">
         <span id="nilai-utama"></span>
-        <span style="color:var(--text-color);">Ω/km</span>
-      </div>
+        <span id="unit-ohm-km" style="color:var(--text-color); display: none;">Ω/km</span> </div>
       <div id="hasil-status"></div>
     </div>
 
@@ -588,7 +587,8 @@
     const suhuEl = document.getElementById('suhu');
     const faktorEl = document.getElementById('faktor');
     const hasilNilai = document.getElementById("hasil-nilai");
-    const nilaiUtamaEl = document.getElementById("nilai-utama"); // Elemen baru untuk nilai numerik
+    const nilaiUtamaEl = document.getElementById("nilai-utama"); 
+    const unitOhmKmEl = document.getElementById("unit-ohm-km"); // Ditambahkan: Elemen untuk unit
     const hasilStatus = document.getElementById("hasil-status");
     const hasilEl = document.getElementById("hasil");
     const alatEl = document.getElementById("alat");
@@ -599,12 +599,21 @@
     // Data spesifikasi untuk perbandingan perhitungan (tidak berubah)
     const specData = {
       CU: { 
-        "0.5": "36,0", "0.75": "24,5", "1.0": "18,1", "1.5": "12,1", "2.5": "7,41", "4": "4,61",
+        "0.5": "36.0", "0.75": "24.5", "1.0": "18.1", "1.5": "12.1", "2.5": "7.41", "4": "4.61",
         "300": "0.0601"
       },
       AL: { 
         "0.5": "-", "0.75": "-", "1.0": "-", "1.5": "-", "2.5": "-", "4": "-", 
         "300": "0.100"
+      },
+      TCU: { // Ditambahkan: Data spec max untuk TCU
+        "0.5": "36.7",
+        "0.75": "24.8",
+        "1.0": "18.2",
+        "1.5": "12.2",
+        "2.5": "7.56",
+        "4": "4.70",
+        "300": "0.0607" 
       }
     };
 
@@ -620,16 +629,25 @@
         "0.75": "5",
         "1.0": "6",
       },
+      TCU: { // Contoh data untuk TCU
+        "0.5": "TCU 0.5 ND",
+        "0.75": "TCU 0.75 ND",
+        "1.0": "TCU 1.0 ND",
+        "1.5": "TCU 1.5 ND",
+        "2.5": "TCU 2.5 ND",
+        "4": "TCU 4 ND",
+        "300": "TCU 300 ND",
+      }
     };
 
     const suhuData = {
       CU: {
-        21: "0,9961",
+        21: "0.9961",
         21.1: "0.9957",
-        22: "0,9922",
-        23: "0,9883",
-        24: "0,9845",
-        25: "0,9807"
+        22: "0.9922",
+        23: "0.9883",
+        24: "0.9845",
+        25: "0.9807"
       },
       AL: {
         21: "0.9960",
@@ -638,6 +656,14 @@
         23: "0.9880",
         24: "0.9841",
         25: "0.9802"
+      },
+      TCU: { // Contoh data untuk TCU (diasumsikan sama dengan CU untuk demo ini)
+        21: "0.9961", 
+        21.1: "0.9957",
+        22: "0.9922",
+        23: "0.9883",
+        24: "0.9845",
+        25: "0.9807"
       }
     };
 
@@ -659,8 +685,8 @@
     function updateSpec() {
       const bahan = bahanEl.value;
       const luas = getLuasValue();
-      spesifikasiEl.value = specData[bahan]?.[luas]?.replace(".", ",") || ""; // Display with comma for UI
-      hitungHasil(); // Panggil hitungHasil setelah update spec
+      spesifikasiEl.value = specData[bahan]?.[luas]?.replace(".", ",") || ""; 
+      hitungHasil(); 
     }
 
     function updateFaktor() {
@@ -676,11 +702,10 @@
         }
       }
       faktorEl.value = faktor.replace(".", ","); 
-      hitungHasil(); // Panggil hitungHasil setelah update faktor
+      hitungHasil(); 
     }
 
     function isInputLengkap() {
-      // Periksa apakah semua input yang dibutuhkan sudah terisi
       return alatEl.value.trim() !== "" &&
         document.getElementById("panjang").value.trim() !== "" &&
         suhuEl.value.trim() !== "" &&
@@ -695,9 +720,10 @@
       } else {
         hasilStatus.innerHTML = `<span class="hint-green">Mohon lengkapi data, untuk memulai aplikasi ini.</span>`;
       }
-      nilaiUtamaEl.textContent = ""; // Kosongkan nilai utama
+      nilaiUtamaEl.textContent = ""; 
+      unitOhmKmEl.style.display = "none"; // Sembunyikan unit saat menampilkan hint
       hasilEl.style.color = "inherit";
-      specTabelDisplay.textContent = ""; // Kosongkan juga ini
+      specTabelDisplay.textContent = ""; 
     }
 
     function hitungHasil() {
@@ -709,7 +735,7 @@
       const specRaw = specData[bahan]?.[luas]?.replace(",", ".");
       const spec = parseFloat(specRaw);
 
-      updateTabelSpecDisplay(); // Panggil ini untuk memperbarui teks spec sesuai tabel
+      updateTabelSpecDisplay(); 
 
       if (!isInputLengkap()) {
         showGreetingHint();
@@ -718,7 +744,8 @@
 
       if (!isNaN(alatNumber) && !isNaN(panjang) && !isNaN(faktor) && panjang !== 0) {
         const hasil = (alatNumber / panjang) * faktor;
-        nilaiUtamaEl.textContent = hasil.toFixed(5); // Hanya nilai numerik di sini
+        nilaiUtamaEl.textContent = hasil.toFixed(5); 
+        unitOhmKmEl.style.display = "inline"; // Tampilkan unit jika perhitungan berhasil
 
         if (!isNaN(spec)) {
           if (hasil < spec) {
@@ -737,12 +764,13 @@
         }
       } else {
         showGreetingHint();
+        unitOhmKmEl.style.display = "none"; // Sembunyikan unit jika ada masalah input
       }
     }
 
     function updateTabelSpecDisplay() {
       const bahan = bahanEl.value;
-      const luasValue = getLuasValue(); // e.g., "0.5"
+      const luasValue = getLuasValue(); 
       
       const specFromTable = tabelSpecData[bahan]?.[luasValue];
 
@@ -763,15 +791,15 @@
       const bahan = bahanEl.options[bahanEl.selectedIndex].text || "-";
       const luas = luasEl.options[luasEl.selectedIndex].text || "-";
       const spesifikasi = spesifikasiEl.value || "-";
-      const hasil = nilaiUtamaEl.textContent || "-"; // Ambil nilai numerik saja
+      const hasil = nilaiUtamaEl.textContent || "-"; 
       const status = hasilStatus.textContent || "-";
-      const specTabel = specTabelDisplay.textContent || "-"; // Ambil teks dari elemen baru
+      const specTabel = specTabelDisplay.textContent || "-"; 
 
       const now = new Date();
       const jamPengujian = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
       const tanggalPengujian = now.toLocaleDateString('id-ID');
       laporanPengujian.push({
-        alat, alatSatuan, panjang, suhu, faktor, bahan, luas, spesifikasi, hasil: hasil + " Ω/kft", status, specTabel, // Tambahkan satuan di sini
+        alat, alatSatuan, panjang, suhu, faktor, bahan, luas, spesifikasi, hasil: hasil + " Ω/km", status, specTabel, 
         tanggal: tanggalPengujian,
         jam: jamPengujian
       });
@@ -783,11 +811,11 @@
     bahanEl.addEventListener('change', () => {
       updateSpec();
       updateFaktor(); 
-      updateTabelSpecDisplay(); // Panggil juga untuk perubahan bahan
+      updateTabelSpecDisplay(); 
     });
     luasEl.addEventListener('change', () => {
         updateSpec();
-        updateTabelSpecDisplay(); // Panggil juga untuk perubahan luas
+        updateTabelSpecDisplay(); 
     });
     suhuEl.addEventListener('input', updateFaktor);
     document.getElementById("panjang").addEventListener("input", hitungHasil); 
@@ -814,9 +842,9 @@
         isiLaporan += `- Jenis Konduktor: ${uji.bahan}\n`;
         isiLaporan += `- Penampang: ${uji.luas}\n`;
         isiLaporan += `- Spesifikasi Standar: ${uji.spesifikasi}\n`;
-        isiLaporan += `- Spek sesuai tabel: ${uji.specTabel}\n\n`; // Tambahan di laporan
+        isiLaporan += `- Spek sesuai tabel: ${uji.specTabel}\n\n`; 
         isiLaporan += `Hasil Perhitungan:\n`;
-        isiLaporan += `- Resistansi: ${uji.hasil}\n`; // Di sini sudah ada satuan dari simpanPengujian()
+        isiLaporan += `- Resistansi: ${uji.hasil}\n`; 
         isiLaporan += `- Status Pengujian: ${uji.status}\n\n`;
       });
 
@@ -844,18 +872,15 @@
     });
 
     window.addEventListener('DOMContentLoaded', () => {
-      // Set nilai default saat halaman dimuat
       bahanEl.value = "CU"; 
       luasEl.value = "0.5"; 
-      // suhuEl.value = "30"; // Baris ini dihapus agar suhu tidak terisi otomatis
       
-      // Panggil fungsi update untuk menampilkan data default
       updateSpec();
       updateFaktor();
       updateTabelSpecDisplay(); 
       
-      alatEl.focus(); // Ini yang mengarahkan kursor ke kolom Pembacaan Alat
-      hitungHasil(); // Hitung hasil awal jika semua input default sudah ada
+      alatEl.focus(); 
+      hitungHasil(); 
     });
   </script>
 </body>
