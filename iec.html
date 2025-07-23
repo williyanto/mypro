@@ -2,8 +2,8 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Kalkulator Resistansi Konduktor ICEA v12</title>
+  <meta name="viewport" content="width=480, initial-scale=1.0"/>
+  <title>Kalkulator Resistansi Konduktor ICEA</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
   <style>
     :root {
@@ -37,14 +37,14 @@
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      padding: 0;
+      padding: 16px;
       font-family: 'Inter', sans-serif;
       background: var(--bg-color);
       color: var(--text-color);
-      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
+      min-height: 100vh;
     }
     .container-main {
       background: var(--input-bg);
@@ -55,10 +55,6 @@
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
       border: 1px solid var(--border-color);
       position: relative;
-      margin: auto;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
     }
     .title-main {
       text-align: center;
@@ -281,12 +277,7 @@
       background: var(--divider);
       margin-bottom: 12px;
     }
-    @media (max-width: 480px) {
-      .container-main {
-        max-width: 99vw;
-        padding: 20px 4vw;
-        border-radius: 8px;
-      }
+    @media (max-width: 460px) {
       .form-row { flex-direction: row !important; gap: 12px !important; flex-wrap: nowrap !important; }
       .btn-section { gap: 9px; }
       .btn-row1, .btn-row2, .btn-row3 { gap: 9px; flex-wrap: wrap; justify-content: center !important; }
@@ -297,7 +288,6 @@
       .info-area { padding: 10px 7px 10px 8px; }
       .info-area.compact { min-width: 28px; }
       .info-area-gap { height: 16px; }
-      .title-main { font-size: 1.1rem; }
     }
     @media print {
       body {
@@ -321,8 +311,9 @@
 </head>
 <body>
   <div class="container-main">
-    <div class="title-main">Kalkulator Resistansi Konduktor ICEA v12</div>
+    <div class="title-main">Kalkulator Resistansi Konduktor ICEA</div>
     <div class="divider"></div>
+
     <div class="form-row">
       <div class="form-group">
         <label class="form-label" for="alat">Pembacaan Alat (Ω)</label>
@@ -333,6 +324,7 @@
         <input type="text" class="form-input" id="panjang" inputmode="decimal" pattern="[0-9]*" />
       </div>
     </div>
+
     <div class="form-row">
       <div class="form-group">
         <label class="form-label" for="suhu">Suhu (°C)</label>
@@ -343,6 +335,7 @@
         <input type="text" class="form-input" id="faktor" readonly />
       </div>
     </div>
+
     <div class="form-row">
       <div class="form-group">
         <label class="form-label" for="bahan">Konduktor</label>
@@ -354,8 +347,8 @@
       <div class="form-group">
         <label class="form-label" for="luas">Penampang</label>
         <select class="form-input" id="luas">
-          <option value="8">8 AWG</option>
-          <option value="3000">3000 KCMIL</option>
+    <option value="8">8 AWG</option>
+    <option value="3000">3000 KCMIL</option>
         </select>
       </div>
       <div class="form-group">
@@ -363,10 +356,13 @@
         <input type="text" class="form-input" id="spesifikasi" readonly />
       </div>
     </div>
+
     <div class="result-box" id="hasil">
       <div id="hasil-nilai"></div>
       <div id="hasil-status"></div>
     </div>
+    <div id="hasil-spek-tabel" style="font-style:italic; margin-top:6px;"></div>
+
     <div class="btn-section" id="btnSection">
       <div class="btn-row1">
         <button class="main-btn" id="btn-iec">Spek. IEC</button>
@@ -395,6 +391,7 @@
     <div id="infoAreaExpandedContainer"></div>
     <div class="footer-main">Made by Williyanto Adi 2025</div>
   </div>
+
   <script>
     function onlyNumberInput(el) {
       el.addEventListener('input', function() {
@@ -507,7 +504,7 @@
     });
     setThemeIcon(document.body.classList.contains('dark'));
 
-    // Kalkulasi & Data ICEA v11
+    // Data & Kalkulasi
     const bahanEl = document.getElementById('bahan');
     const luasEl = document.getElementById('luas');
     const spesifikasiEl = document.getElementById('spesifikasi');
@@ -517,33 +514,46 @@
     const hasilStatus = document.getElementById("hasil-status");
     const hasilEl = document.getElementById("hasil");
     const alatEl = document.getElementById("alat");
+
     let laporanPengujian = [];
 
-    // Data ICEA v11
+    // Data spek untuk hasil uji
     const specData = {
       CU: {
-        "8": "0,66504",
-        "3000": "0,00370"
+  "8": "0,66504",
+  "3000": "0,00370"
       },
       AL: {
-        "8": "1,09140",
-        "3000": "0,00608"
+  "8": "1,09140",
+  "3000": "0,00608"
+      }
+    };
+    // Data spek sesuai tabel permintaan user
+    const spekTabelData = {
+      CU: {
+  "8": "0,66504",
+  "3000": "0,00370"
+      },
+      AL: {
+    "8": "1,09140",
+    "3000": "0,00608"
       }
     };
     const suhuData = {
       CU: {
-        "0": "1.107",
-        "40": "0.944"
+    "0": "1.107",
+    "40": "0.944"
       },
       AL: {
-        "0": "1.110",
-        "40": "0.944"
+    "0": "1.110",
+    "40": "0.944"
       }
     };
 
     function getLuasValue() {
       return luasEl.options[luasEl.selectedIndex].value;
     }
+
     function getGreeting(now) {
       const jam = now.getHours();
       const menit = now.getMinutes();
@@ -554,12 +564,14 @@
       if (totalMenit >= 1080 && totalMenit <= 1439) return "Selamat Malam,";
       return "";
     }
+
     function updateSpec() {
       const bahan = bahanEl.value;
       const luas = getLuasValue();
       spesifikasiEl.value = specData[bahan]?.[luas] || "";
       hitungHasil();
     }
+
     function updateFaktor() {
       const bahan = bahanEl.value;
       const suhuValue = suhuEl.value.replace(",", ".").trim();
@@ -577,12 +589,14 @@
       faktorEl.value = faktor;
       hitungHasil();
     }
+
     function isInputLengkap() {
       return alatEl.value.trim() !== "" &&
         document.getElementById("panjang").value.trim() !== "" &&
         suhuEl.value.trim() !== "" &&
         faktorEl.value.trim() !== "";
     }
+
     function showGreetingHint() {
       const now = new Date();
       const greeting = getGreeting(now);
@@ -594,6 +608,8 @@
       hasilNilai.textContent = "";
       hasilEl.style.color = "inherit";
     }
+
+    // LOGIKA REVISI: hasil = pembacaan alat / panjang * faktor koreksi suhu
     function hitungHasil() {
       let alatValue = alatEl.value.replace(",", ".");
       let alatNumber = parseFloat(alatValue);
@@ -611,6 +627,7 @@
       if (!isNaN(alatNumber) && !isNaN(panjang) && !isNaN(faktor) && panjang !== 0) {
         const hasil = alatNumber / panjang * faktor;
         hasilNilai.textContent = hasil.toFixed(5) + " Ω/feet";
+
         if (!isNaN(spec)) {
           if (hasil < spec) {
             hasilEl.style.color = "green";
@@ -630,6 +647,19 @@
         showGreetingHint();
       }
     }
+
+    function updateSpekTabel() {
+      const bahan = bahanEl.value;
+      const luas = getLuasValue();
+      const spekTabel = spekTabelData[bahan]?.[luas];
+      const hasilSpekTabel = document.getElementById("hasil-spek-tabel");
+      if (spekTabel) {
+        hasilSpekTabel.textContent = `Spek sesuai tabel : ${spekTabel} Ω/feet`;
+      } else {
+        hasilSpekTabel.textContent = "";
+      }
+    }
+
     function simpanPengujian() {
       const alat = alatEl.value || "-";
       const panjang = document.getElementById("panjang").value || "-";
@@ -650,15 +680,22 @@
       });
       alert("Pengujian berhasil disimpan ke laporan!");
     }
+
     document.getElementById("btn-simpan").addEventListener("click", simpanPengujian);
+
     bahanEl.addEventListener('change', () => {
       updateSpec();
       updateFaktor();
+      updateSpekTabel();
     });
-    luasEl.addEventListener('change', updateSpec);
+    luasEl.addEventListener('change', () => {
+      updateSpec();
+      updateSpekTabel();
+    });
     suhuEl.addEventListener('input', updateFaktor);
     alatEl.addEventListener("input", hitungHasil);
     document.getElementById("panjang").addEventListener("input", hitungHasil);
+
     document.getElementById("btn-laporan").addEventListener("click", () => {
       if (laporanPengujian.length === 0) {
         alert("Belum ada pengujian yang disimpan dalam laporan.");
@@ -666,6 +703,7 @@
       }
       let isiLaporan = `Laporan Perhitungan Resistansi Konduktor\n`;
       isiLaporan += `Total Pengujian: ${laporanPengujian.length}\n\n`;
+
       laporanPengujian.forEach((uji, idx) => {
         isiLaporan += `--- Pengujian ke-${idx+1} ---\n`;
         isiLaporan += `Tanggal: ${uji.tanggal}\n`;
@@ -683,6 +721,7 @@
         isiLaporan += `- Resistansi (Ω/feet): ${uji.hasil}\n`;
         isiLaporan += `- Status Pengujian: ${uji.status}\n\n`;
       });
+
       const blob = new Blob([isiLaporan], {type: "text/plain"});
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
@@ -692,6 +731,7 @@
       document.body.removeChild(link);
       URL.revokeObjectURL(link.href);
     });
+
     document.getElementById("btn-iec").addEventListener("click", function() {
       window.location.href = "https://google.com";
     });
@@ -704,11 +744,13 @@
     document.getElementById("btn-spln").addEventListener("click", function() {
       window.location.href = "https://github.com";
     });
+
     window.addEventListener('DOMContentLoaded', () => {
       bahanEl.value = "CU";
       luasEl.value = "8";
       updateSpec();
       updateFaktor();
+      updateSpekTabel();
       alatEl.focus();
       showGreetingHint();
       collapseInfoArea();
