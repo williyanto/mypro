@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Kalkulator Resistansi Konduktor ICEA v10</title>
+  <title>Kalkulator Resistansi Konduktor ICEA v11</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
   <style>
     :root {
@@ -19,6 +19,7 @@
       --info-bg: #e8f5ff;
       --info-border: #90caf9;
       --info-color: #1976d2;
+      --container-padding: 32px 24px;
     }
     body.dark {
       --bg-color: #121212;
@@ -50,7 +51,7 @@
     }
     .container-main {
       background: var(--input-bg);
-      padding: 32px 24px;
+      padding: var(--container-padding);
       border-radius: 20px;
       max-width: 480px;
       width: 100%;
@@ -58,6 +59,7 @@
       border: 1px solid var(--border-color);
       position: relative;
       margin: 0 auto;
+      /* Tambah jarak kiri-kanan default */
     }
     .title-main {
       text-align: center;
@@ -280,19 +282,20 @@
       background: var(--divider);
       margin-bottom: 12px;
     }
-    /* Tambahkan padding kanan kiri pada layar mobile */
+    /* Tambahkan responsive horizontal padding pada layar mobile */
     @media (max-width: 600px) {
-      body {
-        padding-left: 12px;
-        padding-right: 12px;
+      :root {
+        --container-padding: 16px 12px;
       }
       .container-main {
-        padding: 16px 8px;
         border-radius: 10px;
         max-width: 100vw;
       }
     }
     @media (max-width: 460px) {
+      :root {
+        --container-padding: 12px 8px;
+      }
       .form-row { flex-direction: row !important; gap: 12px !important; flex-wrap: nowrap !important; }
       .btn-section { gap: 9px; }
       .btn-row1, .btn-row2, .btn-row3 { gap: 9px; flex-wrap: wrap; justify-content: center !important; }
@@ -326,7 +329,7 @@
 </head>
 <body>
   <div class="container-main">
-    <div class="title-main">Kalkulator Resistansi Konduktor ICEA v10</div>
+    <div class="title-main">Kalkulator Resistansi Konduktor ICEA v11</div>
     <div class="divider"></div>
 
     <div class="form-row">
@@ -624,7 +627,6 @@
       hasilEl.style.color = "inherit";
     }
 
-    // LOGIKA REVISI: hasil = pembacaan alat / panjang * faktor koreksi suhu
     function hitungHasil() {
       let alatValue = alatEl.value.replace(",", ".");
       let alatNumber = parseFloat(alatValue);
