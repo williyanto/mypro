@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Kalkulator Resistansi Konduktor ICEA v9</title>
+  <title>Kalkulator Resistansi Konduktor ICEA v10</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
   <style>
     :root {
@@ -171,6 +171,11 @@
     .form-input:focus {
       border-color: var(--button-bg);
       outline: none;
+    }
+    /* Placeholder style */
+    .form-input::placeholder {
+      font-style: italic;
+      color: var(--footer-color); /* Make it subtle */
     }
     .result-box {
       border: 1.5px solid var(--border-color);
@@ -343,26 +348,26 @@
 </head>
 <body>
   <div class="container-main">
-    <div class="title-main">Kalkulator Resistansi Konduktor ICEA v9</div>
+    <div class="title-main">Kalkulator Resistansi Konduktor ICEA v10</div>
     <div class="divider"></div>
 
     <div class="form-row">
       <div class="form-group">
         <label class="form-label" for="alat">Pembacaan Alat</label>
         <div style="display: flex; gap: 8px;">
-          <input type="text" class="form-input" id="alat" style="flex:1;" inputmode="decimal" pattern="[0-9]*" />
+          <input type="text" class="form-input" id="alat" style="flex:1;" inputmode="decimal" pattern="[0-9]*" placeholder="dalam satuan mΩ" />
         </div>
       </div>
       <div class="form-group">
-        <label class="form-label" for="panjang">Panjang (Feet)</label>
-        <input type="text" class="form-input" id="panjang" inputmode="decimal" pattern="[0-9]*" />
+        <label class="form-label" for="panjang">Panjang</label>
+        <input type="text" class="form-input" id="panjang" inputmode="decimal" pattern="[0-9]*" placeholder="dalam satuan feet" />
       </div>
     </div>
 
     <div class="form-row">
       <div class="form-group">
-        <label class="form-label" for="suhu">Suhu (°C)</label>
-        <input type="text" class="form-input" id="suhu" inputmode="decimal" pattern="[0-9]*" />
+        <label class="form-label" for="suhu">Suhu</label>
+        <input type="text" class="form-input" id="suhu" inputmode="decimal" pattern="[0-9]*" placeholder="dalam °C" />
       </div>
       <div class="form-group">
         <label class="form-label" for="faktor">Faktor Koreksi Suhu</label>
@@ -665,6 +670,7 @@
     }
 
     function isInputLengkap() {
+      // Periksa apakah semua input yang dibutuhkan sudah terisi
       return alatEl.value.trim() !== "" &&
         document.getElementById("panjang").value.trim() !== "" &&
         suhuEl.value.trim() !== "" &&
@@ -831,7 +837,7 @@
       // Set nilai default saat halaman dimuat
       bahanEl.value = "CU"; 
       luasEl.value = "4/0AWG"; 
-      suhuEl.value = "30"; // Set nilai suhu default
+      // suhuEl.value = "30"; // Baris ini dihapus agar suhu tidak terisi otomatis
       
       // Panggil fungsi update untuk menampilkan data default
       updateSpec();
