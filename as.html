@@ -80,6 +80,7 @@
       color: var(--text-color-dark);
     }
 
+    /* Tombol Proyek */
     .row {
       width: 100%;
       max-width: 600px;
@@ -124,12 +125,17 @@
     .btn-custom-7 { background: linear-gradient(135deg, #34495e, #2c3e50); }
     .btn-custom-8 { background: linear-gradient(135deg, #27ae60, #229954); }
 
-    /* Hidden projects spacing */
-    .hidden-projects {
-      display: none;
+    /* Hidden projects row style - agar jarak antar baris sama seperti grid utama */
+    .hidden-projects-row {
       width: 100%;
       max-width: 600px;
-      margin-top: 12px; /* add spacing above hidden projects */
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      /* Bootstrap g-3 tetap berlaku */
+    }
+
+    .hidden-projects {
+      display: none;
     }
 
     .show-more-btn-wrapper {
@@ -245,9 +251,8 @@
         margin-top: 8px;
       }
 
-      .hidden-projects {
+      .hidden-projects-row {
         max-width: 100%;
-        margin-top: 8px;
       }
 
       .project-button {
@@ -270,7 +275,7 @@
 </head>
 <body>
   <div class="container-fluid">
-    <h1>Daftar Proyek Saya</h1>
+    <h1>Daftar Proyek Saya v7</h1>
     <hr class="custom-hr" />
     <div class="row row-cols-2 g-3">
       <div class="col">
@@ -305,8 +310,8 @@
       </div>
     </div>
 
-    <!-- Hidden projects: always in 2x1 grid, with spacing above -->
-    <div class="row row-cols-2 g-3 hidden-projects" id="hiddenProjects">
+    <!-- Hidden projects: always in 2 columns, with the same gutter as main grid -->
+    <div class="row row-cols-2 g-3 hidden-projects-row hidden-projects" id="hiddenProjects">
       <div class="col">
         <a href="project7.html" class="project-button btn-custom-7">
           <i class="fas fa-robot"></i><span>Proyek 7</span>
