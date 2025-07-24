@@ -124,10 +124,12 @@
     .btn-custom-7 { background: linear-gradient(135deg, #34495e, #2c3e50); }
     .btn-custom-8 { background: linear-gradient(135deg, #27ae60, #229954); }
 
+    /* Hidden projects spacing */
     .hidden-projects {
       display: none;
       width: 100%;
       max-width: 600px;
+      margin-top: 12px; /* add spacing above hidden projects */
     }
 
     .show-more-btn-wrapper {
@@ -245,6 +247,7 @@
 
       .hidden-projects {
         max-width: 100%;
+        margin-top: 8px;
       }
 
       .project-button {
@@ -302,7 +305,7 @@
       </div>
     </div>
 
-    <!-- Hidden projects: always in 2x2 grid -->
+    <!-- Hidden projects: always in 2x1 grid, with spacing above -->
     <div class="row row-cols-2 g-3 hidden-projects" id="hiddenProjects">
       <div class="col">
         <a href="project7.html" class="project-button btn-custom-7">
