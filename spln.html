@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Kalkulator Resistansi Konduktor SPLN v6</title>
+  <title>Kalkulator Resistansi Konduktor SPLN v7</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
   <style>
     :root {
@@ -348,7 +348,7 @@
 </head>
 <body>
   <div class="container-main">
-    <div class="title-main">Kalkulator Resistansi Konduktor SPLN v6</div>
+    <div class="title-main">Kalkulator Resistansi Konduktor SPLN v7</div>
     <div class="divider"></div>
 
     <div class="form-row">
@@ -455,6 +455,31 @@
   </div>
 
   <script>
+    // Manual urutan penampang AAAC sesuai deklarasi
+    const aaacOrder = [
+      "16",
+      "25",
+      "35",
+      "50/7",
+      "50/19",
+      "55",
+      "70",
+      "95",
+      "100",
+      "120",
+      "150/19",
+      "150/37",
+      "185",
+      "240/19",
+      "240/61",
+      "300",
+      "400",
+      "500",
+      "630",
+      "800",
+      "1000"
+    ];
+
     // Membatasi input hanya angka & titik/koma di kolom pembacaan alat, panjang dan suhu
     function onlyNumberInput(el) {
       el.addEventListener('input', function() {
@@ -592,53 +617,179 @@
     // Data spesifikasi untuk perbandingan perhitungan (tidak berubah)
     const specData = {
       AAAC: { 
-        "16": "1.955",
-        "25": "1.183",
-        "35": "0.958",
-        "50/7": "0.665",
-        "50/19": "0.724",
+            "16": "1,955",
+            "25": "1,183",
+            "35": "0,958",
+            "50/7": "0,665",
+            "50/19": "0,724",
+            "55": "0,567",
+            "70": "0,438",
+            "95": "0,355",
+            "100": "0,332",
+            "120": "0,293",
+            "150/19": "0,210",
+            "150/37": "0,225",
+            "185": "0,183",
+            "240/19": "0,137",
+            "240/61": "0,139",
+            "300": "0,111",
+            "400": "0,077",
+            "500": "0,066",
+            "630": "0,052",
+            "800": "0,044",
+            "1000": "0,033"
       },
       ACSR: { 
-        "16/2,5": "1.879",
-        "25/4": "1.203",
-        "35/6": "0.8353",
-        "44/32": "-",
-        "50/8": "0.5946",
+            "16/2,5": "1,879",
+            "25/4": "1,203",
+            "35/6": "0,8353",
+            "44/32": "-",
+            "50/8": "0,5946",
+            "50/30": "0,5644",
+            "70/12": "0,4130",
+            "95/15": "0,3053",
+            "95/55": "0,2992",
+            "105/75": "-",
+            "120/20": "0,2374",
+            "120/70": "0,2364",
+            "125/30": "0,2259",
+            "150/25": "0,1939",
+            "170/40": "0,1682",
+            "185/30": "0,1571",
+            "210/35": "0,1980",
+            "210/50": "0,1363",
+            "230/30": "0,1249",
+            "240/40": "0,1183",
+            "265/35": "0,1094",
+            "300/50": "0,09497",
+            "305/40": "0,09490",
+            "340/30": "0,09513",
+            "360/50": "0,07573",
+            "385/33": "0,07432",
+            "435/55": "0,06656",
+            "430/40": "0,05437",
+            "490/65": "0,05896",
+            "493/35": "0,05142",
+            "510/45": "0,03957",
+            "550/70": "0,05259",
+            "560/50": "0,03142",
+            "570/40": "0,05057",
+            "650/45": "0,0442",
+            "680/83": "0,04260",
+            "1043/45": "-"
       }
     };
 
     // Data spesifikasi untuk tampilan "Nominal Diameter" (baru)
     const tabelSpecData = {
       AAAC: {
-        "16": "AAAC 16 ND",
-        "25": "AAAC 25 ND",
-        "35": "AAAC 35 ND",
-        "50/7": "AAAC 50/7 ND",
-        "50/19": "AAAC 50/19 ND",
+            "16": "belum tersedia",
+            "25": "belum tersedia",
+            "35": "belum tersedia",
+            "50/7": "belum tersedia",
+            "50/19": "belum tersedia",
+            "55": "belum tersedia",
+            "70": "belum tersedia",
+            "95": "belum tersedia",
+            "100": "belum tersedia",
+            "120": "belum tersedia",
+            "150/19": "belum tersedia",
+            "150/37": "belum tersedia",
+            "185": "belum tersedia",
+            "240/19": "belum tersedia",
+            "240/61": "belum tersedia",
+            "300": "belum tersedia",
+            "400": "belum tersedia",
+            "500": "belum tersedia",
+            "630": "belum tersedia",
+            "800": "belum tersedia",
+            "1000": "belum tersedia"
       },
       ACSR: {
-        "16/2,5": "ACSR 16/2.5 ND",
-        "25/4": "ACSR 25/4 ND",
-        "35/6": "ACSR 35/6 ND",
-        "44/32": "ACSR 44/32 ND",
-        "50/8": "ACSR 50/8 ND",
+            "16/2,5": "belum tersedia",
+            "25/4": "belum tersedia",
+            "35/6": "belum tersedia",
+            "44/32": "belum tersedia",
+            "50/8": "belum tersedia",
+            "50/30": "belum tersedia",
+            "70/12": "belum tersedia",
+            "95/15": "belum tersedia",
+            "95/55": "belum tersedia",
+            "105/75": "belum tersedia",
+            "120/20": "belum tersedia",
+            "120/70": "belum tersedia",
+            "125/30": "belum tersedia",
+            "150/25": "belum tersedia",
+            "170/40": "belum tersedia",
+            "185/30": "belum tersedia",
+            "210/35": "belum tersedia",
+            "210/50": "belum tersedia",
+            "230/30": "belum tersedia",
+            "240/40": "belum tersedia",
+            "265/35": "belum tersedia",
+            "300/50": "belum tersedia",
+            "305/40": "belum tersedia",
+            "340/30": "belum tersedia",
+            "360/50": "belum tersedia",
+            "385/33": "belum tersedia",
+            "435/55": "belum tersedia",
+            "430/40": "belum tersedia",
+            "490/65": "belum tersedia",
+            "493/35": "belum tersedia",
+            "510/45": "belum tersedia",
+            "550/70": "belum tersedia",
+            "560/50": "belum tersedia",
+            "570/40": "belum tersedia",
+            "650/45": "belum tersedia",
+            "680/83": "belum tersedia",
+            "1043/45": "belum tersedia",
       }
     };
 
     const suhuData = {
       AAAC: {
-        21: "0.996",
-        22: "0.992",
-        23: "0.988",
-        24: "0.984",
-        25: "0.980"
+            "21": "0.996",
+            "22": "0.992",
+            "23": "0.988",
+            "24": "0.984",
+            "25": "0.980",
+            "26": "0.977",
+            "27": "0.973",
+            "28": "0.969",
+            "29": "0.965",
+            "30": "0.962",
+            "31": "0.958",
+            "32": "0.954",
+            "33": "0.951",
+            "34": "0.947",
+            "35": "0.943",
+            "36": "0.940",
+            "37": "0.934",
+            "38": "0.933",
+            "39": "0.929",
+            "40": "0.926"
       },
       ACSR: {
-        21: "0.996",
-        22: "0.992",
-        23: "0.988",
-        24: "0.984",
-        25: "0.980"
+            "21": "0.996",
+            "22": "0.992",
+            "23": "0.988",
+            "24": "0.984",
+            "25": "0.980",
+            "26": "0.977",
+            "27": "0.973",
+            "28": "0.969",
+            "29": "0.965",
+            "30": "0.962",
+            "31": "0.958",
+            "32": "0.954",
+            "33": "0.951",
+            "34": "0.947",
+            "35": "0.943",
+            "36": "0.940",
+            "37": "0.934",
+            "38": "0.933",
+            "39": "0.929",
+            "40": "0.926"
       }
     };
 
@@ -659,16 +810,25 @@
 
     function populateLuasOptions() {
         const selectedBahan = bahanEl.value;
-        const luasOptions = specData[selectedBahan];
         luasEl.innerHTML = ''; // Clear existing options
 
-        if (luasOptions) {
-            for (const key in luasOptions) {
+        if (selectedBahan === "AAAC") {
+            aaacOrder.forEach(key => {
+                if (specData.AAAC[key]) {
+                    const option = document.createElement('option');
+                    option.value = key;
+                    option.textContent = key + ' mm²';
+                    luasEl.appendChild(option);
+                }
+            });
+        } else if (selectedBahan === "ACSR") {
+            // Untuk ACSR urut sesuai deklarasi object
+            Object.keys(specData.ACSR).forEach(key => {
                 const option = document.createElement('option');
                 option.value = key;
                 option.textContent = key + ' mm²';
                 luasEl.appendChild(option);
-            }
+            });
         }
     }
 
