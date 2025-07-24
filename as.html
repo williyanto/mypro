@@ -54,17 +54,17 @@
     }
 
     h1 {
-      font-size: 1.7rem;
+      font-size: 1.75rem;
       font-weight: 700;
-      margin: 14px 0 26px;
+      margin: 10px 0 32px;
       text-align: center;
       transition: color 0.3s ease;
     }
 
     .custom-hr {
       width: 100%;
-      max-width: 500px;
-      margin: 0 auto 18px auto;
+      max-width: 600px;
+      margin: 0 auto 24px auto;
       border: none;
       border-top: 2px solid #000;
       background: none;
@@ -80,10 +80,10 @@
       color: var(--text-color-dark);
     }
 
+    /* Tombol Proyek */
     .row {
       width: 100%;
-      max-width: 500px;
-      margin: 0 auto;
+      max-width: 600px;
     }
 
     .project-button {
@@ -91,53 +91,29 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      min-height: 82px;
-      padding: 10px 6px;
+      padding: 15px 10px;
+      min-height: 100px;
       text-align: center;
       text-decoration: none;
-      color: #fff;
+      color: white;
       border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
       font-weight: 600;
-      font-size: 1em;
+      font-size: 1.05em;
       width: 100%;
-      height: 100%;
-      transition: all 0.2s;
-      background: #007bff;
-      margin-bottom: 0;
-      /* Agar nama panjang rapi dan tidak melebihi kotak */
-      overflow: hidden;
-      word-break: break-word;
+      transition: all 0.3s ease;
     }
 
     .project-button i {
-      font-size: 1.45em;
-      margin-bottom: 5px;
-      color: rgba(255,255,255,0.93);
-      flex-shrink: 0;
+      font-size: 2em;
+      margin-bottom: 8px;
+      color: rgba(255, 255, 255, 0.9);
     }
 
-    .project-button span {
-      display: block;
-      font-size: 0.98em;
-      font-weight: 500;
-      /* Maksimal dua baris, sisanya ellipsis */
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      line-height: 1.18em;
-      max-height: 2.36em;
-    }
-
-    .project-button:hover,
-    .project-button:focus {
-      transform: translateY(-2px) scale(1.025);
-      box-shadow: 0 4px 14px rgba(0,0,0,0.12);
-      opacity: 0.98;
-      text-decoration: none;
-      outline: none;
+    .project-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+      opacity: 0.95;
     }
 
     .btn-custom-1 { background: linear-gradient(135deg, #1abc9c, #16a085); }
@@ -149,21 +125,13 @@
     .btn-custom-7 { background: linear-gradient(135deg, #34495e, #2c3e50); }
     .btn-custom-8 { background: linear-gradient(135deg, #27ae60, #229954); }
 
-    .row > .col {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-    }
-    .row > .col > .project-button {
-      flex: 1 1 auto;
-      height: 100%;
-    }
-
+    /* Hidden projects row style - agar jarak antar baris sama seperti grid utama */
     .hidden-projects-row {
       width: 100%;
-      max-width: 500px;
+      max-width: 600px;
       margin-top: 0 !important;
       margin-bottom: 0 !important;
+      /* Bootstrap g-3 tetap berlaku */
     }
 
     .hidden-projects {
@@ -172,8 +140,8 @@
 
     .show-more-btn-wrapper {
       width: 100%;
-      max-width: 500px;
-      margin: 12px auto 0 auto;
+      max-width: 600px;
+      margin: 15px auto 0 auto;
       text-align: center;
     }
 
@@ -183,16 +151,16 @@
       color: #fff;
       border: none;
       border-radius: 30px;
-      padding: 7px 25px;
+      padding: 8px 28px;
       font-size: 1em;
       font-weight: 600;
       cursor: pointer;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.10);
-      transition: background 0.18s, box-shadow 0.18s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.10);
+      transition: background 0.2s, box-shadow 0.2s;
     }
     .show-more-btn:hover {
       background: #0056b3;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     }
     body.dark-mode .show-more-btn {
       background: #9b59b6;
@@ -202,8 +170,8 @@
     }
 
     .mode-toggle-wrapper {
-      margin-top: 18px;
-      margin-bottom: 8px;
+      margin-top: 20px;
+      margin-bottom: 10px;
       text-align: center;
     }
 
@@ -211,7 +179,7 @@
       background: none;
       border: none;
       cursor: pointer;
-      padding: 6px 15px;
+      padding: 8px 16px;
       font-size: 1em;
       border-radius: 50px;
       color: var(--primary-color);
@@ -219,13 +187,13 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-      transition: background-color 0.23s, box-shadow 0.23s;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
     }
 
     .mode-toggle:hover {
-      background-color: rgba(0, 123, 255, 0.08);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.11);
+      background-color: rgba(0, 123, 255, 0.1);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     }
 
     body.dark-mode .mode-toggle {
@@ -233,12 +201,12 @@
     }
 
     body.dark-mode .mode-toggle:hover {
-      background-color: rgba(155, 89, 182, 0.13);
+      background-color: rgba(155, 89, 182, 0.2);
     }
 
     .footer-hr {
       width: 100%;
-      max-width: 500px;
+      max-width: 600px;
       margin: 6px auto 0 auto;
       border: none;
       border-top: 2px solid #000;
@@ -266,41 +234,41 @@
 
     @media (max-width: 576px) {
       h1 {
-        font-size: 1.2rem;
-        margin: 5px 0 15px;
+        font-size: 1.5rem;
+        margin: 5px 0 18px;
       }
+
       .custom-hr, .footer-hr {
-        margin-bottom: 10px;
+        margin-bottom: 16px;
         max-width: 100%;
       }
+
       .footer-hr {
-        margin-top: 2px;
+        margin-top: 4px;
       }
+
+      .show-more-btn-wrapper {
+        margin-top: 8px;
+      }
+
+      .hidden-projects-row {
+        max-width: 100%;
+      }
+
       .project-button {
-        font-size: 0.93em;
-        min-height: 68px;
-        padding: 8px 4px;
+        font-size: 1em;
+        min-height: 90px;
+        margin-bottom: 10px;
       }
+
       .project-button i {
-        font-size: 1.15em;
-        margin-bottom: 3px;
+        font-size: 1.8em;
+        margin-bottom: 5px;
       }
-      .project-button span {
-        font-size: 0.93em;
-        max-height: 2.1em;
-      }
-      .row, .hidden-projects-row, .show-more-btn-wrapper {
-        max-width: 100vw;
-        padding-left: 0;
-        padding-right: 0;
-      }
+
       .mode-toggle-wrapper {
-        margin-top: 10px;
-        margin-bottom: 3px;
-      }
-      .show-more-btn {
-        padding: 7px 17px;
-        font-size: 0.95em;
+        margin-top: 15px;
+        margin-bottom: 5px;
       }
     }
   </style>
@@ -308,11 +276,12 @@
 <body>
   <div class="container-fluid">
     <h1>My Project</h1>
+    <br>
     <hr class="custom-hr" />
     <div class="row row-cols-2 g-3">
       <div class="col">
         <a href="project1.html" class="project-button btn-custom-1">
-          <i class="fas fa-calculator"></i><span>Kalkulator Hambatan Konduktor</span>
+          <i class="fas fa-calculator"></i><span>Hambatan Konduktor</span>
         </a>
       </div>
       <div class="col">
@@ -327,7 +296,7 @@
       </div>
       <div class="col">
         <a href="project4.html" class="project-button btn-custom-4">
-          <i class="fas fa-ruler"></i><span>Hitung Panjang kabel di drum</span>
+          <i class="fas fa-ruler"></i><span>Hitung Panjang kabel</span>
         </a>
       </div>
       <div class="col">
@@ -343,7 +312,7 @@
     </div>
 
     <!-- Hidden projects: always in 2 columns, with the same gutter as main grid -->
-    <div class="row row-cols-2 g-3 hidden-projects-row hidden-projects" id="hiddenProjects" style="margin-top:0.5rem !important;">
+    <div class="row row-cols-2 g-3 hidden-projects-row hidden-projects" id="hiddenProjects">
       <div class="col">
         <a href="project7.html" class="project-button btn-custom-7">
           <i class="fas fa-robot"></i><span>Tools Lainnya 1</span>
