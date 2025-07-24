@@ -13,20 +13,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
-        /* CSS Kustom */
+        /* Custom CSS Variables */
         :root {
-            --primary-color: #007bff; /* Biru Bootstrap standar */
-            --secondary-color: #6c757d; /* Abu-abu Bootstrap standar */
-            --body-bg-light: #f8f9fa; /* Latar belakang terang */
-            --body-bg-dark: #343a40; /* Latar belakang gelap */
-            --text-color-light: #212529; /* Teks gelap untuk mode terang */
-            --text-color-dark: #f8f9fa; /* Teks terang untuk mode gelap */
+            --primary-color: #007bff; /* Standard Bootstrap blue */
+            --secondary-color: #6c757d; /* Standard Bootstrap gray */
+            --body-bg-light: #f8f9fa; /* Light background */
+            --body-bg-dark: #343a40; /* Dark background */
+            --text-color-light: #212529; /* Dark text for light mode */
+            --text-color-dark: #f8f9fa; /* Light text for dark mode */
             --card-bg-light: #ffffff;
             --card-bg-dark: #495057;
             --border-color-light: #dee2e6;
             --border-color-dark: #6c757d;
         }
 
+        /* Base Body Styles */
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--body-bg-light);
@@ -34,27 +35,30 @@
             transition: background-color 0.3s ease, color 0.3s ease;
             display: flex;
             flex-direction: column;
-            min-height: 100vh; /* Memastikan body mengisi seluruh viewport */
+            min-height: 100vh; /* Ensures body takes full viewport height */
             margin: 0;
             padding: 0;
-            overflow-x: hidden; /* Mencegah scroll horizontal */
+            overflow-x: hidden; /* Prevents horizontal scroll */
         }
 
+        /* Dark Mode Body Styles */
         body.dark-mode {
             background-color: var(--body-bg-dark);
             color: var(--text-color-dark);
         }
 
+        /* Container Styling */
         .container-fluid {
-            flex: 1; /* Memastikan container mengambil ruang yang tersedia */
+            flex: 1; /* Allows container to take available space */
             display: flex;
             flex-direction: column;
-            justify-content: center; /* Pusatkan konten secara vertikal */
-            align-items: center; /* Pusatkan konten secara horizontal */
+            justify-content: center; /* Center content vertically */
+            align-items: center; /* Center content horizontally */
             padding-top: 20px;
             padding-bottom: 20px;
         }
 
+        /* Heading Styles */
         h1 {
             color: var(--text-color-light);
             margin-bottom: 30px;
@@ -62,57 +66,60 @@
             transition: color 0.3s ease;
         }
 
+        /* Dark Mode Heading Styles */
         body.dark-mode h1 {
             color: var(--text-color-dark);
         }
 
+        /* Project Button Styles */
         .project-button {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 20px 15px;
-            min-height: 120px; /* Tinggi minimum tombol */
+            min-height: 120px; /* Minimum height for buttons */
             text-align: center;
             text-decoration: none;
-            color: white; /* Warna teks default untuk tombol Bootstrap */
+            color: white; /* Default text color for Bootstrap buttons */
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
             font-weight: 600;
             font-size: 1.1em;
-            width: 100%; /* Lebar penuh di grid */
+            width: 100%; /* Full width in grid */
         }
 
         .project-button i {
-            font-size: 2.5em; /* Ukuran ikon */
+            font-size: 2.5em; /* Icon size */
             margin-bottom: 10px;
-            color: rgba(255, 255, 255, 0.8); /* Warna ikon sedikit transparan */
+            color: rgba(255, 255, 255, 0.8); /* Slightly transparent icon color */
         }
 
         .project-button:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
             opacity: 0.95;
-            color: white; /* Pastikan teks tetap putih saat hover */
+            color: white; /* Ensure text remains white on hover */
         }
 
-        /* Warna Tombol Kustom */
-        .btn-custom-1 { background: linear-gradient(135deg, #1abc9c, #16a085); } /* Hijau Zamrud */
-        .btn-custom-2 { background: linear-gradient(135deg, #3498db, #2980b9); } /* Biru Cerah */
-        .btn-custom-3 { background: linear-gradient(135deg, #9b59b6, #8e44ad); } /* Ungu Amethyst */
-        .btn-custom-4 { background: linear-gradient(135deg, #e67e22, #d35400); } /* Oranye Labu */
-        .btn-custom-5 { background: linear-gradient(135deg, #f1c40f, #f39c12); } /* Kuning Cerah */
-        .btn-custom-6 { background: linear-gradient(135deg, #e74c3c, #c0392b); } /* Merah Bata */
+        /* Custom Button Colors (using linear gradients) */
+        .btn-custom-1 { background: linear-gradient(135deg, #1abc9c, #16a085); } /* Emerald Green */
+        .btn-custom-2 { background: linear-gradient(135deg, #3498db, #2980b9); } /* Bright Blue */
+        .btn-custom-3 { background: linear-gradient(135deg, #9b59b6, #8e44ad); } /* Amethyst Purple */
+        .btn-custom-4 { background: linear-gradient(135deg, #e67e22, #d35400); } /* Pumpkin Orange */
+        .btn-custom-5 { background: linear-gradient(135deg, #f1c40f, #f39c12); } /* Bright Yellow */
+        .btn-custom-6 { background: linear-gradient(135deg, #e74c3c, #c0392b); } /* Brick Red */
 
-        /* Mode Toggle Button Styling */
+        /* Mode Toggle Button Wrapper */
         .mode-toggle-wrapper {
             width: 100%;
             display: flex;
             justify-content: center;
-            margin-top: 30px; /* Jarak dari grid tombol */
+            margin-top: 30px; /* Spacing from the button grid */
         }
 
+        /* Mode Toggle Button Styles */
         .mode-toggle {
             background: none;
             border: none;
@@ -139,8 +146,9 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
 
+        /* Dark Mode Toggle Button Styles */
         body.dark-mode .mode-toggle {
-            color: #9b59b6; /* Warna ungu untuk dark mode toggle */
+            color: #9b59b6; /* Purple color for dark mode toggle */
             box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
         }
 
@@ -149,6 +157,7 @@
             box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
         }
 
+        /* Footer Text Styles */
         .footer-text {
             margin-top: 20px;
             padding-bottom: 20px;
@@ -158,17 +167,18 @@
             transition: color 0.3s ease;
         }
 
+        /* Dark Mode Footer Text Styles */
         body.dark-mode .footer-text {
             color: #bdc3c7;
         }
 
-        /* Responsive adjustments for smaller screens */
+        /* Responsive Adjustments for Smaller Screens */
         @media (max-width: 576px) { /* Extra small devices (portrait phones) */
             .project-button {
                 padding: 15px 10px;
-                min-height: 100px; /* Sedikit lebih kecil untuk layar sangat kecil */
+                min-height: 100px; /* Slightly smaller for very small screens */
                 font-size: 1em;
-                margin-bottom: 15px; /* Tambahkan jarak antar tombol */
+                margin-bottom: 15px; /* Add space between buttons */
             }
             .project-button i {
                 font-size: 2em;
@@ -188,38 +198,32 @@
         <div class="row row-cols-2 g-3">
             <div class="col">
                 <a href="project1.html" class="project-button btn-custom-1">
-                    <i class="fas fa-calculator" aria-hidden="true"></i>
-                    <span>Proyek 1</span>
+                    <i class="fas fa-calculator"></i> <span>Proyek 1</span>
                 </a>
             </div>
             <div class="col">
                 <a href="project2.html" class="project-button btn-custom-2">
-                    <i class="fas fa-plug" aria-hidden="true"></i>
-                    <span>Proyek 2</span>
+                    <i class="fas fa-bolt"></i> <span>Proyek 2</span>
                 </a>
             </div>
             <div class="col">
                 <a href="project3.html" class="project-button btn-custom-3">
-                    <i class="fas fa-thermometer-half" aria-hidden="true"></i>
-                    <span>Proyek 3</span>
+                    <i class="fas fa-thermometer-half"></i> <span>Proyek 3</span>
                 </a>
             </div>
             <div class="col">
                 <a href="project4.html" class="project-button btn-custom-4">
-                    <i class="fas fa-ruler" aria-hidden="true"></i>
-                    <span>Proyek 4</span>
+                    <i class="fas fa-ruler"></i> <span>Proyek 4</span>
                 </a>
             </div>
             <div class="col">
                 <a href="project5.html" class="project-button btn-custom-5">
-                    <i class="fas fa-flask" aria-hidden="true"></i>
-                    <span>Proyek 5</span>
+                    <i class="fas fa-code"></i> <span>Proyek 5</span>
                 </a>
             </div>
             <div class="col">
                 <a href="project6.html" class="project-button btn-custom-6">
-                    <i class="fas fa-code" aria-hidden="true"></i>
-                    <span>Proyek 6</span>
+                    <i class="fas fa-flask"></i> <span>Proyek 6</span>
                 </a>
             </div>
         </div>
@@ -243,38 +247,38 @@
             const modeIcon = modeToggleBtn.querySelector('i');
             const modeText = document.getElementById('modeText');
 
-            function updateModeText(isDarkMode) {
+            /**
+             * Updates the text and icon of the mode toggle button based on the current mode.
+             * @param {boolean} isDarkMode - True if dark mode is active, false otherwise.
+             */
+            function updateModeToggleUI(isDarkMode) {
                 if (isDarkMode) {
                     modeText.textContent = 'Mode Gelap';
-                    modeIcon.classList.remove('fa-moon');
-                    modeIcon.classList.add('fa-sun');
+                    modeIcon.classList.replace('fa-moon', 'fa-sun'); // Replace moon with sun icon
                 } else {
                     modeText.textContent = 'Mode Terang';
-                    modeIcon.classList.remove('fa-sun');
-                    modeIcon.classList.add('fa-moon');
+                    modeIcon.classList.replace('fa-sun', 'fa-moon'); // Replace sun with moon icon
                 }
             }
 
-            // Check for saved theme preference in localStorage
+            // Check for saved theme preference in localStorage on page load
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme === 'dark') {
                 body.classList.add('dark-mode');
-                updateModeText(true);
+                updateModeToggleUI(true);
             } else {
                 body.classList.remove('dark-mode');
-                updateModeText(false);
+                updateModeToggleUI(false);
             }
 
+            // Add event listener for the mode toggle button
             modeToggleBtn.addEventListener('click', () => {
-                if (body.classList.contains('dark-mode')) {
-                    body.classList.remove('dark-mode');
-                    localStorage.setItem('theme', 'light');
-                    updateModeText(false);
-                } else {
-                    body.classList.add('dark-mode');
-                    localStorage.setItem('theme', 'dark');
-                    updateModeText(true);
-                }
+                // Toggle 'dark-mode' class on the body
+                const isDarkMode = body.classList.toggle('dark-mode');
+                // Save the current theme preference to localStorage
+                localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+                // Update the button's text and icon
+                updateModeToggleUI(isDarkMode);
             });
         });
     </script>
