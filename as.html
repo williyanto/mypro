@@ -27,7 +27,11 @@
             --border-color-dark: #6c757d;
         }
 
-        /* Base Body Styles */
+        /* --- Global Styles --- */
+        html, body {
+            height: 100%; /* Pastikan html dan body mengambil 100% tinggi viewport */
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--body-bg-light);
@@ -39,41 +43,41 @@
             margin: 0;
             padding: 0;
             overflow-x: hidden; /* Prevents horizontal scroll */
+            /* Tambahkan ini untuk mencegah scroll vertikal berlebihan pada body jika ada konten yang tumpang tindih */
+            overflow-y: auto; 
         }
 
-        /* Dark Mode Body Styles */
         body.dark-mode {
             background-color: var(--body-bg-dark);
             color: var(--text-color-dark);
         }
 
-        /* Container Styling */
+        /* --- Main Container Styling --- */
         .container-fluid {
             flex: 1; /* Allows container to take available space */
             display: flex;
             flex-direction: column;
             justify-content: center; /* Center content vertically */
             align-items: center; /* Center content horizontally */
-            padding-top: 20px;
-            padding-bottom: 20px;
-            /* Tambahkan ini untuk memastikan konten tidak melebihi lebar kontainer */
-            overflow: hidden; 
+            /* Mengurangi padding vertikal untuk mengurangi blank space */
+            padding-top: 15px; 
+            padding-bottom: 15px;
+            overflow: hidden; /* Ensure content inside doesn't overflow */
         }
 
-        /* Heading Styles */
+        /* --- Heading Styles --- */
         h1 {
             color: var(--text-color-light);
-            margin-bottom: 30px;
+            margin-bottom: 25px; /* Sedikit mengurangi margin bawah heading */
             font-weight: 700;
             transition: color 0.3s ease;
         }
 
-        /* Dark Mode Heading Styles */
         body.dark-mode h1 {
             color: var(--text-color-dark);
         }
 
-        /* Project Button Styles */
+        /* --- Project Button Styles --- */
         .project-button {
             display: flex;
             flex-direction: column;
@@ -113,12 +117,12 @@
         .btn-custom-5 { background: linear-gradient(135deg, #f1c40f, #f39c12); } /* Bright Yellow */
         .btn-custom-6 { background: linear-gradient(135deg, #e74c3c, #c0392b); } /* Brick Red */
 
-        /* Mode Toggle Button Wrapper */
+        /* --- Mode Toggle Button Wrapper --- */
         .mode-toggle-wrapper {
             width: 100%;
             display: flex;
             justify-content: center;
-            margin-top: 30px; /* Spacing from the button grid */
+            margin-top: 25px; /* Sedikit mengurangi margin atas toggle button */
         }
 
         /* Mode Toggle Button Styles */
@@ -159,22 +163,21 @@
             box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
         }
 
-        /* Footer Text Styles */
+        /* --- Footer Text Styles --- */
         .footer-text {
-            margin-top: 20px;
-            padding-bottom: 20px;
+            margin-top: 15px; /* Mengurangi margin atas footer */
+            padding-bottom: 15px; /* Mengurangi padding bawah footer */
             color: var(--secondary-color);
             font-size: 0.85em;
             text-align: center;
             transition: color 0.3s ease;
         }
 
-        /* Dark Mode Footer Text Styles */
         body.dark-mode .footer-text {
             color: #bdc3c7;
         }
 
-        /* Responsive Adjustments for Smaller Screens */
+        /* --- Responsive Adjustments for Smaller Screens --- */
         @media (max-width: 576px) { /* Extra small devices (portrait phones) */
             .project-button {
                 padding: 15px 10px;
@@ -190,12 +193,23 @@
                 font-size: 1.5em;
                 margin-bottom: 20px;
             }
+            .container-fluid {
+                padding-top: 10px; /* Lebih kecil lagi untuk mobile */
+                padding-bottom: 10px;
+            }
+            .mode-toggle-wrapper {
+                margin-top: 20px;
+            }
+            .footer-text {
+                margin-top: 10px;
+                padding-bottom: 10px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container-fluid">
-        <h1 class="text-center">Daftar Proyek Saya v1</h1>
+        <h1 class="text-center">Daftar Proyek Saya v2</h1>
 
         <div class="row row-cols-2 g-3">
             <div class="col">
