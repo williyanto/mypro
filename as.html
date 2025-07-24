@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Kalkulator Resistansi Konduktor AS/NZS v7</title>
+    <title>Kalkulator Resistansi Konduktor AS/NZS v6</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
     <style>
         :root {
@@ -348,7 +348,7 @@
 </head>
 <body>
     <div class="container-main">
-        <div class="title-main">Kalkulator Resistansi Konduktor AS/NZS v7</div>
+        <div class="title-main">Kalkulator Resistansi Konduktor AS/NZS v7 full</div>
         <div class="divider"></div>
 
         <div class="form-row">
@@ -366,7 +366,7 @@
 
         <div class="form-row">
             <div class="form-group">
-                <label class="form-label" for="suhu">Suhu (°C)</label>
+                <label class="form-label" for="suhu">Suhu</label>
                 <input type="text" class="form-input" id="suhu" inputmode="decimal" pattern="[0-9]*" placeholder="dalam °C" />
             </div>
             <div class="form-group">
@@ -387,13 +387,34 @@
             <div class="form-group">
                 <label class="form-label" for="luas">Penampang</label>
                 <select class="form-input" id="luas">
-                    <option value="0.5">0,5 mm²</option>
-                    <option value="0.75">0,75 mm²</option>
-                    <option value="1.0">1,0 mm²</option>
-                    <option value="1.5">1,5 mm²</option>
-                    <option value="2.5">2,5 mm²</option>
-                    <option value="4">4 mm²</option>
-                    <option value="300">300 mm²</option>
+                        <option value="0,5">0,5 mm²</option>
+                        <option value="0,75">0,75 mm²</option>
+                        <option value="1,0">1,0 mm²</option>
+                        <option value="1,5">1,5 mm²</option>
+                        <option value="2,5">2,5 mm²</option>
+                        <option value="4">4 mm²</option>
+                        <option value="6">6 mm²</option>
+                        <option value="10">10 mm²</option>
+                        <option value="16">16 mm²</option>
+                        <option value="25">25 mm²</option>
+                        <option value="35">35 mm²</option>
+                        <option value="50">50 mm²</option>
+                        <option value="70">70 mm²</option>
+                        <option value="95">95 mm²</option>
+                        <option value="120">120 mm²</option>
+                        <option value="150">150 mm²</option>
+                        <option value="185">185 mm²</option>
+                        <option value="240">240 mm²</option>
+                        <option value="300">300 mm²</option>
+                        <option value="400">400 mm²</option>
+                        <option value="500">500 mm²</option>
+                        <option value="630">630 mm²</option>
+                        <option value="800">800 mm²</option>
+                        <option value="960">960 mm²</option>
+                        <option value="1000">1000 mm²</option>
+                        <option value="1200">1200 mm²</option>
+                        <option value="1600">1600 mm²</option>
+                        <option value="2000">2000 mm²</option>
                 </select>
             </div>
             <div class="form-group">
@@ -601,79 +622,335 @@
         // Data spesifikasi untuk perbandingan perhitungan (tidak berubah)
         const specData = {
             CU: { 
-                "0.5": "36.0", "0.75": "24.5", "1.0": "18.1", "1.5": "12.1", "2.5": "7.41", "4": "4.61",
-                "300": "0.0601"
+                "0,5": "38,4",
+                "0,75": "25,3",
+                "1,0": "21,2",
+                "1,5": "13,6",
+                "2,5": "7,41",
+                "4": "4,61",
+                "6": "3,08",
+                "10": "1,83",
+                "16": "1,15",
+                "25": "0,727",
+                "35": "0,524",
+                "50": "0,387",
+                "70": "0,268",
+                "95": "0,193",
+                "120": "0,153",
+                "150": "0,124",
+                "185": "0,0991",
+                "240": "0,0754",
+                "300": "0,0601",
+                "400": "0,0470",
+                "500": "0,0366",
+                "630": "0,0283",
+                "800": "0,0221",
+                "960": "0,0189",
+                "1000": "0,0176",
+                "1200": "0,0151",
+                "1600": "0,0113",
+                "2000": "0,0090"
             },
             AL: { 
-                "0.5": "-", "0.75": "-", "1.0": "-", "1.5": "-", "2.5": "-", "4": "-", 
-                "300": "0.100"
+                "0,5": "-",
+                "0,75": "-",
+                "1,0": "-",
+                "1,5": "-",
+                "2,5": "-",
+                "4": "7,41",
+                "6": "4,61",
+                "10": "3,08",
+                "16": "1,91",
+                "25": "1,20",
+                "35": "0,868",
+                "50": "0,641",
+                "70": "0,443",
+                "95": "0,320",
+                "120": "0,253",
+                "150": "0,206",
+                "185": "0,164",
+                "240": "0,125",
+                "300": "0,100",
+                "400": "0,0778",
+                "500": "0,0605",
+                "630": "0,0469",
+                "800": "0,0367",
+                "960": "-",
+                "1000": "0,0291",
+                "1200": "-",
+                "1600": "-",
+                "2000": "-",
             },
-            TCU: { // Ditambahkan: Data spec max untuk TCU
-                "0.5": "36.7",
-                "0.75": "24.8",
-                "1.0": "18.2",
-                "1.5": "12.2",
-                "2.5": "7.56",
-                "4": "4.70",
-                "300": "0.0607" 
+            TCU: {
+                "0,5": "39,6",
+                "0,75": "26,0",
+                "1,0": "21,6",
+                "1,5": "13,8",
+                "2,5": "7,56",
+                "4": "4,70",
+                "6": "3,11",
+                "10": "1,84",
+                "16": "1,16",
+                "25": "0,734",
+                "35": "0,529",
+                "50": "0,391",
+                "70": "0,270",
+                "95": "0,195",
+                "120": "0,154",
+                "150": "0,126",
+                "185": "0,100",
+                "240": "0,0762",
+                "300": "0,0607",
+                "400": "0,0475",
+                "500": "0,0369",
+                "630": "0,0286",
+                "800": "0,0224",
+                "960": "0,0189",
+                "1000": "0,0177",
+                "1200": "0,0151",
+                "1600": "0,0113",
+                "2000": "0,0090"
             }
         };
 
         // Data spesifikasi untuk tampilan "Nominal Diameter" (baru)
         const tabelSpecData = {
             CU: {
-                "0.5": { single: "38.4", multi: "1000" },
-                "0.75": { single: "25.3", multi: "1500" },
-                "1.0": { single: "21.2", multi: "2000" },
-                "1.5": { single: "13.6", multi: "2500" },
-                "2.5": { single: "7.41", multi: "3000" },
-                "4": { single: "4.61", multi: "3500" },
-                "300": { single: "0.0601", multi: "4000" }
+                "0,5": { single: "belum update", multi: "No yet" },
+                "0,75": { single: "belum update", multi: "No yet" },
+                "1,0": { single: "belum update", multi: "No yet" },
+                "1,5": { single: "belum update", multi: "No yet" },
+                "2,5": { single: "belum update", multi: "No yet" },
+                "4": { single: "belum update", multi: "No yet" },
+                "6": { single: "belum update", multi: "No yet" },
+                "10": { single: "belum update", multi: "No yet" },
+                "16": { single: "belum update", multi: "No yet" },
+                "25": { single: "belum update", multi: "No yet" },
+                "35": { single: "belum update", multi: "No yet" },
+                "50": { single: "belum update", multi: "No yet" },
+                "70": { single: "belum update", multi: "No yet" },
+                "95": { single: "belum update", multi: "No yet" },
+                "120": { single: "belum update", multi: "No yet" },
+                "150": { single: "belum update", multi: "No yet" },
+                "185": { single: "belum update", multi: "No yet" },
+                "240": { single: "belum update", multi: "No yet" },
+                "300": { single: "belum update", multi: "No yet" },
+                "400": { single: "belum update", multi: "No yet" },
+                "500": { single: "belum update", multi: "No yet" },
+                "630": { single: "belum update", multi: "No yet" },
+                "800": { single: "belum update", multi: "No yet" },
+                "960": { single: "belum update", multi: "No yet" },
+                "1000": { single: "belum update", multi: "No yet" },
+                "1200": { single: "belum update", multi: "No yet" },
+                "1600": { single: "belum update", multi: "No yet" },
+                "2000": { single: "belum update", multi: "No yet" }
             },
             AL: {
-                "0.5": { single: "1", multi: "8" },
-                "0.75": { single: "2", multi: "9" },
-                "1.0": { single: "3", multi: "10" },
-                "1.5": { single: "4", multi: "11" },
-                "2.5": { single: "5", multi: "12" },
-                "4": { single: "6", multi: "13" },
-                "300": { single: "7", multi: "14" }
+                "0,5": { single: "belum update", multi: "No yet" },
+                "0,75": { single: "belum update", multi: "No yet" },
+                "1,0": { single: "belum update", multi: "No yet" },
+                "1,5": { single: "belum update", multi: "No yet" },
+                "2,5": { single: "belum update", multi: "No yet" },
+                "4": { single: "belum update", multi: "No yet" },
+                "6": { single: "belum update", multi: "No yet" },
+                "10": { single: "belum update", multi: "No yet" },
+                "16": { single: "belum update", multi: "No yet" },
+                "25": { single: "belum update", multi: "No yet" },
+                "35": { single: "belum update", multi: "No yet" },
+                "50": { single: "belum update", multi: "No yet" },
+                "70": { single: "belum update", multi: "No yet" },
+                "95": { single: "belum update", multi: "No yet" },
+                "120": { single: "belum update", multi: "No yet" },
+                "150": { single: "belum update", multi: "No yet" },
+                "185": { single: "belum update", multi: "No yet" },
+                "240": { single: "belum update", multi: "No yet" },
+                "300": { single: "belum update", multi: "No yet" },
+                "400": { single: "belum update", multi: "No yet" },
+                "500": { single: "belum update", multi: "No yet" },
+                "630": { single: "belum update", multi: "No yet" },
+                "800": { single: "belum update", multi: "No yet" },
+                "960": { single: "belum update", multi: "No yet" },
+                "1000": { single: "belum update", multi: "No yet" },
+                "1200": { single: "belum update", multi: "No yet" },
+                "1600": { single: "belum update", multi: "No yet" },
+                "2000": { single: "belum update", multi: "No yet" }
             },
             TCU: {
-                "0.5": { single: "15", multi: "22" },
-                "0.75": { single: "16", multi: "23" },
-                "1.0": { single: "17", multi: "24" },
-                "1.5": { single: "18", multi: "25" },
-                "2.5": { single: "19", multi: "26" },
-                "4": { single: "20", multi: "27" },
-                "300": { single: "21", multi: "28" }
+                "0,5": { single: "belum update", multi: "No yet" },
+                "0,75": { single: "belum update", multi: "No yet" },
+                "1,0": { single: "belum update", multi: "No yet" },
+                "1,5": { single: "belum update", multi: "No yet" },
+                "2,5": { single: "belum update", multi: "No yet" },
+                "4": { single: "belum update", multi: "No yet" },
+                "6": { single: "belum update", multi: "No yet" },
+                "10": { single: "belum update", multi: "No yet" },
+                "16": { single: "belum update", multi: "No yet" },
+                "25": { single: "belum update", multi: "No yet" },
+                "35": { single: "belum update", multi: "No yet" },
+                "50": { single: "belum update", multi: "No yet" },
+                "70": { single: "belum update", multi: "No yet" },
+                "95": { single: "belum update", multi: "No yet" },
+                "120": { single: "belum update", multi: "No yet" },
+                "150": { single: "belum update", multi: "No yet" },
+                "185": { single: "belum update", multi: "No yet" },
+                "240": { single: "belum update", multi: "No yet" },
+                "300": { single: "belum update", multi: "No yet" },
+                "400": { single: "belum update", multi: "No yet" },
+                "500": { single: "belum update", multi: "No yet" },
+                "630": { single: "belum update", multi: "No yet" },
+                "800": { single: "belum update", multi: "No yet" },
+                "960": { single: "belum update", multi: "No yet" },
+                "1000": { single: "belum update", multi: "No yet" },
+                "1200": { single: "belum update", multi: "No yet" },
+                "1600": { single: "belum update", multi: "No yet" },
+                "2000": { single: "belum update", multi: "No yet" }
             }
         };
 
         const suhuData = {
             CU: {
-                21: "0.9961",
-                21.1: "0.9957",
-                22: "0.9922",
-                23: "0.9883",
-                24: "0.9845",
-                25: "0.9807"
+                "5": "1.0640",
+                "6": "1.0590",
+                "7": "1.0550",
+                "8": "1.0500",
+                "9": "1.0460",
+                "10": "1.0420",
+                "11": "1.0370",
+                "12": "1.0330",
+                "13": "1.0290",
+                "14": "1.0250",
+                "15": "1.0200",
+                "16": "1.0160",
+                "17": "1.0120",
+                "18": "1.0080",
+                "19": "1.0040",
+                "20": "1.0000",
+                "21": "0.9960",
+                "22": "0.9920",
+                "23": "0.9880",
+                "24": "0.9840",
+                "25": "0.9800",
+                "26": "0.9770",
+                "27": "0.9730",
+                "28": "0.9690",
+                "29": "0.9650",
+                "30": "0.9620",
+                "31": "0.9580",
+                "32": "0.9540",
+                "33": "0.9510",
+                "34": "0.9470",
+                "35": "0.9430",
+                "36": "0.9400",
+                "37": "0.9360",
+                "38": "0.9330",
+                "39": "0.9290",
+                "40": "0.9260",
+                "45": "0.9090",
+                "50": "0.8930",
+                "55": "0.8770",
+                "60": "0.8620",
+                "65": "0.8470",
+                "70": "0.8330",
+                "75": "0.8200",
+                "80": "0.8060",
+                "85": "0.7940",
+                "90": "0.7810"
             },
             AL: {
-                21: "0.9960",
-                21.1: "0.9956",
-                22: "0.9920",
-                23: "0.9880",
-                24: "0.9841",
-                25: "0.9802"
+                "5": "1.0640",
+                "6": "1.0590",
+                "7": "1.0550",
+                "8": "1.0500",
+                "9": "1.0460",
+                "10": "1.0420",
+                "11": "1.0370",
+                "12": "1.0330",
+                "13": "1.0290",
+                "14": "1.0250",
+                "15": "1.0200",
+                "16": "1.0160",
+                "17": "1.0120",
+                "18": "1.0080",
+                "19": "1.0040",
+                "20": "1.0000",
+                "21": "0.9960",
+                "22": "0.9920",
+                "23": "0.9880",
+                "24": "0.9840",
+                "25": "0.9800",
+                "26": "0.9770",
+                "27": "0.9730",
+                "28": "0.9690",
+                "29": "0.9650",
+                "30": "0.9620",
+                "31": "0.9580",
+                "32": "0.9540",
+                "33": "0.9510",
+                "34": "0.9470",
+                "35": "0.9430",
+                "36": "0.9400",
+                "37": "0.9360",
+                "38": "0.9330",
+                "39": "0.9290",
+                "40": "0.9260",
+                "45": "0.9090",
+                "50": "0.8930",
+                "55": "0.8770",
+                "60": "0.8620",
+                "65": "0.8470",
+                "70": "0.8330",
+                "75": "0.8200",
+                "80": "0.8060",
+                "85": "0.7940",
+                "90": "0.7810"
             },
-            TCU: { // Contoh data untuk TCU (diasumsikan sama dengan CU untuk demo ini)
-                21: "0.9961", 
-                21.1: "0.9957",
-                22: "0.9922",
-                23: "0.9883",
-                24: "0.9845",
-                25: "0.9807"
+            TCU: {
+                "5": "1.0640",
+                "6": "1.0590",
+                "7": "1.0550",
+                "8": "1.0500",
+                "9": "1.0460",
+                "10": "1.0420",
+                "11": "1.0370",
+                "12": "1.0330",
+                "13": "1.0290",
+                "14": "1.0250",
+                "15": "1.0200",
+                "16": "1.0160",
+                "17": "1.0120",
+                "18": "1.0080",
+                "19": "1.0040",
+                "20": "1.0000",
+                "21": "0.9960",
+                "22": "0.9920",
+                "23": "0.9880",
+                "24": "0.9840",
+                "25": "0.9800",
+                "26": "0.9770",
+                "27": "0.9730",
+                "28": "0.9690",
+                "29": "0.9650",
+                "30": "0.9620",
+                "31": "0.9580",
+                "32": "0.9540",
+                "33": "0.9510",
+                "34": "0.9470",
+                "35": "0.9430",
+                "36": "0.9400",
+                "37": "0.9360",
+                "38": "0.9330",
+                "39": "0.9290",
+                "40": "0.9260",
+                "45": "0.9090",
+                "50": "0.8930",
+                "55": "0.8770",
+                "60": "0.8620",
+                "65": "0.8470",
+                "70": "0.8330",
+                "75": "0.8200",
+                "80": "0.8060",
+                "85": "0.7940",
+                "90": "0.7810"
             }
         };
 
@@ -883,7 +1160,7 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             bahanEl.value = "CU"; 
-            luasEl.value = "0.5"; 
+            luasEl.value = "0,5"; 
             
             updateSpec();
             updateFaktor();
