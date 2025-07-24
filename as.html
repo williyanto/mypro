@@ -56,6 +56,8 @@
             align-items: center; /* Center content horizontally */
             padding-top: 20px;
             padding-bottom: 20px;
+            /* Tambahkan ini untuk memastikan konten tidak melebihi lebar kontainer */
+            overflow: hidden; 
         }
 
         /* Heading Styles */
@@ -176,9 +178,9 @@
         @media (max-width: 576px) { /* Extra small devices (portrait phones) */
             .project-button {
                 padding: 15px 10px;
-                min-height: 100px; /* Slightly smaller for very small screens */
+                min-height: 100px; /* Sedikit lebih kecil untuk layar sangat kecil */
                 font-size: 1em;
-                margin-bottom: 15px; /* Add space between buttons */
+                margin-bottom: 15px; /* Tambahkan jarak antar tombol */
             }
             .project-button i {
                 font-size: 2em;
@@ -193,7 +195,7 @@
 </head>
 <body>
     <div class="container-fluid">
-        <h1 class="text-center">Daftar Proyek Saya</h1>
+        <h1 class="text-center">Daftar Proyek Saya v1</h1>
 
         <div class="row row-cols-2 g-3">
             <div class="col">
