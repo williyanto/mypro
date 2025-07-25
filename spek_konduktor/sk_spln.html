@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Konduktor Resistansi SPLN</title>
+  <link rel="icon" type="image/png" href="logo_spln.png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+#resistansi {
+  transition:
+    box-shadow 0.5s cubic-bezier(.4,2,.7,1.2),
+    background 0.5s cubic-bezier(.4,2,.7,1.2),
+    color 0.5s cubic-bezier(.4,2,.7,1.2),
+    opacity 0.5s cubic-bezier(.4,2,.7,1.2),
+    transform 0.5s cubic-bezier(.4,2,.7,1.2);
+  opacity: 1;
+  background: #fff;
+  box-shadow: none;
+  color: #222;
+  text-align: center;
+}
+#resistansi {
+  text-align: center;
+}
+body {
+  background: linear-gradient(145deg, #f0f0f0, #ffffff);
+  font-family: 'Segoe UI', sans-serif;
+  transition: background 0.3s, color 0.3s;
+}
+.card-box {
+  max-width: 420px;
+  margin: 50px auto;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  padding: 25px;
+  background-color: white;
+  transition: background 0.3s, color 0.3s, border 0.3s;
+}
+h4.title {
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 25px;
+  transition: color 0.3s;
+}
+.leaf-btn {
+  color: #127cff;
+  font-weight: 400;
+  border: 2px solid #127cff;
+  background: transparent;
+  padding: 6px 18px;
+  margin: 5px 5px 5px 0;
+  border-radius: 30px;
+  transition:
+    transform 0.18s cubic-bezier(.4,2,.7,1.2),
+    background 0.2s,
+    color 0.2s,
+    box-shadow 0.2s;
+  font-size: 1rem;
+  box-shadow: none;
+  display: inline-block;
+  line-height: 1.2;
+}
+.leaf-btn.active,
+.leaf-btn:focus {
+  background-color: #127cff !important;
+  color: #fff !important;
+  outline: 2px solid #127cff !important;
+  box-shadow: 0 0 12px rgba(18, 124, 255, 0.18) !important;
+  transform: scale(1.09);
+}
+.leaf-btn:hover {
+  background-color: #127cff;
+  color: #fff;
+  transform: scale(1.09);
+  z-index: 2;
+}
+.form-control,
+.form-select.luas-select {
+  border-radius: 12px;
+  font-weight: bold;
+  transition: background 0.3s, color 0.3s, border 0.3s;
+  background: #fff;
+  color: #222;
+  border: 1px solid #ddd;
+}
+.form-select.luas-select {
+  text-align: left;
+  padding-left: 12px;
+}
+.form-label {
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+.info-text {
+  font-size: 14px;
+  text-align: center;
+  margin-top: 15px;
+  color: #333;
+  opacity: 1;
+  transform: translateY(0px) scale(1);
+  transition: opacity 0.55s cubic-bezier(.4,2,.7,1.2), transform 0.55s cubic-bezier(.4,2,.7,1.2);
+  white-space: nowrap; /* Added this line */
+  overflow: hidden; /* Added this line */
+  text-overflow: ellipsis; /* Added this line */
+}
+.info-text.anim-change {
+  opacity: 0;
+  transform: translateY(18px) scale(0.96);
+  transition: opacity 0.2s, transform 0.2s;
+}
+/* Keterangan hijau tebal */
+.info-detail {
+  color: #22b573 !important;
+  font-weight: bold;
+}
+.satuan-ohm {
+  color: #222 !important;
+  font-weight: normal !important;
+}
+body.dark-mode .satuan-ohm {
+  color: #fff !important;
+}
+.nav-btn {
+  border-radius: 30px;
+  margin: 5px;
+  padding: 6px 18px;
+  font-weight: 500;
+  background-color: #0d6efd;
+  color: white;
+  transition: all 0.3s ease;
+  border: none;
+  font-size: 1rem;
+  line-height: 1.2;
+  text-decoration: none !important;
+}
+.nav-btn:hover {
+  background-color: #084298;
+}
+.footer {
+  border-top: 1px solid #ccc;
+  padding-top: 12px;
+  margin-top: 30px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  transition: color 0.3s, border-color 0.3s;
+}
+/* Enhanced animasi pada input hasil resistansi */
+#resistansi {
+  transition:
+    box-shadow 0.5s cubic-bezier(.4,2,.7,1.2),
+    background 0.5s cubic-bezier(.4,2,.7,1.2),
+    color 0.5s cubic-bezier(.4,2,.7,1.2),
+    opacity 0.5s cubic-bezier(.4,2,.7,1.2),
+    transform 0.5s cubic-bezier(.4,2,.7,1.2);
+  opacity: 1;
+  background: #fff;
+  box-shadow: none;
+  color: #222;
+}
+#resistansi.anim-change {
+  opacity: 0;
+  background: #e0f7ff;
+  box-shadow: 0 0 16px 2px #80d0ff4d;
+  color: #127cff;
+  transform: scale(0.96) translateY(-10px);
+  transition:
+    opacity 0.2s,
+    background 0.2s,
+    color 0.2s,
+    box-shadow 0.2s,
+    transform 0.2s;
+}
+/* DARK MODE FULL BLACK */
+body.dark-mode {
+  background: #000 !important;
+  color: #fff !important;
+}
+body.dark-mode .card-box {
+  background-color: #000 !important;
+  color: #fff !important;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.7);
+  border: 2px solid #fff;
+}
+body.dark-mode .form-control,
+body.dark-mode .form-select.luas-select {
+  background-color: #000 !important;
+  color: #fff !important;
+  border: 1.5px solid #fff !important;
+}
+body.dark-mode .form-control:focus,
+body.dark-mode .form-select.luas-select:focus {
+  background-color: #000 !important;
+  color: #fff !important;
+  border: 2px solid #22b573 !important;
+  box-shadow: 0 0 0 0.15rem #22b5734d;
+}
+body.dark-mode .form-label {
+  color: #fff !important;
+}
+body.dark-mode .info-text {
+  color: #fff !important;
+}
+body.dark-mode .leaf-btn {
+  color: #127cff !important;
+  background: transparent !important;
+  border: 2px solid #127cff !important;
+  box-shadow: none !important;
+}
+body.dark-mode .leaf-btn.active,
+body.dark-mode .leaf-btn:focus {
+  background-color: #127cff !important;
+  color: #fff !important;
+  outline: 2px solid #127cff !important;
+  box-shadow: 0 0 12px rgba(18, 124, 255, 0.18) !important;
+}
+body.dark-mode .leaf-btn:hover {
+  background-color: #127cff !important;
+  color: #fff !important;
+}
+body.dark-mode .nav-btn {
+  background-color: #1a73e8 !important;
+  color: #fff !important;
+}
+body.dark-mode .nav-btn:hover {
+  background-color: #125bbb !important;
+}
+body.dark-mode .footer {
+  color: #fff !important;
+  border-top: 1px solid #fff !important;
+}
+body.dark-mode h4.title {
+  color: #fff !important;
+}
+@media (max-width:500px) {
+  .leaf-btn, .nav-btn {
+    padding: 5px 12px;
+    font-size: 0.93rem;
+  }
+  .form-select.luas-select {
+    font-size: 0.93rem;
+    padding-left: 8px;
+  }
+}
+  </style>
+</head>
+<body>
+  <div class="card-box bg-white">
+    <h4 class="title">Konduktor Resistansi SPLN</h4>
+    <div class="text-center mb-4">
+      <button class="leaf-btn me-2 active" id="btnAAAC">AAAC</button>
+      <button class="leaf-btn me-2" id="btnACSR">ACSR</button>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Luas Penampang</label>
+      <select class="form-select luas-select" id="luas">
+<option class="aaac-option" value="16">16 mm²</option>
+<option class="aaac-option" value="25">25 mm²</option>
+<option class="aaac-option" value="35">35 mm²</option>
+<option class="aaac-option" value="50/7">50/7 mm²</option>
+<option class="aaac-option" value="50/19">50/19 mm²</option>
+<option class="aaac-option" value="55">55 mm²</option>
+<option class="aaac-option" value="70">70 mm²</option>
+<option class="aaac-option" value="95">95 mm²</option>
+<option class="aaac-option" value="100">100 mm²</option>
+<option class="aaac-option" value="120">120 mm²</option>
+<option class="aaac-option" value="150/19">150/19 mm²</option>
+<option class="aaac-option" value="150/37">150/37 mm²</option>
+<option class="aaac-option" value="185">185 mm²</option>
+<option class="aaac-option" value="240/19">240/19 mm²</option>
+<option class="aaac-option" value="240/61">240/61 mm²</option>
+<option class="aaac-option" value="300">300 mm²</option>
+<option class="aaac-option" value="400">400 mm²</option>
+<option class="aaac-option" value="500">500 mm²</option>
+<option class="aaac-option" value="630">630 mm²</option>
+<option class="aaac-option" value="800">800 mm²</option>
+<option class="aaac-option" value="1000">1000 mm²</option>
+<option class="acsr-option" value="16/2,5">16/2,5 mm²</option>
+<option class="acsr-option" value="25/4">25/4 mm²</option>
+<option class="acsr-option" value="35/6">35/6 mm²</option>
+<option class="acsr-option" value="44/32">44/32 mm²</option>
+<option class="acsr-option" value="50/8">50/8 mm²</option>
+<option class="acsr-option" value="50/30">50/30 mm²</option>
+<option class="acsr-option" value="70/12">70/12 mm²</option>
+<option class="acsr-option" value="95/15">95/15 mm²</option>
+<option class="acsr-option" value="95/55">95/55 mm²</option>
+<option class="acsr-option" value="105/75">105/75 mm²</option>
+<option class="acsr-option" value="120/20">120/20 mm²</option>
+<option class="acsr-option" value="120/70">120/70 mm²</option>
+<option class="acsr-option" value="125/30">125/30 mm²</option>
+<option class="acsr-option" value="150/25">150/25 mm²</option>
+<option class="acsr-option" value="170/40">170/40 mm²</option>
+<option class="acsr-option" value="185/30">185/30 mm²</option>
+<option class="acsr-option" value="210/35">210/35 mm²</option>
+<option class="acsr-option" value="210/50">210/50 mm²</option>
+<option class="acsr-option" value="230/30">230/30 mm²</option>
+<option class="acsr-option" value="240/40">240/40 mm²</option>
+<option class="acsr-option" value="265/35">265/35 mm²</option>
+<option class="acsr-option" value="300/50">300/50 mm²</option>
+<option class="acsr-option" value="305/40">305/40 mm²</option>
+<option class="acsr-option" value="340/30">340/30 mm²</option>
+<option class="acsr-option" value="360/50">360/50 mm²</option>
+<option class="acsr-option" value="385/33">385/33 mm²</option>
+<option class="acsr-option" value="435/55">435/55 mm²</option>
+<option class="acsr-option" value="430/40">430/40 mm²</option>
+<option class="acsr-option" value="490/65">490/65 mm²</option>
+<option class="acsr-option" value="493/35">493/35 mm²</option>
+<option class="acsr-option" value="510/45">510/45 mm²</option>
+<option class="acsr-option" value="550/70">550/70 mm²</option>
+<option class="acsr-option" value="560/50">560/50 mm²</option>
+<option class="acsr-option" value="570/40">570/40 mm²</option>
+<option class="acsr-option" value="650/45">650/45 mm²</option>
+<option class="acsr-option" value="680/83">680/83 mm²</option>
+<option class="acsr-option" value="1043/45">1043/45 mm²</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Resistansi Maksimal (Ω/km)</label>
+      <input
+        type="text"
+        class="form-control"
+        id="resistansi"
+        value="1,955"
+        readonly
+      >
+    </div>
+    <div class="info-text" id="infoText">
+      Spesifikasi SPLN AAAC <span class="info-detail">16 mm²</span> adalah: <span class="info-detail">1,955</span> <span class="satuan-ohm">Ω/km</span>
+    </div>
+<div class="text-center mt-4">
+  <a href="..//spek konduktor/sk_index.html" class="nav-btn">Kembali</a>
+  <a href="..//index.html" class="nav-btn">Halaman Utama</a>
+  <button class="nav-btn" id="toggleDark">Dark</button>
+</div>
+    <div class="footer mt-4">
+      Made by Williyanto Adi 2025
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Data tabel resistansi [material][luas]
+    const resistansiTable = {
+      AAAC: {
+    "16": "1,955",
+    "25": "1,183",
+    "35": "0,958",
+    "50/7": "0,665",
+    "50/19": "0,724",
+    "55": "0,567",
+    "70": "0,438",
+    "95": "0,355",
+    "100": "0,332",
+    "120": "0,293",
+    "150/19": "0,210",
+    "150/37": "0,225",
+    "185": "0,183",
+    "240/19": "0,137",
+    "240/61": "0,139",
+    "300": "0,111",
+    "400": "0,077",
+    "500": "0,066",
+    "630": "0,052",
+    "800": "0,044",
+    "1000": "0,033"
+      },
+      ACSR: {
+"16/2,5": "1,879",
+    "25/4": "1,203",
+    "35/6": "0,8353",
+    "44/32": "-",
+    "50/8": "0,5946",
+    "50/30": "0,5644",
+    "70/12": "0,4130",
+    "95/15": "0,3053",
+    "95/55": "0,2992",
+    "105/75": "-",
+    "120/20": "0,2374",
+    "120/70": "0,2364",
+    "125/30": "0,2259",
+    "150/25": "0,1939",
+    "170/40": "0,1682",
+    "185/30": "0,1571",
+    "210/35": "0,1980",
+    "210/50": "0,1363",
+    "230/30": "0,1249",
+    "240/40": "0,1183",
+    "265/35": "0,1094",
+    "300/50": "0,09497",
+    "305/40": "0,09490",
+    "340/30": "0,09513",
+    "360/50": "0,07573",
+    "385/33": "0,07432",
+    "435/55": "0,06656",
+    "430/40": "0,05437",
+    "490/65": "0,05896",
+    "493/35": "0,05142",
+    "510/45": "0,03957",
+    "550/70": "0,05259",
+    "560/50": "0,03142",
+    "570/40": "0,05057",
+    "650/45": "0,0442",
+    "680/83": "0,04260",
+    "1043/45": "-"
+      }
+    };
+
+    // Label material untuk infoText
+    const labelMaterial = {
+      AAAC: "AAAC",
+      ACSR: "ACSR"
+    };
+
+    let selectedMaterial = 'AAAC'; // Default to AAAC
+    const buttons = document.querySelectorAll('.leaf-btn');
+    const resistansiInput = document.getElementById('resistansi');
+    const infoText = document.getElementById('infoText');
+    const luasSelect = document.getElementById('luas');
+
+    // Enhanced Fade & Slide helper
+    function animUpdate(el, updateFn) {
+      el.classList.add('anim-change');
+      setTimeout(() => {
+        updateFn();
+        el.classList.remove('anim-change');
+      }, 200); // fade out quickly, then update and fade in
+    }
+
+    function updateLuasOptions() {
+      // Clear existing options
+      luasSelect.innerHTML = '';
+
+      // Add new options based on selectedMaterial
+      const currentOptions = resistansiTable[selectedMaterial];
+      for (const value in currentOptions) {
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = `${value} mm²`;
+        luasSelect.appendChild(option);
+      }
+      // Set the first option as selected by default after updating
+      luasSelect.selectedIndex = 0;
+    }
+
+    function setResistansiAndInfo() {
+      const luas = luasSelect.value;
+      const luasText = luasSelect.options[luasSelect.selectedIndex].text;
+      const resistansiValue = resistansiTable[selectedMaterial][luas] || "-";
+
+      // Enhanced fade+slide for resistansi input value
+      animUpdate(resistansiInput, () => {
+        resistansiInput.value = resistansiValue;
+      });
+
+      // Pisahkan angka dan satuan
+      let nilai = resistansiValue;
+      let satuan = "Ω/km";
+      if (nilai === "-") satuan = "";
+
+      // Enhanced fade+slide for info text
+      animUpdate(infoText, () => {
+        // Changed to single line
+        infoText.innerHTML =
+          `Spesifikasi SPLN ${labelMaterial[selectedMaterial]} <span class="info-detail">${luasText}</span> adalah: <span class="info-detail">${nilai}</span> <span class="satuan-ohm">${satuan}</span>`;
+      });
+    }
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', function () {
+        buttons.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        selectedMaterial = this.id.replace('btn', '');
+        updateLuasOptions(); // Update dropdown options when material changes
+        setResistansiAndInfo();
+      });
+    });
+
+    luasSelect.addEventListener('change', function () {
+      setResistansiAndInfo();
+    });
+
+    // Inisialisasi tampilan awal sesuai default
+    // First, update the options, then set the resistance and info
+    updateLuasOptions();
+    setResistansiAndInfo();
+
+    // Dark Mode
+    const toggleDark = document.getElementById("toggleDark");
+    let darkMode = false;
+
+    function setDarkMode(on) {
+      if(on) {
+        document.body.classList.add('dark-mode');
+        toggleDark.textContent = "🌞";
+        darkMode = true;
+      } else {
+        document.body.classList.remove('dark-mode');
+        toggleDark.textContent = "🌙";
+        darkMode = false;
+      }
+      // Simpan preferensi ke localStorage
+      localStorage.setItem('darkMode', darkMode ? "1" : "0");
+    }
+
+    toggleDark.addEventListener('click', function() {
+      setDarkMode(!darkMode);
+    });
+
+    // Load preferensi dark mode (jika ada)
+    if(localStorage.getItem('darkMode') === "1") {
+      setDarkMode(true);
+    }
+  </script>
+</body>
+</html>

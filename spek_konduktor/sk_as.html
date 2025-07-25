@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Konduktor Resistansi AS/NZS</title>
+  <link rel="icon" type="image/png" href="logo_as.png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+/* Styling for the resistance input field */
+#resistansi {
+  transition:
+    box-shadow 0.5s cubic-bezier(.4,2,.7,1.2),
+    background 0.5s cubic-bezier(.4,2,.7,1.2),
+    color 0.5s cubic-bezier(.4,2,.7,1.2),
+    opacity 0.5s cubic-bezier(.4,2,.7,1.2),
+    transform 0.5s cubic-bezier(.4,2,.7,1.2);
+  opacity: 1;
+  background: #fff;
+  box-shadow: none;
+  color: #222;
+  text-align: center;
+}
+#resistansi {
+  text-align: center;
+}
+/* Body general styling */
+body {
+  background: linear-gradient(145deg, #f0f0f0, #ffffff);
+  font-family: 'Segoe UI', sans-serif;
+  transition: background 0.3s, color 0.3s;
+}
+/* Card container styling */
+.card-box {
+  max-width: 420px;
+  margin: 50px auto;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  padding: 25px;
+  background-color: white;
+  transition: background 0.3s, color 0.3s, border 0.3s;
+}
+/* Title styling */
+h4.title {
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 25px;
+  transition: color 0.3s;
+}
+/* Modified .leaf-btn to support dropdowns */
+.leaf-btn-group {
+  display: inline-block;
+  margin: 5px 5px 5px 0;
+}
+/* Styling for the material selection buttons */
+.leaf-btn {
+  color: #127cff;
+  font-weight: 400;
+  border: 2px solid #127cff;
+  background: transparent;
+  padding: 6px 18px;
+  border-radius: 30px;
+  transition:
+    transform 0.18s cubic-bezier(.4,2,.7,1.2),
+    background 0.2s,
+    color 0.2s,
+    box-shadow 0.2s;
+  font-size: 1rem;
+  box-shadow: none;
+  line-height: 1.2;
+}
+/* Active and focus states for material buttons */
+.leaf-btn.active,
+.leaf-btn:focus {
+  background-color: #127cff !important;
+  color: #fff !important;
+  outline: 2px solid #127cff !important;
+  box-shadow: 0 0 12px rgba(18, 124, 255, 0.18) !important;
+  transform: scale(1.09);
+}
+/* Hover state for material buttons */
+.leaf-btn:hover {
+  background-color: #127cff;
+  color: #fff;
+  transform: scale(1.09);
+  z-index: 2;
+}
+
+/* Dropdown specific styles */
+.dropdown-toggle::after {
+  display: none; /* Hide default caret */
+}
+.dropdown-menu {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border: none;
+}
+.dropdown-item {
+  font-weight: 500;
+  color: #333;
+  padding: 8px 16px;
+  transition: background-color 0.2s, color 0.2s;
+}
+.dropdown-item.active, .dropdown-item:active {
+  background-color: #127cff !important;
+  color: #fff !important;
+}
+.dropdown-item:hover {
+  background-color: #e9ecef;
+  color: #127cff;
+}
+
+/* Form control and select styling */
+.form-control,
+.form-select.luas-select {
+  border-radius: 12px;
+  font-weight: bold;
+  transition: background 0.3s, color 0.3s, border 0.3s;
+  background: #fff;
+  color: #222;
+  border: 1px solid #ddd;
+}
+.form-select.luas-select {
+  text-align: left;
+  padding-left: 12px;
+}
+/* Form label styling */
+.form-label {
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+/* Info text styling */
+.info-text {
+  font-size: 14px;
+  text-align: center;
+  margin-top: 15px;
+  color: #333;
+  opacity: 1;
+  transform: translateY(0px) scale(1);
+  transition: opacity 0.55s cubic-bezier(.4,2,.7,1.2), transform 0.55s cubic-bezier(.4,2,.7,1.2);
+}
+.info-text.anim-change {
+  opacity: 0;
+  transform: translateY(18px) scale(0.96);
+  transition: opacity 0.2s, transform 0.2s;
+}
+/* Bold green text for info details */
+.info-detail {
+  color: #22b573 !important;
+  font-weight: bold;
+}
+/* Ohm unit styling */
+.satuan-ohm {
+  color: #222 !important;
+  font-weight: normal !important;
+}
+body.dark-mode .satuan-ohm {
+  color: #fff !important;
+}
+/* Navigation button styling */
+.nav-btn {
+  border-radius: 30px;
+  margin: 5px;
+  padding: 6px 18px;
+  font-weight: 500;
+  background-color: #0d6efd;
+  color: white;
+  transition: all 0.3s ease;
+  border: none;
+  font-size: 1rem;
+  line-height: 1.2;
+  text-decoration: none !important;
+}
+.nav-btn:hover {
+  background-color: #084298;
+}
+/* Footer styling */
+.footer {
+  border-top: 1px solid #ccc;
+  padding-top: 12px;
+  margin-top: 30px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  transition: color 0.3s, border-color 0.3s;
+}
+/* Enhanced animation for resistance input result */
+#resistansi {
+  transition:
+    box-shadow 0.5s cubic-bezier(.4,2,.7,1.2),
+    background 0.5s cubic-bezier(.4,2,.7,1.2),
+    color 0.5s cubic-bezier(.4,2,.7,1.2),
+    opacity 0.5s cubic-bezier(.4,2,.7,1.2),
+    transform 0.5s cubic-bezier(.4,2,.7,1.2);
+  opacity: 1;
+  background: #fff;
+  box-shadow: none;
+  color: #222;
+}
+#resistansi.anim-change {
+  opacity: 0;
+  background: #e0f7ff;
+  box-shadow: 0 0 16px 2px #80d0ff4d;
+  color: #127cff;
+  transform: scale(0.96) translateY(-10px);
+  transition:
+    opacity 0.2s,
+    background 0.2s,
+    color 0.2s,
+    box-shadow 0.2s,
+    transform 0.2s;
+}
+/* DARK MODE FULL BLACK */
+body.dark-mode {
+  background: #000 !important;
+  color: #fff !important;
+}
+body.dark-mode .card-box {
+  background-color: #000 !important;
+  color: #fff !important;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.7);
+  border: 2px solid #fff;
+}
+body.dark-mode .form-control,
+body.dark-mode .form-select.luas-select {
+  background-color: #000 !important;
+  color: #fff !important;
+  border: 1.5px solid #fff !important;
+}
+body.dark-mode .form-control:focus,
+body.dark-mode .form-select.luas-select:focus {
+  background-color: #000 !important;
+  color: #fff !important;
+  border: 2px solid #22b573 !important;
+  box-shadow: 0 0 0 0.15rem #22b5734d;
+}
+body.dark-mode .form-label {
+  color: #fff !important;
+}
+body.dark-mode .info-text {
+  color: #fff !important;
+}
+body.dark-mode .leaf-btn {
+  color: #127cff !important;
+  background: transparent !important;
+  border: 2px solid #127cff !important;
+  box-shadow: none !important;
+}
+body.dark-mode .leaf-btn.active,
+body.dark-mode .leaf-btn:focus {
+  background-color: #127cff !important;
+  color: #fff !important;
+  outline: 2px solid #127cff !important;
+  box-shadow: 0 0 12px rgba(18, 124, 255, 0.18) !important;
+}
+body.dark-mode .leaf-btn:hover {
+  background-color: #127cff !important;
+  color: #fff !important;
+}
+/* Dark mode for dropdown menu */
+body.dark-mode .dropdown-menu {
+  background-color: #000 !important;
+  border: 1.5px solid #fff !important;
+}
+body.dark-mode .dropdown-item {
+  color: #fff !important;
+}
+body.dark-mode .dropdown-item.active,
+body.dark-mode .dropdown-item:active {
+  background-color: #127cff !important;
+  color: #fff !important;
+}
+body.dark-mode .dropdown-item:hover {
+  background-color: #333 !important;
+  color: #fff !important;
+}
+
+/* NEW CSS for core type text colors */
+.single-core-text {
+  color: #22b573; /* Green */
+  font-weight: bold;
+}
+.multi-core-text {
+  color: #0d6efd; /* Blue */
+  font-weight: bold;
+}
+body.dark-mode .single-core-text {
+  color: #66ff99; /* Lighter green for dark mode */
+}
+body.dark-mode .multi-core-text {
+  color: #6699ff; /* Lighter blue for dark mode */
+}
+
+
+body.dark-mode .nav-btn {
+  background-color: #1a73e8 !important;
+  color: #fff !important;
+}
+body.dark-mode .nav-btn:hover {
+  background-color: #125bbb !important;
+}
+body.dark-mode .footer {
+  color: #fff !important;
+  border-top: 1px solid #fff !important;
+}
+body.dark-mode h4.title {
+  color: #fff !important;
+}
+@media (max-width:500px) {
+  .leaf-btn, .nav-btn {
+    padding: 5px 12px;
+    font-size: 0.93rem;
+  }
+  .form-select.luas-select {
+    font-size: 0.93rem;
+    padding-left: 8px;
+  }
+}
+  </style>
+</head>
+<body>
+  <div class="card-box bg-white">
+    <h4 class="title">Konduktor Resistansi AS/NZS</h4>
+    <div class="text-center mb-4">
+      <div class="leaf-btn-group dropdown">
+        <button class="leaf-btn dropdown-toggle active" type="button" id="btnCU" data-bs-toggle="dropdown" aria-expanded="false">
+          CU
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="btnCU">
+          <li><a class="dropdown-item active" href="#" data-core-type="Single">Single Core</a></li>
+          <li><a class="dropdown-item" href="#" data-core-type="Multi">Multi Core</a></li>
+        </ul>
+      </div>
+      <div class="leaf-btn-group dropdown">
+        <button class="leaf-btn dropdown-toggle" type="button" id="btnAL" data-bs-toggle="dropdown" aria-expanded="false">
+          AL
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="btnAL">
+          <li><a class="dropdown-item" href="#" data-core-type="Single">Single Core</a></li>
+          <li><a class="dropdown-item" href="#" data-core-type="Multi">Multi Core</a></li>
+        </ul>
+      </div>
+      <div class="leaf-btn-group dropdown">
+        <button class="leaf-btn dropdown-toggle" type="button" id="btnTCU" data-bs-toggle="dropdown" aria-expanded="false">
+          TCU
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="btnTCU">
+          <li><a class="dropdown-item" href="#" data-core-type="Single">Single Core</a></li>
+          <li><a class="dropdown-item" href="#" data-core-type="Multi">Multi Core</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="luas" class="form-label">Luas Penampang</label>
+        <select class="form-select luas-select" id="luas">
+            <option value="0,5">0,5 mm²</option>
+            <option value="0,75">0,75 mm²</option>
+            <option value="1,0">1,0 mm²</option>
+            <option value="1,5">1,5 mm²</option>
+            <option value="2,5">2,5 mm²</option>
+            <option value="4">4 mm²</option>
+            <option value="6">6 mm²</option>
+            <option value="10">10 mm²</option>
+            <option value="16">16 mm²</option>
+            <option value="25">25 mm²</option>
+            <option value="35">35 mm²</option>
+            <option value="50">50 mm²</option>
+            <option value="70">70 mm²</option>
+            <option value="95">95 mm²</option>
+            <option value="120">120 mm²</option>
+            <option value="150">150 mm²</option>
+            <option value="185">185 mm²</option>
+            <option value="240">240 mm²</option>
+            <option value="300">300 mm²</option>
+            <option value="400">400 mm²</option>
+            <option value="500">500 mm²</option>
+            <option value="630">630 mm²</option>
+            <option value="800">800 mm²</option>
+            <option value="960">960 mm²</option>
+            <option value="1000">1000 mm²</option>
+            <option value="1200">1200 mm²</option>
+            <option value="1600">1600 mm²</option>
+            <option value="2000">2000 mm²</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label" id="resistansiLabel">Resistansi Maksimal (Ω/km) - <span class="single-core-text">Single Core</span></label>
+      <input
+        type="text"
+        class="form-control"
+        id="resistansi"
+        value="0,0601"
+        readonly
+      >
+    </div>
+    <div class="info-text" id="infoText">
+      </div>
+<div class="text-center mt-4">
+  <a href="..//spek konduktor/sk_index.html" class="nav-btn">Kembali</a>
+  <a href="..//index.html" class="nav-btn">Halaman Utama</a>
+  <button class="nav-btn" id="toggleDark">Dark</button>
+</div>
+    <div class="footer mt-4">
+      Made by Williyanto Adi 2025
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Data tabel resistansi [material][tipe_core][luas]
+    // Sekarang, setiap entri memiliki 'max' untuk resistansi maksimal dan 'info' untuk resistansi di info tambahan.
+    // Saya telah membuat nilai 'info' berbeda dari 'max' sebagai contoh, seperti yang Anda sebutkan (misal, 0,01).
+    const resistansiTable = {
+        CU: {
+Single: {
+        "0,5": { max: "39,6", info: "38,4" },
+        "0,75": { max: "26,1", info: "25,3" },
+        "1,0": { max: "21,9", info: "21,2" },
+        "1,5": { max: "14,0", info: "13,6" },
+        "2,5": { max: "7,64", info: "7,41" },
+        "4": { max: "4,75", info: "4,61" },
+        "6": { max: "3,18", info: "3,08" },
+        "10": { max: "1,89", info: "1,83" },
+        "16": { max: "1,19", info: "1,15" },
+        "25": { max: "0,749", info: "0,727" },
+        "35": { max: "0,540", info: "0,524" },
+        "50": { max: "0,399", info: "0,387" },
+        "70": { max: "0,276", info: "0,268" },
+        "95": { max: "0,199", info: "0,193" },
+        "120": { max: "0,158", info: "0,153" },
+        "150": { max: "0,128", info: "0,124" },
+        "185": { max: "0,102", info: "0,0991" },
+        "240": { max: "0,0777", info: "0,0754" },
+        "300": { max: "0,0620", info: "0,0601" },
+        "400": { max: "0,0485", info: "0,0470" },
+        "500": { max: "0,0377", info: "0,0366" },
+        "630": { max: "0,0292", info: "0,0283" },
+        "800": { max: "0,0228", info: "0,0221" },
+        "960": { max: "0,0195", info: "0,0189" },
+        "1000": { max: "0,0181", info: "0,0176" },
+        "1200": { max: "0,0156", info: "0,0151" },
+        "1600": { max: "0,0116", info: "0,0113" },
+        "2000": { max: "0,0093", info: "0,0090" }
+        },
+Multi: {
+        "0,5": { max: "39,6", info: "38,4" },
+        "0,75": { max: "26,1", info: "25,3" },
+        "1,0": { max: "21,9", info: "21,2" },
+        "1,5": { max: "14,0", info: "13,6" },
+        "2,5": { max: "7,64", info: "7,41" },
+        "4": { max: "4,75", info: "4,61" },
+        "6": { max: "3,18", info: "3,08" },
+        "10": { max: "1,89", info: "1,83" },
+        "16": { max: "1,19", info: "1,15" },
+        "25": { max: "0,749", info: "0,727" },
+        "35": { max: "0,540", info: "0,524" },
+        "50": { max: "0,399", info: "0,387" },
+        "70": { max: "0,276", info: "0,268" },
+        "95": { max: "0,199", info: "0,193" },
+        "120": { max: "0,158", info: "0,153" },
+        "150": { max: "0,128", info: "0,124" },
+        "185": { max: "0,102", info: "0,0991" },
+        "240": { max: "0,0777", info: "0,0754" },
+        "300": { max: "0,0620", info: "0,0601" },
+        "400": { max: "0,0485", info: "0,0470" },
+        "500": { max: "0,0373", info: "0,0366" },
+        "630": { max: "0,0289", info: "0,0283" },
+        "800": { max: "0,0228", info: "0,0221" },
+        "960": { max: "0,0195", info: "0,0189" },
+        "1000": { max: "0,0181", info: "0,0176" },
+        "1200": { max: "0,0156", info: "0,0151" },
+        "1600": { max: "0,0116", info: "0,0113" },
+        "2000": { max: "0,0093", info: "0,0090" }
+        }
+      },
+      TCU: {
+Single: {
+        "0,5": { max: "40,8", info: "39,6" },
+        "0,75": { max: "26,8", info: "26,0" },
+        "1,0": { max: "22,3", info: "21,6" },
+        "1,5": { max: "14,2", info: "13,8" },
+        "2,5": { max: "7,79", info: "7,56" },
+        "4": { max: "4,85", info: "4,70" },
+        "6": { max: "3,21", info: "3,11" },
+        "10": { max: "1,90", info: "1,84" },
+        "16": { max: "1,20", info: "1,16" },
+        "25": { max: "0,757", info: "0,734" },
+        "35": { max: "0,545", info: "0,529" },
+        "50": { max: "0,403", info: "0,391" },
+        "70": { max: "0,278", info: "0,270" },
+        "95": { max: "0,201", info: "0,195" },
+        "120": { max: "0,159", info: "0,154" },
+        "150": { max: "0,130", info: "0,126" },
+        "185": { max: "0,103", info: "0,100" },
+        "240": { max: "0,0786", info: "0,0762" },
+        "300": { max: "0,0626", info: "0,0607" },
+        "400": { max: "0,0490", info: "0,0475" },
+        "500": { max: "0,0380", info: "0,0369" },
+        "630": { max: "0,0295", info: "0,0286" },
+        "800": { max: "0,0231", info: "0,0224" },
+        "960": { max: "0,0195", info: "0,0189" },
+        "1000": { max: "0,0182", info: "0,0177" },
+        "1200": { max: "0,0156", info: "0,0151" },
+        "1600": { max: "0,0116", info: "0,0113" },
+        "2000": { max: "0,0093", info: "0,0090" }
+        },
+Multi: {
+        "0,5": { max: "40,8", info: "39,6" },
+        "0,75": { max: "26,8", info: "26,0" },
+        "1,0": { max: "22,3", info: "21,6" },
+        "1,5": { max: "14,2", info: "13,8" },
+        "2,5": { max: "7,79", info: "7,56" },
+        "4": { max: "4,85", info: "4,70" },
+        "6": { max: "3,21", info: "3,11" },
+        "10": { max: "1,90", info: "1,84" },
+        "16": { max: "1,20", info: "1,16" },
+        "25": { max: "0,757", info: "0,734" },
+        "35": { max: "0,545", info: "0,529" },
+        "50": { max: "0,403", info: "0,391" },
+        "70": { max: "0,278", info: "0,270" },
+        "95": { max: "0,201", info: "0,195" },
+        "120": { max: "0,159", info: "0,154" },
+        "150": { max: "0,130", info: "0,126" },
+        "185": { max: "0,103", info: "0,100" },
+        "240": { max: "0,0786", info: "0,0762" },
+        "300": { max: "0,0626", info: "0,0607" },
+        "400": { max: "0,0490", info: "0,0475" },
+        "500": { max: "0,0376", info: "0,0369" },
+        "630": { max: "0,0292", info: "0,0286" },
+        "800": { max: "0,0231", info: "0,0224" },
+        "960": { max: "0,0195", info: "0,0189" },
+        "1000": { max: "0,0182", info: "0,0177" },
+        "1200": { max: "0,0156", info: "0,0151" },
+        "1600": { max: "0,0116", info: "0,0113" },
+        "2000": { max: "0,0093", info: "0,0090" }
+        }
+      },
+
+      AL: {
+Single: {
+        "0,5": { max: "-", info: "-" },
+        "0,75": { max: "-", info: "-" },
+        "1,0": { max: "-", info: "-" },
+        "1,5": { max: "-", info: "-" },
+        "2,5": { max: "-", info: "-" },
+        "4": { max: "7,41", info: "7,41" },
+        "6": { max: "4,61", info: "4,61" },
+        "10": { max: "3,08", info: "3,08" },
+        "16": { max: "1,91", info: "1,91" },
+        "25": { max: "1,20", info: "1,20" },
+        "35": { max: "0,868", info: "0,868" },
+        "50": { max: "0,641", info: "0,641" },
+        "70": { max: "0,443", info: "0,443" },
+        "95": { max: "0,320", info: "0,320" },
+        "120": { max: "0,253", info: "0,253" },
+        "150": { max: "0,206", info: "0,206" },
+        "185": { max: "0,164", info: "0,164" },
+        "240": { max: "0,125", info: "0,125" },
+        "300": { max: "0,100", info: "0,100" },
+        "400": { max: "0,0778", info: "0,0778" },
+        "500": { max: "0,0605", info: "0,0605" },
+        "630": { max: "0,0469", info: "0,0469" },
+        "800": { max: "0,0367", info: "0,0367" },
+        "960": { max: "-", info: "-" },
+        "1000": { max: "0,0291", info: "0,0291" },
+        "1200": { max: "-", info: "-" },
+        "1600": { max: "-", info: "-" },
+        "2000": { max: "-", info: "-" }
+        },
+Multi: {
+        "0,5": { max: "-", info: "-" },
+        "0,75": { max: "-", info: "-" },
+        "1,0": { max: "-", info: "-" },
+        "1,5": { max: "-", info: "-" },
+        "2,5": { max: "-", info: "-" },
+        "4": { max: "7,41", info: "7,41" },
+        "6": { max: "4,61", info: "4,61" },
+        "10": { max: "3,08", info: "3,08" },
+        "16": { max: "1,91", info: "1,91" },
+        "25": { max: "1,20", info: "1,20" },
+        "35": { max: "0,868", info: "0,868" },
+        "50": { max: "0,641", info: "0,641" },
+        "70": { max: "0,443", info: "0,443" },
+        "95": { max: "0,320", info: "0,320" },
+        "120": { max: "0,253", info: "0,253" },
+        "150": { max: "0,206", info: "0,206" },
+        "185": { max: "0,164", info: "0,164" },
+        "240": { max: "0,125", info: "0,125" },
+        "300": { max: "0,100", info: "0,100" },
+        "400": { max: "0,0778", info: "0,0778" },
+        "500": { max: "0,0617", info: "0,0605" },
+        "630": { max: "0,0478", info: "0,0469" },
+        "800": { max: "0,0367", info: "0,0367" },
+        "960": { max: "-", info: "-" },
+        "1000": { max: "0,0291", info: "0,0291" },
+        "1200": { max: "-", info: "-" },
+        "1600": { max: "-", info: "-" },
+        "2000": { max: "-", info: "-" }
+        }
+      }
+    };
+
+    let selectedMaterial = 'CU';
+    let selectedCoreType = 'Single'; // Default ke Single Core
+
+    const materialButtons = document.querySelectorAll('.leaf-btn-group .leaf-btn');
+    const dropdownItems = document.querySelectorAll('.dropdown-item');
+    const resistansiInput = document.getElementById('resistansi');
+    const infoText = document.getElementById('infoText');
+    const luasSelect = document.getElementById('luas');
+    const resistansiLabel = document.getElementById('resistansiLabel'); // Ambil elemen label resistansi
+
+    // Helper untuk animasi Fade & Slide
+    function animUpdate(el, updateFn) {
+      el.classList.add('anim-change');
+      setTimeout(() => {
+        updateFn();
+        el.classList.remove('anim-change');
+      }, 200); // fade out dengan cepat, lalu update dan fade in
+    }
+
+    function setResistansiAndInfo() {
+      const luas = luasSelect.value;
+      const luasText = luasSelect.options[luasSelect.selectedIndex].text;
+
+      // Ambil objek resistansi yang berisi 'max' dan 'info'
+      const resistansiData = resistansiTable[selectedMaterial]?.[selectedCoreType]?.[luas];
+
+      let resistansiMaxValue = "-";
+      let resistansiInfoValue = "-";
+      let coreTypeTextForLabel = ""; // Variabel untuk menyimpan teks core type dengan styling
+
+      if (resistansiData) {
+        resistansiMaxValue = resistansiData.max;
+        resistansiInfoValue = resistansiData.info;
+      }
+
+      // Tentukan kelas CSS berdasarkan selectedCoreType
+      if (selectedCoreType === 'Single') {
+        coreTypeTextForLabel = `<span class="single-core-text">Single Core</span>`;
+      } else if (selectedCoreType === 'Multi') {
+        coreTypeTextForLabel = `<span class="multi-core-text">Multi Core</span>`;
+      }
+
+      // Animasi fade+slide untuk input resistansi (menggunakan resistansiMaxValue)
+      animUpdate(resistansiInput, () => {
+        resistansiInput.value = resistansiMaxValue;
+      });
+
+      // Update teks label resistansi dengan keterangan core type dan warna
+      animUpdate(resistansiLabel, () => {
+          resistansiLabel.innerHTML = `Resistansi Maksimal (Ω/km) - ${coreTypeTextForLabel}`;
+      });
+
+      // Animasi fade+slide untuk teks info (menggunakan resistansiInfoValue)
+      animUpdate(infoText, () => {
+        infoText.innerHTML =
+          `Spesifikasi sesuai tabel <span class="info-detail">${selectedMaterial} ${luasText}</span> adalah : <span class="info-detail">${resistansiInfoValue}</span> <span class="satuan-ohm">Ω/km</span>`;
+      });
+    }
+
+    materialButtons.forEach(btn => {
+      btn.addEventListener('click', function () {
+        // Nonaktifkan semua tombol material
+        materialButtons.forEach(b => b.classList.remove('active'));
+        // Nonaktifkan semua item dropdown terlepas dari induknya
+        dropdownItems.forEach(item => item.classList.remove('active'));
+
+        // Aktifkan tombol material yang diklik
+        this.classList.add('active');
+        selectedMaterial = this.id.replace('btn', '');
+
+        // Temukan menu dropdown yang sesuai dan aktifkan default (Single Core)
+        const dropdownMenu = this.closest('.leaf-btn-group').querySelector('.dropdown-menu');
+        const singleCoreItem = dropdownMenu.querySelector('[data-core-type="Single"]');
+        if (singleCoreItem) {
+          singleCoreItem.classList.add('active');
+          selectedCoreType = 'Single'; // Atur tipe core default
+        }
+
+        setResistansiAndInfo();
+      });
+    });
+
+    dropdownItems.forEach(item => {
+      item.addEventListener('click', function (e) {
+        e.preventDefault(); // Mencegah perilaku tautan default
+
+        // Nonaktifkan semua item dropdown dalam grup material yang sama
+        const parentDropdownMenu = this.closest('.dropdown-menu');
+        parentDropdownMenu.querySelectorAll('.dropdown-item').forEach(li => li.classList.remove('active'));
+
+        // Aktifkan item dropdown yang diklik
+        this.classList.add('active');
+        selectedCoreType = this.dataset.coreType;
+
+        // Pastikan tombol material induk aktif
+        materialButtons.forEach(btn => btn.classList.remove('active'));
+        const parentButtonId = this.closest('.leaf-btn-group').querySelector('.leaf-btn').id;
+        document.getElementById(parentButtonId).classList.add('active');
+        selectedMaterial = parentButtonId.replace('btn', '');
+
+        setResistansiAndInfo();
+      });
+    });
+
+    luasSelect.addEventListener('change', function () {
+      setResistansiAndInfo();
+    });
+
+    // Inisialisasi tampilan awal sesuai default (CU, Single Core, 300mm²)
+    // Temukan tipe core aktif default untuk CU (Single Core) dan terapkan kelas aktif
+    const defaultCuSingleCore = document.querySelector('#btnCU').closest('.leaf-btn-group').querySelector('[data-core-type="Single"]');
+    if (defaultCuSingleCore) {
+      defaultCuSingleCore.classList.add('active');
+    }
+    luasSelect.value = "0,5";
+
+    setResistansiAndInfo();
+
+    // Dark Mode
+    const toggleDark = document.getElementById("toggleDark");
+    let darkMode = false;
+    function setDarkMode(on) {
+      if(on) {
+        document.body.classList.add('dark-mode');
+        toggleDark.textContent = "🌞";
+        darkMode = true;
+      } else {
+        document.body.classList.remove('dark-mode');
+        toggleDark.textContent = "🌙";
+        darkMode = false;
+      }
+      // Simpan preferensi ke localStorage
+      localStorage.setItem('darkMode', darkMode ? "1" : "0");
+    }
+
+    toggleDark.addEventListener('click', function() {
+      setDarkMode(!darkMode);
+    });
+
+    // Muat preferensi dark mode (jika ada)
+    if(localStorage.getItem('darkMode') === "1") {
+      setDarkMode(true);
+    }
+  </script>
+</body>
+</html>
