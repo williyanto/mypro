@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Konverter Hambatan</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+body {
+  background: linear-gradient(145deg, #f0f0f0, #ffffff);
+  font-family: 'Segoe UI', sans-serif;
+  transition: background 0.3s, color 0.3s;
+  color: #222;
+}
+.card-box {
+  max-width: 420px;
+  margin: 50px auto;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  padding: 25px;
+  background-color: #fff;
+  transition: background 0.3s, color 0.3s, border 0.3s;
+}
+h4.title {
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 25px;
+  transition: color 0.3s;
+}
+.form-control, .form-select {
+  border-radius: 12px;
+  font-weight: bold;
+  transition: background 0.3s, color 0.3s, border 0.3s;
+  background: #fff;
+  color: #222;
+  border: 1px solid #ddd;
+}
+.form-label {
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+#result {
+  transition:
+    box-shadow 0.5s cubic-bezier(.4,2,.7,1.2),
+    background 0.5s cubic-bezier(.4,2,.7,1.2),
+    color 0.5s cubic-bezier(.4,2,.7,1.2),
+    opacity 0.5s cubic-bezier(.4,2,.7,1.2),
+    transform 0.5s cubic-bezier(.4,2,.7,1.2);
+  opacity: 1;
+  background: #fff;
+  box-shadow: none;
+  color: #22b573 !important;
+  text-align: center;
+  font-weight: bold;
+}
+#result.anim-change {
+  opacity: 0;
+  background: #e0f7ff;
+  box-shadow: 0 0 16px 2px #80d0ff4d;
+  color: #22b573 !important;
+  transform: scale(0.96) translateY(-10px);
+  transition:
+    opacity 0.2s,
+    background 0.2s,
+    color 0.2s,
+    box-shadow 0.2s,
+    transform 0.2s;
+}
+.info-text {
+  font-size: 14px;
+  text-align: center;
+  margin-top: 15px;
+  color: #333;
+  opacity: 1;
+  transform: translateY(0px) scale(1);
+  transition: opacity 0.55s cubic-bezier(.4,2,.7,1.2), transform 0.55s cubic-bezier(.4,2,.7,1.2);
+}
+.info-text.anim-change {
+  opacity: 0;
+  transform: translateY(18px) scale(0.96);
+  transition: opacity 0.2s, transform 0.2s;
+}
+.info-detail {
+  color: #22b573 !important;
+  font-weight: bold;
+}
+.hasil-label {
+  color: #000 !important;
+  font-weight: bold;
+}
+.info-extra {
+  margin-top: 9px;
+  font-size: 13px;
+  color: #222;
+}
+.green {
+  color: #22b573 !important;
+  font-weight: bold;
+}
+/* --- NAV/PRIMARY BUTTONS --- */
+.nav-btn {
+  border-radius: 30px;
+  margin: 5px;
+  padding: 6px 18px;
+  font-weight: 500;
+  background-color: #0d6efd;
+  color: white !important;
+  transition: all 0.3s ease;
+  border: none;
+  font-size: 1rem;
+  line-height: 1.2;
+  text-decoration: none !important;
+  display: inline-block;
+}
+.nav-btn:hover {
+  background-color: #084298;
+  color: #fff !important;
+  text-decoration: none;
+}
+body.dark-mode .nav-btn {
+  background-color: #1a73e8 !important;
+  color: #fff !important;
+}
+body.dark-mode .nav-btn:hover {
+  background-color: #125bbb !important;
+}
+#btnSwitch {
+  padding: 6px 13px;
+  font-size: 1.2rem;
+  border-radius: 30px;
+  margin-bottom: 7px;
+  transition: background 0.2s, color 0.2s;
+  border: 2px solid #127cff;
+  background: #fff;
+  color: #127cff;
+}
+#btnSwitch:active, #btnSwitch:focus, #btnSwitch:hover {
+  background: #127cff;
+  color: #fff;
+}
+body.dark-mode #btnSwitch {
+  background: #23272e !important;
+  color: #127cff !important;
+  border: 2px solid #127cff !important;
+}
+body.dark-mode #btnSwitch:active,
+body.dark-mode #btnSwitch:focus,
+body.dark-mode #btnSwitch:hover {
+  background: #127cff !important;
+  color: #fff !important;
+}
+.footer {
+  border-top: 1px solid #ccc;
+  padding-top: 12px;
+  margin-top: 30px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  transition: color 0.3s, border-color 0.3s;
+}
+/* --- DARK MODE --- */
+body.dark-mode {
+  background: linear-gradient(145deg, #23272e 0%, #11141a 100%) !important;
+  color: #fff !important;
+}
+body.dark-mode .card-box {
+  background-color: #191c22 !important;
+  color: #fff !important;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.7);
+  border: 2px solid #3c3f46;
+}
+body.dark-mode .form-control,
+body.dark-mode .form-select {
+  background-color: #23272e !important;
+  color: #fff !important;
+  border: 1.5px solid #555 !important;
+}
+body.dark-mode .form-control:focus,
+body.dark-mode .form-select:focus {
+  background-color: #23272e !important;
+  color: #fff !important;
+  border: 2px solid #22b573 !important;
+  box-shadow: 0 0 0 0.15rem #22b5734d;
+}
+body.dark-mode .form-label {
+  color: #e1e1e1 !important;
+}
+body.dark-mode .info-text {
+  color: #eee !important;
+}
+body.dark-mode .info-extra {
+  color: #fff !important;
+}
+body.dark-mode .green {
+  color: #22b573 !important;
+}
+body.dark-mode #result {
+  color: #22b573 !important;
+  background: #23272e !important;
+  border: 1.5px solid #22b573 !important;
+}
+body.dark-mode .hasil-label {
+  color: #fff !important;
+  background: transparent;
+}
+body.dark-mode .footer {
+  color: #bbb !important;
+  border-top: 1px solid #555 !important;
+}
+body.dark-mode h4.title {
+  color: #fff !important;
+}
+body.dark-mode .leaf-btn {
+  color: #127cff !important;
+  background: transparent !important;
+  border: 2px solid #127cff !important;
+  box-shadow: none !important;
+}
+body.dark-mode .leaf-btn.active,
+body.dark-mode .leaf-btn:focus {
+  background-color: #127cff !important;
+  color: #fff !important;
+  outline: 2px solid #127cff !important;
+  box-shadow: 0 0 12px rgba(18, 124, 255, 0.18) !important;
+}
+body.dark-mode .leaf-btn:hover {
+  background-color: #127cff !important;
+  color: #fff !important;
+}
+@media (max-width:500px) {
+  .leaf-btn, .nav-btn {
+    padding: 5px 12px;
+    font-size: 0.93rem;
+  }
+  .d-flex.flex-row > div {
+    min-width: 0;
+    flex: 1 1 0%;
+  }
+  .d-flex.flex-row {
+    flex-direction: column !important;
+    gap: 0 !important;
+  }
+  #btnSwitch {
+    margin: 10px 0 !important;
+  }
+}
+  </style>
+</head>
+<body>
+  <div class="card-box bg-white">
+    <h4 class="title">Konverter Hambatan</h4>
+    <div class="mb-3" id="input-group-main">
+      <div class="d-flex flex-row align-items-end gap-2">
+        <div style="flex:100%;">
+          <div class="d-flex flex-row align-items-end gap-2">
+            <div style="flex:4;">
+              <label class="form-label">Nilai Hambatan</label>
+              <input 
+                type="number"
+                class="form-control"
+                id="inputValue"
+                placeholder="Masukkan nilai"
+                min="0"
+                autocomplete="off"
+              >
+            </div>
+            <div style="flex:4;">
+              <label class="form-label">Panjang</label>
+              <input 
+                type="number"
+                class="form-control"
+                id="inputLength"
+                placeholder="Masukkan panjang"
+                min="0"
+                autocomplete="off"
+              >
+            </div>
+          </div>
+          <div class="mt-2 d-flex flex-row align-items-end gap-2">
+            <div style="flex:1;">
+              <label class="form-label mb-1" for="selectSatuanMain">Satuan</label>
+              <select class="form-select" id="selectSatuanMain">
+                <option value="tera">TΩ</option>
+                <option value="giga">GΩ</option>
+                <option value="mega">MΩ</option>
+                <option value="kilo">kΩ</option>
+                <option value="ohm">Ω</option>
+                <option value="mili">mΩ</option>
+                <option value="mikro">µΩ</option>
+                <option value="nano">nΩ</option>
+                <option value="piko">pΩ</option>
+              </select>
+            </div>
+            <div class="d-flex flex-column align-items-center" style="justify-content:center;">
+              <button type="button" class="leaf-btn" id="btnSwitch" title="Tukar satuan input dan output">⇆</button>
+            </div>
+            <div style="flex:1;">
+              <label class="form-label mb-1" for="selectSatuanOutput" style="visibility:hidden;">Satuan Output</label>
+              <select class="form-select" id="selectSatuanOutput">
+                <option value="tera">TΩ</option>
+                <option value="giga">GΩ</option>
+                <option value="mega">MΩ</option>
+                <option value="kilo">kΩ</option>
+                <option value="ohm">Ω</option>
+                <option value="mili">mΩ</option>
+                <option value="mikro">µΩ</option>
+                <option value="nano">nΩ</option>
+                <option value="piko">pΩ</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mb-3" id="result-box-main">
+      <label class="form-label">Hasil Konversi</label>
+      <input 
+        type="text"
+        class="form-control"
+        id="result"
+        value="0"
+        readonly
+      >
+    </div>
+    <div class="info-text" id="infoText">
+      Silakan masukkan nilai hambatan, panjang, dan pilih satuan asal.
+      <div class="info-extra" id="infoExtra"></div>
+    </div>
+    <div class="text-center mt-4">
+      <a href="https://youtube.com" target class="nav-btn">Home</a>
+      <a href="https://google.com" target class="nav-btn">Home Page</a>
+      <button class="nav-btn" id="toggleDark">Dark</button>
+    </div>
+    <div class="footer mt-4">
+      Made by Williyanto Adi 2025
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Elemen Hambatan
+    const inputValue = document.getElementById('inputValue');
+    const inputLength = document.getElementById('inputLength');
+    const selectSatuanMain = document.getElementById('selectSatuanMain');
+    const selectSatuanOutput = document.getElementById('selectSatuanOutput');
+    const btnSwitch = document.getElementById('btnSwitch');
+    const resultInput = document.getElementById('result');
+    const infoText = document.getElementById('infoText');
+
+    // Satuan hambatan
+    const satuanList = [
+      { value: "tera", text: "TΩ", factor: 1e12, full: "Tera Ω" },
+      { value: "giga", text: "GΩ", factor: 1e9, full: "Giga Ω" },
+      { value: "mega", text: "MΩ", factor: 1e6, full: "Mega Ω" },
+      { value: "kilo", text: "kΩ", factor: 1e3, full: "Kilo Ω" },
+      { value: "ohm",  text: "Ω", factor: 1, full: "Ω" },
+      { value: "mili", text: "mΩ", factor: 1e-3, full: "Mili Ω" },
+      { value: "mikro", text: "µΩ", factor: 1e-6, full: "Mikro Ω" },
+      { value: "nano", text: "nΩ", factor: 1e-9, full: "Nano Ω" },
+      { value: "piko", text: "pΩ", factor: 1e-12, full: "Piko Ω" }
+    ];
+    function satuanText(val) {
+      const found = satuanList.find(s => s.value === val);
+      return found ? found.text : "";
+    }
+    function satuanTextFull(val) {
+      const found = satuanList.find(s => s.value === val);
+      return found ? found.full : "";
+    }
+    function satuanFactor(val) {
+      const found = satuanList.find(s => s.value === val);
+      return found ? found.factor : 1;
+    }
+    function satuanIdx(val) {
+      return satuanList.findIndex(s => s.value === val);
+    }
+
+    function animUpdate(el, updateFn) {
+      el.classList.add('anim-change');
+      setTimeout(() => {
+        updateFn();
+        el.classList.remove('anim-change');
+      }, 200);
+    }
+
+    // Konversi ke Ohm dan sebaliknya
+    function keOhm(nilai, dari) {
+      return nilai * satuanFactor(dari);
+    }
+    function dariOhm(nilai, ke) {
+      return nilai / satuanFactor(ke);
+    }
+
+    // Konversi MΩ·km
+    function getMOhmKm(val, satuanVal, panjang) {
+      let ohm = keOhm(val, satuanVal);
+      let megaohm = ohm / 1e6;
+      let km = parseFloat(panjang);
+      if (isNaN(km) || km <= 0) return 0;
+      return megaohm * km;
+    }
+
+    // Buat info tambahan, misal "1 Giga Ω sama dengan 1.000 Mega Ω"
+    function getInfoExtra(nilai, satuanFrom, satuanTo) {
+      if (!nilai || satuanFrom === satuanTo) return '';
+      const fromIdx = satuanIdx(satuanFrom);
+      const toIdx = satuanIdx(satuanTo);
+      if (fromIdx < 0 || toIdx < 0 || fromIdx === toIdx) return '';
+
+      let nilaiFrom = 1;
+      let nilaiTo = satuanFactor(satuanFrom) / satuanFactor(satuanTo);
+      let satuanFromFull = satuanTextFull(satuanFrom);
+      let satuanToFull = satuanTextFull(satuanTo);
+
+      if (Math.abs(nilaiTo) < 1) {
+        nilaiTo = 1;
+        nilaiFrom = satuanFactor(satuanTo) / satuanFactor(satuanFrom);
+        let temp = satuanFromFull; satuanFromFull = satuanToFull; satuanToFull = temp;
+      }
+
+      let nilaiToStr = '';
+      if (nilaiTo >= 1) {
+        nilaiToStr = nilaiTo.toLocaleString('id-ID', { maximumFractionDigits: 3 });
+      } else {
+        nilaiToStr = nilaiTo.toLocaleString('id-ID', { maximumFractionDigits: 12 }).replace(/0+$/, '');
+      }
+
+      let nilaiFromStr = '';
+      if (nilaiFrom >= 1) {
+        nilaiFromStr = nilaiFrom.toLocaleString('id-ID', { maximumFractionDigits: 3 });
+      } else {
+        nilaiFromStr = nilaiFrom.toLocaleString('id-ID', { maximumFractionDigits: 12 }).replace(/0+$/, '');
+      }
+
+      // Tampilkan: 1 Giga Ω sama dengan 1.000 Mega Ω
+      return `<span class="green">${nilaiFromStr} ${satuanFromFull}</span> sama dengan <span class="green">${nilaiToStr} ${satuanToFull}</span>.`;
+    }
+
+    function updateResultMain() {
+      const val = parseFloat(inputValue.value.replace(",", "."));
+      const panjang = parseFloat(inputLength.value.replace(",", "."));
+      const satuanAsal = selectSatuanMain.value;
+      const satuanTujuan = selectSatuanOutput.value;
+      if (isNaN(val) || val < 0) {
+        animUpdate(resultInput, () => { resultInput.value = "0"; });
+        animUpdate(infoText, () => {
+          infoText.innerHTML = `Silakan masukkan nilai hambatan, panjang, dan pilih satuan asal.<div class="info-extra" id="infoExtra"></div>`;
+        });
+        return;
+      }
+      // Hasil konversi satuan input-output
+      const ohm = keOhm(val, satuanAsal);
+      const hasil = dariOhm(ohm, satuanTujuan);
+      animUpdate(resultInput, () => {
+        resultInput.value = `${hasil.toLocaleString('id-ID', {maximumFractionDigits: 12})} ${satuanTextFull(satuanTujuan)}`;
+      });
+      // Hasil MΩ·km
+      let hasilMOhmKm = (isNaN(panjang) || panjang <= 0)
+        ? 0
+        : getMOhmKm(val, satuanAsal, panjang);
+      // Info: label hitam, hasil hijau
+      animUpdate(infoText, () => {
+        let infoStr = "";
+        if (!isNaN(panjang) && panjang > 0) {
+          infoStr = `<span class="hasil-label">Hasil Hitung :</span> <span class="info-detail">${hasilMOhmKm.toLocaleString('id-ID', {maximumFractionDigits: 12})} MΩ·km</span>`;
+        }
+        // Tambahan info konversi satuan
+        let infoExtraStr = getInfoExtra(1, satuanAsal, satuanTujuan);
+        infoText.innerHTML = (infoStr ? infoStr : "") + `<div class="info-extra">${infoExtraStr}</div>`;
+      });
+    }
+
+    inputValue.addEventListener('input', updateResultMain);
+    inputLength.addEventListener('input', updateResultMain);
+    selectSatuanMain.addEventListener('change', updateResultMain);
+    selectSatuanOutput.addEventListener('change', updateResultMain);
+
+    btnSwitch.addEventListener('click', function() {
+      const idxMain = selectSatuanMain.selectedIndex;
+      const idxOut = selectSatuanOutput.selectedIndex;
+      selectSatuanMain.selectedIndex = idxOut;
+      selectSatuanOutput.selectedIndex = idxMain;
+      updateResultMain();
+    });
+
+    // DARK MODE
+    const toggleDark = document.getElementById("toggleDark");
+    let darkMode = false;
+    function setDarkMode(on) {
+      if (on) {
+        document.body.classList.add('dark-mode');
+        toggleDark.textContent = "Light";
+        darkMode = true;
+      } else {
+        document.body.classList.remove('dark-mode');
+        toggleDark.textContent = "Dark";
+        darkMode = false;
+      }
+      localStorage.setItem('darkMode', darkMode ? "1" : "0");
+    }
+    toggleDark.addEventListener('click', function() {
+      setDarkMode(!darkMode);
+    });
+    function checkSystemDark() {
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    (function () {
+      let darkPref = localStorage.getItem('darkMode');
+      if (darkPref === "1" || (darkPref === null && checkSystemDark())) {
+        setDarkMode(true);
+      } else {
+        setDarkMode(false);
+      }
+    })();
+
+    // Inisialisasi tampilan awal
+    updateResultMain();
+  </script>
+</body>
+</html>
