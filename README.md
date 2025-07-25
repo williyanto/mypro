@@ -1,2 +1,0 @@
-# mypro
-experiment page
