@@ -87,6 +87,7 @@
             transition: all .3s ease; /* Smooth transition */
             padding: .75rem 1rem; /* More padding */
             color: #34495e;
+            height: calc(1.5em + 1.5rem + 3px); /* Standard Bootstrap form-control height calculation */
         }
         .form-control:focus {
             border-color: #3498db; /* Blue border on focus */
@@ -109,6 +110,11 @@
             border: 1.5px solid #d3eaf2; /* Light blue border */
             box-shadow: none;
             transition: all .3s ease;
+            /* Pastikan properti tinggi dan padding seragam dengan form-control */
+            height: calc(1.5em + 1.5rem + 3px); /* Match form-control height */
+            padding-top: .75rem;
+            padding-bottom: .75rem;
+            line-height: 1.5; /* Ensure enough line height */
         }
         .custom-select:focus {
             border-color: #3498db;
@@ -120,19 +126,21 @@
         .input-group .custom-select {
             border-left: 1.5px solid #d3eaf2 !important; /* Ensure border between input and select */
             border-radius: 0 10px 10px 0 !important; /* Rounded right for the select in group */
-            width: 120px !important; /* Lebar yang lebih spesifik */
+            /* *** FOKUS PERBAIKAN UKURAN KOLOM SAMA *** */
+            width: 120px !important; /* Tetapkan lebar eksplisit */
             min-width: 120px !important;
             max-width: 120px !important;
             padding-right: 2.5rem; /* Menambah padding kanan untuk panah dropdown */
-            
-            /* *** FOKUS PERBAIKAN FONT TERPOTONG *** */
-            height: calc(1.5em + 1.5rem + 3px) !important; /* Explicit height, matches .form-control height */
-            /* This calculation is (line-height * font-size) + (padding-top + padding-bottom) + (border-top + border-bottom) */
-            line-height: 1.5 !important; /* Pastikan line-height yang cukup */
-            padding-top: 0.75rem !important; /* Padding yang konsisten dengan .form-control */
-            padding-bottom: 0.75rem !important;
+            /* Pastikan tinggi, padding, dan line-height seragam dengan .form-control */
+            height: calc(1.5em + 1.5rem + 3px) !important; /* Height sama dengan .form-control */
+            padding-top: .75rem !important; /* Padding sama dengan .form-control */
+            padding-bottom: .75rem !important;
+            line-height: 1.5 !important; /* Line-height sama dengan .form-control */
             display: flex; /* Untuk perataan vertikal */
             align-items: center; /* Perataan vertikal di tengah */
+            
+            /* Tambahan: Pastikan teks di tengah vertikal di setiap option */
+            text-align-last: center; /* Memaksa teks opsi untuk rata tengah */
         }
 
         label.sr-only {
@@ -212,7 +220,7 @@
             .form-control, .custom-select {
                 font-size: 1rem;
             }
-            /* *** PERBAIKAN UNTUK FONT SATUAN PANJANG PADA MOBILE *** */
+            /* *** PERBAIKAN UNTUK UKURAN KOLOM PADA MOBILE *** */
             .short-select {
                 width: 100px !important; /* Menyesuaikan lebar untuk mobile */
                 min-width: 100px !important;
@@ -328,7 +336,7 @@
         </form>
         <div id="hasil" class="mt-4"></div> </div>
     <footer>
-        Dibuat oleh Williyanto Adi 2025
+        Dibuat dengan ❤️ oleh Williyanto Adi &copy; 2025
     </footer>
     <script>
         function toggleInputDrum() {

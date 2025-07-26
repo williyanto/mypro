@@ -230,22 +230,66 @@ body.dark-mode .leaf-btn:hover {
   background-color: #127cff !important;
   color: #fff !important;
 }
-@media (max-width:500px) {
-  .leaf-btn, .nav-btn {
-    padding: 5px 12px;
-    font-size: 0.93rem;
+
+/* --- MOBILE OPTIMIZATION --- */
+@media (max-width: 576px) { /* Ini adalah breakpoint untuk perangkat mobile */
+  .card-box {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 95%; /* Sedikit lebih lebar untuk memberi ruang pada kolom */
+    padding: 15px; /* Mengurangi padding untuk layar sangat kecil */
   }
-  .d-flex.flex-row > div {
-    min-width: 0;
-    flex: 1 1 0%;
+
+  /* Untuk kelompok "Nilai Hambatan" dan "Panjang" */
+  .d-flex.flex-row .flex-4 { /* Targetkan div dengan flex:4 */
+    flex: 1 1 48% !important; /* Biarkan mereka fleksibel tetapi dengan basis lebar sekitar setengah */
+    max-width: 48% !important; /* Pastikan tidak melebihi setengah */
   }
+
+  /* Untuk kelompok "Satuan Input", "Tombol Tukar", dan "Satuan Output" */
+  .d-flex.flex-row .flex-1 { /* Targetkan div dengan flex:1 */
+    flex: 1 1 30% !important; /* Biarkan mereka fleksibel dengan basis lebar sekitar sepertiga */
+    max-width: 30% !important; /* Pastikan tidak melebihi sepertiga */
+  }
+
+  /* Pastikan tombol switch tetap di tengah di antara dropdown */
+  .d-flex.flex-column.align-items-center {
+    flex: 0 0 auto !important; /* Biarkan ukurannya sesuai konten */
+    width: auto !important; /* Jangan biarkan dia mengambil lebar penuh */
+    margin: 0 5px; /* Sedikit margin horizontal untuk ruang */
+  }
+
+  /* Atur ulang gap untuk flex-row di mobile agar lebih rapat */
   .d-flex.flex-row {
-    flex-direction: column !important;
-    gap: 0 !important;
+    gap: 10px !important; /* Kurangi jarak antar elemen agar muat */
+    flex-wrap: nowrap !important; /* Penting: mencegah penumpukan baris */
+    justify-content: center; /* Pusatkan item di flex-row jika ada ruang sisa */
   }
+
+  /* Menyesuaikan ukuran font dan padding tombol */
+  .leaf-btn, .nav-btn {
+    padding: 5px 10px;
+    font-size: 0.85rem; /* Ukuran font lebih kecil agar muat */
+  }
+
   #btnSwitch {
-    margin: 10px 0 !important;
+    margin: 0 !important; /* Hapus margin vertikal yang ada */
+    padding: 5px 10px; /* Sesuaikan padding tombol switch */
   }
+
+  /* Kolom hasil konversi */
+  #result-box-main .form-label {
+    text-align: center; /* Label hasil rata tengah */
+    width: 100%; /* Pastikan label mengambil lebar penuh */
+  }
+}
+
+/* Pertahankan pengaturan desktop Anda di sini (tanpa perubahan besar) */
+@media (min-width: 577px) {
+    .d-flex.flex-row > div {
+        /* Kembalikan flex default untuk desktop jika perlu */
+        flex: 1; /* Atau sesuai kebutuhan desain desktop Anda */
+    }
 }
   </style>
 </head>
@@ -256,9 +300,8 @@ body.dark-mode .leaf-btn:hover {
       <div class="d-flex flex-row align-items-end gap-2">
         <div style="flex:100%;">
           <div class="d-flex flex-row align-items-end gap-2">
-            <div style="flex:4;">
-              <label class="form-label">Nilai Hambatan</label>
-              <input 
+            <div style="flex:4;" class="flex-4"> <label class="form-label">Nilai Hambatan</label>
+              <input
                 type="number"
                 class="form-control"
                 id="inputValue"
@@ -267,9 +310,8 @@ body.dark-mode .leaf-btn:hover {
                 autocomplete="off"
               >
             </div>
-            <div style="flex:4;">
-              <label class="form-label">Panjang</label>
-              <input 
+            <div style="flex:4;" class="flex-4"> <label class="form-label">Panjang</label>
+              <input
                 type="number"
                 class="form-control"
                 id="inputLength"
@@ -280,8 +322,7 @@ body.dark-mode .leaf-btn:hover {
             </div>
           </div>
           <div class="mt-2 d-flex flex-row align-items-end gap-2">
-            <div style="flex:1;">
-              <label class="form-label mb-1" for="selectSatuanMain">Satuan</label>
+            <div style="flex:1;" class="flex-1"> <label class="form-label mb-1" for="selectSatuanMain">Satuan</label>
               <select class="form-select" id="selectSatuanMain">
                 <option value="tera">TΩ</option>
                 <option value="giga">GΩ</option>
@@ -290,15 +331,13 @@ body.dark-mode .leaf-btn:hover {
                 <option value="ohm">Ω</option>
                 <option value="mili">mΩ</option>
                 <option value="mikro">µΩ</option>
-                <option value="nano">nΩ</option>
-                <option value="piko">pΩ</option>
+                <option value="nano">nΩ</                <option value="piko">pΩ</option>
               </select>
             </div>
             <div class="d-flex flex-column align-items-center" style="justify-content:center;">
               <button type="button" class="leaf-btn" id="btnSwitch" title="Tukar satuan input dan output">⇆</button>
             </div>
-            <div style="flex:1;">
-              <label class="form-label mb-1" for="selectSatuanOutput" style="visibility:hidden;">Satuan Output</label>
+            <div style="flex:1;" class="flex-1"> <label class="form-label mb-1" for="selectSatuanOutput" style="visibility:hidden;">Satuan Output</label>
               <select class="form-select" id="selectSatuanOutput">
                 <option value="tera">TΩ</option>
                 <option value="giga">GΩ</option>
@@ -317,7 +356,7 @@ body.dark-mode .leaf-btn:hover {
     </div>
     <div class="mb-3" id="result-box-main">
       <label class="form-label">Hasil Konversi</label>
-      <input 
+      <input
         type="text"
         class="form-control"
         id="result"
@@ -355,7 +394,7 @@ body.dark-mode .leaf-btn:hover {
       { value: "giga", text: "GΩ", factor: 1e9, full: "Giga Ω" },
       { value: "mega", text: "MΩ", factor: 1e6, full: "Mega Ω" },
       { value: "kilo", text: "kΩ", factor: 1e3, full: "Kilo Ω" },
-      { value: "ohm",  text: "Ω", factor: 1, full: "Ω" },
+      { value: "ohm",   text: "Ω", factor: 1, full: "Ω" },
       { value: "mili", text: "mΩ", factor: 1e-3, full: "Mili Ω" },
       { value: "mikro", text: "µΩ", factor: 1e-6, full: "Mikro Ω" },
       { value: "nano", text: "nΩ", factor: 1e-9, full: "Nano Ω" },
