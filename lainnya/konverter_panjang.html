@@ -201,22 +201,55 @@ body.dark-mode .footer {
 body.dark-mode h4.title {
   color: #fff !important;
 }
-@media (max-width:500px) {
-  .leaf-btn, .nav-btn {
-    padding: 5px 12px;
-    font-size: 0.93rem;
+
+/* --- MOBILE OPTIMIZATION --- */
+@media (max-width: 576px) { /* Adjust breakpoint as needed for mobile */
+  .card-box {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 95%; /* Slightly wider to give more room */
+    padding: 15px; /* Reduced padding for very small screens */
   }
-  .d-flex.flex-row > div {
-    min-width: 0;
-    flex: 1 1 0%;
+
+  /* Ensure the main input value column takes full width */
+  #input-group-length .d-flex.flex-row > div:first-child {
+    flex: 0 0 100%; /* Ensure "Nilai Panjang" column takes full width */
+    max-width: 100%;
   }
-  .d-flex.flex-row {
-    flex-direction: column !important;
-    gap: 0 !important;
+
+  /* For the "Satuan" and "Satuan Output" dropdowns + switch button */
+  #input-group-length .d-flex.flex-row.mt-2 { /* Target the specific flex-row for units */
+    flex-wrap: nowrap !important; /* Important: prevent wrapping to new line */
+    justify-content: center; /* Center the items if there's extra space */
+    gap: 5px !important; /* Reduce gap even more for tight fit */
   }
+
+  #input-group-length .d-flex.flex-row.mt-2 > div {
+    flex: 1 1 40% !important; /* Allow flexibility, but aim for approx 40% width for dropdowns */
+    max-width: 45% !important; /* Max width for each dropdown */
+  }
+
+  /* Adjust switch button size and margin */
   #btnSwitchLength {
-    margin: 10px 0 !important;
+    margin: 0 3px !important; /* Smaller horizontal margin */
+    padding: 5px 8px; /* Smaller padding */
+    font-size: 1rem; /* Smaller font size */
+    flex: 0 0 auto !important; /* Ensure it doesn't try to take up too much space */
   }
+
+  /* Adjust general button padding and font size for all buttons */
+  .leaf-btn, .nav-btn {
+    padding: 5px 10px;
+    font-size: 0.85rem;
+  }
+}
+
+/* Maintain your desktop settings here (no major changes needed) */
+@media (min-width: 577px) {
+    .d-flex.flex-row > div {
+        /* Revert to default flex for desktop if necessary */
+        flex: 1; /* Or as per your desktop design needs */
+    }
 }
   </style>
 </head>
@@ -227,9 +260,8 @@ body.dark-mode h4.title {
       <div class="d-flex flex-row align-items-end gap-2">
         <div style="flex:100%;">
           <div class="d-flex flex-row align-items-end gap-2">
-            <div style="flex:4;">
-              <label class="form-label">Nilai Panjang</label>
-              <input 
+            <div style="flex:4;"> <label class="form-label">Nilai Panjang</label>
+              <input
                 type="number"
                 class="form-control"
                 id="inputValueLength"
@@ -240,8 +272,7 @@ body.dark-mode h4.title {
             </div>
           </div>
           <div class="mt-2 d-flex flex-row align-items-end gap-2">
-            <div style="flex:1;">
-              <label class="form-label mb-1" for="selectSatuanMainLength">Satuan</label>
+            <div style="flex:1;"> <label class="form-label mb-1" for="selectSatuanMainLength">Satuan</label>
               <select class="form-select" id="selectSatuanMainLength">
                 <option value="km">Kilometer (km)</option>
                 <option value="hm">Hektometer (hm)</option>
@@ -259,8 +290,7 @@ body.dark-mode h4.title {
             <div class="d-flex flex-column align-items-center" style="justify-content:center;">
               <button type="button" class="leaf-btn" id="btnSwitchLength" title="Tukar satuan input dan output">⇆</button>
             </div>
-            <div style="flex:1;">
-              <label class="form-label mb-1" for="selectSatuanOutputLength" style="visibility:hidden;">Satuan Output</label>
+            <div style="flex:1;"> <label class="form-label mb-1" for="selectSatuanOutputLength" style="visibility:hidden;">Satuan Output</label>
               <select class="form-select" id="selectSatuanOutputLength">
                 <option value="km">Kilometer (km)</option>
                 <option value="hm">Hektometer (hm)</option>
@@ -281,7 +311,7 @@ body.dark-mode h4.title {
     </div>
     <div class="mb-3" id="result-box-length">
       <label class="form-label">Hasil Konversi</label>
-      <input 
+      <input
         type="text"
         class="form-control"
         id="result-length"
@@ -445,17 +475,19 @@ body.dark-mode h4.title {
       } else {
         setDarkMode(false);
       }
-      selectSatuanMainLength.value = "m";
-      selectSatuanOutputLength.value = "ft";
+      selectSatuanMainLength.value = "m"; // Set initial value
+      selectSatuanOutputLength.value = "ft"; // Set initial value
       updateResultLength();
     })();
 
     window.addEventListener('DOMContentLoaded', function() {
-      selectSatuanMainLength.value = "m";
-      selectSatuanOutputLength.value = "ft";
-      updateResultLength();
+      // These are already handled by the immediately invoked function above
+      // selectSatuanMainLength.value = "m";
+      // selectSatuanOutputLength.value = "ft";
+      // updateResultLength();
     });
 
+    // Initial update call (redundant if already in IIFE, but safe to keep)
     updateResultLength();
   </script>
 </body>
