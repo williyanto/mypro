@@ -108,7 +108,7 @@
                 <div class="col-12 mt-4">
                     <div id="hasil-container">
                         <h5 class="mb-2">Hasil Akhir</h5>
-                        <h2 id="hasil" class="fw-bold">0.000 Ω/km</h2>
+                        <h2 id="hasil" class="fw-bold">0.0000 Ω/km</h2>
                     </div>
                 </div>
 
@@ -180,21 +180,24 @@
                 faktorKoreksiInput.value = faktorValue;
             }
 
+            // Fungsi utama untuk menghitung dan menampilkan hasil
             function hitungResistansi() {
                 const pembacaanAlat = parseFloat(document.getElementById('pembacaan_alat').value) || 0;
                 const panjang = parseFloat(document.getElementById('panjang').value) || 0;
                 const faktorKoreksiSuhu = parseFloat(faktorKoreksiInput.value) || 1;
                 
+                // Cek jika panjang adalah nol untuk mencegah pembagian dengan nol
                 if (panjang === 0) {
-                    hasilElement.textContent = "0.000 Ω/km";
+                    hasilElement.textContent = "0.0000 Ω/km";
                     return;
                 }
                 
-                const resistansiPerKm = (pembacaanAlat / panjang) * faktorKoreksiSuhu * 1000;
-                hasilElement.textContent = `${resistansiPerKm.toFixed(3)} Ω/km`;
+                // Rumus perhitungan baru
+                const hasilHitung = (pembacaanAlat / panjang) * faktorKoreksiSuhu;
+                hasilElement.textContent = `${hasilHitung.toFixed(4)} Ω/km`;
             }
 
-            // Event listener untuk Konduktor dan Suhu agar Faktor Koreksi terisi otomatis
+            // Event listener untuk Konduktor dan Penampang
             konduktorSelect.addEventListener('change', () => {
                 updateSpekMax();
                 updateFaktorKoreksi();
@@ -204,17 +207,17 @@
                 updateSpekMax();
                 hitungResistansi();
             });
+            
+            // Event listener untuk Suhu
             suhuInput.addEventListener('input', () => {
                 updateFaktorKoreksi();
                 hitungResistansi();
             });
 
-            // Event listener untuk input lain agar hasil terupdate real-time
-            const inputs = document.querySelectorAll('.form-control');
-            inputs.forEach(input => {
-                if(input.id !== 'suhu' && input.id !== 'faktor_koreksi_suhu') {
-                    input.addEventListener('input', hitungResistansi);
-                }
+            // Event listener untuk input Pembacaan Alat dan Panjang
+            const inputsLain = [document.getElementById('pembacaan_alat'), document.getElementById('panjang')];
+            inputsLain.forEach(input => {
+                input.addEventListener('input', hitungResistansi);
             });
 
             // Panggil fungsi-fungsi ini saat halaman dimuat pertama kali
