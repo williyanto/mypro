@@ -117,6 +117,25 @@
       font-size: 14px;
       cursor: pointer;
     }
+
+    .center-play-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 60px;
+      color: white;
+      background-color: rgba(0, 0, 0, 0.4);
+      border-radius: 50%;
+      padding: 20px;
+      z-index: 15;
+      display: none;
+      cursor: pointer;
+    }
+
+    .center-play-btn.show {
+      display: block;
+    }
   </style>
 </head>
 <body>
@@ -128,8 +147,13 @@
       <input type="file" id="videoInput" accept="video/*" multiple>
     </div>
 
+    <!-- Tombol play/pause tengah -->
+    <div id="centerPlayBtn" class="center-play-btn">
+      <i class="fas fa-pause"></i>
+    </div>
+
     <!-- Video Player -->
-    <video id="videoPlayer" autoplay muted controls playsinline></video>
+    <video id="videoPlayer" autoplay playsinline></video>
 
     <!-- Sidebar kanan -->
     <div class="sidebar-right">
@@ -167,15 +191,20 @@
   <script>
     const videoInput = document.getElementById('videoInput');
     const videoPlayer = document.getElementById('videoPlayer');
+    const playBtn = document.getElementById('centerPlayBtn');
+    const playIcon = playBtn.querySelector('i');
+
     let videoFiles = [];
     let currentIndex = 0;
 
+    // Pilih banyak video
     videoInput.addEventListener('change', function () {
       videoFiles = Array.from(this.files);
       currentIndex = 0;
       playVideo(currentIndex);
     });
 
+    // Lanjut ke video berikutnya saat selesai
     videoPlayer.addEventListener('ended', function () {
       currentIndex++;
       if (currentIndex < videoFiles.length) {
@@ -186,12 +215,39 @@
       }
     });
 
+    // Play/pause toggle
+    function togglePlayPause() {
+      if (videoPlayer.paused) {
+        videoPlayer.play();
+        playIcon.className = 'fas fa-pause';
+      } else {
+        videoPlayer.pause();
+        playIcon.className = 'fas fa-play';
+      }
+    }
+
+    // Tampilkan tombol saat disentuh
+    videoPlayer.addEventListener('click', () => {
+      playBtn.classList.add('show');
+      togglePlayPause();
+      setTimeout(() => {
+        playBtn.classList.remove('show');
+      }, 1000);
+    });
+
+    // Bisa juga klik ikon langsung
+    playBtn.addEventListener('click', () => {
+      togglePlayPause();
+    });
+
+    // Fungsi untuk mainkan video
     function playVideo(index) {
       const file = videoFiles[index];
       const url = URL.createObjectURL(file);
       videoPlayer.src = url;
       videoPlayer.load();
       videoPlayer.play();
+      playIcon.className = 'fas fa-pause';
     }
   </script>
 </body>
