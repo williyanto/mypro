@@ -1,518 +1,659 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkulator Panjang Kabel Drum</title>
-    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/williyantoadi/CableDrumCalculator/main/icon/danger_hv.png" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-    <style>
-        body {
-            padding: 0;
-            margin: 0;
-            min-height: 100vh;
-            background: #e0f2f7; /* Light blue background */
-            background: linear-gradient(135deg, #e0f2f7 0%, #d1e9f4 100%); /* Subtle gradient background */
-            font-family: 'Poppins', sans-serif; /* Modern font */
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        .container {
-            max-width: 600px; /* Slightly wider */
-            margin: 50px auto 20px auto; /* More top margin */
-            background: #fff;
-            border-radius: 20px; /* More rounded corners */
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15), 0 4px 10px rgba(0,0,0,0.08); /* Stronger, softer shadow */
-            padding: 45px 35px 35px 35px; /* More padding */
-            animation: fadeInContainer 0.8s ease-out; /* Fade in animation for container */
-        }
-        @keyframes fadeInContainer {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        h2 {
-            font-weight: 700;
-            font-size: 2.1rem; /* Slightly larger heading */
-            color: #2c3e50; /* Darker, more refined blue */
-            letter-spacing: 0.8px;
-            margin-bottom: 30px; /* More space below heading */
-            text-align: center;
-            position: relative;
-        }
-        h2::after {
-            content: '';
-            display: block;
-            width: 60px;
-            height: 4px;
-            background: linear-gradient(90deg, #3498db 0%, #2980b9 100%); /* Blue gradient underline */
-            margin: 10px auto 0;
-            border-radius: 2px;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YouTube Shorts Clone</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        .form-check-label {
-            font-size: 1.05rem;
-            color: #34495e; /* Darker text for labels */
-            padding-left: 8px; /* More space for checkbox */
-            font-weight: 500; /* Medium weight */
-        }
-        .form-check-input {
-            accent-color: #3498db; /* Blue accent for checkboxes/radios */
-            width: 1.2em; /* Slightly larger */
-            height: 1.2em;
-            margin-top: 0.25em; /* Align better with text */
-        }
-        .form-check-input:checked + .form-check-label {
-            color: #2c3e50;
-            font-weight: 600;
-        }
-        .form-group, .form-group-diameter, .form-group-keliling {
-            margin-bottom: 22px; /* Increased bottom margin for form groups */
-        }
-        .input-group-text {
-            background: #f0f8ff; /* Lighter background for adornment */
-            border: 1.5px solid #d3eaf2; /* Light border */
-            border-right: none;
-            border-radius: 10px 0 0 10px !important; /* Rounded only on left */
-            padding: .75rem 1rem; /* More padding */
-            color: #3498db; /* Icon color */
-        }
-        .form-control {
-            border-radius: 0 10px 10px 0 !important; /* Rounded only on right for inputs */
-            font-size: 1.05rem;
-            border: 1.5px solid #d3eaf2; /* Light blue border */
-            box-shadow: none;
-            transition: all .3s ease; /* Smooth transition */
-            padding: .75rem 1rem; /* More padding */
-            color: #34495e;
-            height: calc(1.5em + 1.5rem + 3px); /* Standard Bootstrap form-control height calculation */
-        }
-        .form-control:focus {
-            border-color: #3498db; /* Blue border on focus */
-            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25); /* Subtle focus ring */
-            background-color: #fafffe; /* Very light background on focus */
-        }
+    body {
+      background: #000;
+      color: white;
+      overflow: hidden;
+      height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
 
-        /* --- Custom Select Styles --- */
-        .custom-select {
-            appearance: none; /* Remove default arrow */
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%233498db' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            background-size: .65em auto;
-            border-radius: 10px !important; /* Full rounded for standalone select */
-            font-size: 1.05rem; /* Ensure consistent font size */
-            color: #34495e;
-            border: 1.5px solid #d3eaf2; /* Light blue border */
-            box-shadow: none;
-            transition: all .3s ease;
-            /* Pastikan properti tinggi dan padding seragam dengan form-control */
-            height: calc(1.5em + 1.5rem + 3px); /* Match form-control height */
-            padding-top: .75rem;
-            padding-bottom: .75rem;
-            line-height: 1.5; /* Ensure enough line height */
-        }
-        .custom-select:focus {
-            border-color: #3498db;
-            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
-            background-color: #fafffe;
-        }
+    .video-container {
+      position: relative;
+      height: 100vh;
+      overflow-y: auto;
+      scroll-snap-type: y mandatory;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
 
-        /* Overriding for specific select within input-group */
-        .input-group .custom-select {
-            border-left: 1.5px solid #d3eaf2 !important; /* Ensure border between input and select */
-            border-radius: 0 10px 10px 0 !important; /* Rounded right for the select in group */
-            /* *** FOKUS PERBAIKAN UKURAN KOLOM SAMA *** */
-            width: 120px !important; /* Tetapkan lebar eksplisit */
-            min-width: 120px !important;
-            max-width: 120px !important;
-            padding-right: 2.5rem; /* Menambah padding kanan untuk panah dropdown */
-            /* Pastikan tinggi, padding, dan line-height seragam dengan .form-control */
-            height: calc(1.5em + 1.5rem + 3px) !important; /* Height sama dengan .form-control */
-            padding-top: .75rem !important; /* Padding sama dengan .form-control */
-            padding-bottom: .75rem !important;
-            line-height: 1.5 !important; /* Line-height sama dengan .form-control */
-            display: flex; /* Untuk perataan vertikal */
-            align-items: center; /* Perataan vertikal di tengah */
-            
-            /* Tambahan: Pastikan teks di tengah vertikal di setiap option */
-            text-align-last: center; /* Memaksa teks opsi untuk rata tengah */
-        }
+    .video-container::-webkit-scrollbar {
+      display: none;
+    }
 
-        label.sr-only {
-            display: none;
-        }
-        .input-group {
-            align-items: center;
-        }
-        .form-text.text-muted {
-            font-size: 0.9em; /* Slightly smaller hint text */
-            margin-top: 5px; /* More space above hint */
-            color: #7f8c8d !important; /* Muted grey */
-        }
-        .alert {
-            border-radius: 12px; /* More rounded alerts */
-            font-size: 1.0rem;
-            padding: 1rem 1.25rem;
-            animation: fadeIn .6s ease-out; /* Smoother fade in */
-            border: none; /* Remove default alert border */
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08); /* Shadow for alerts */
-        }
-        .alert-info { background-color: #e8f7fd; color: #2196f3; } /* Light blue for info */
-        .alert-success { background-color: #e6ffee; color: #28a745; } /* Light green for success */
-        .alert-warning { background-color: #fff8e1; color: #ffc107; } /* Light yellow for warning */
-        .alert-danger { background-color: #ffebee; color: #dc3545; } /* Light red for danger */
+    .video-slide {
+      position: relative;
+      height: 100vh;
+      scroll-snap-align: start;
+      background: #1DB954;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-        .alert strong {
-            color: inherit; /* Inherit color from alert */
-            font-weight: 700;
-            font-size: 1.05em; /* Slightly larger bold text */
-        }
-        .btn-primary {
-            background: linear-gradient(90deg, #3498db 0%, #2980b9 100%); /* Stronger blue gradient */
-            border: none;
-            border-radius: 10px; /* More rounded button */
-            font-weight: 600;
-            letter-spacing: 0.7px;
-            box-shadow: 0 4px 15px rgba(52,152,219,0.3); /* Button shadow */
-            transition: all 0.3s ease; /* Smooth hover effect */
-            padding: .75rem 1.5rem;
-        }
-        .btn-primary:hover {
-            background: linear-gradient(90deg, #2980b9 0%, #3498db 100%);
-            box-shadow: 0 6px 20px rgba(52,152,219,0.4);
-            transform: translateY(-2px); /* Slight lift on hover */
-        }
+    .video-element {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: #1DB954;
+    }
 
-        /* Adjustments for inputs within input-group to remove left border radius */
-        .input-group .form-control:not(:last-child),
-        .input-group .custom-select:not(:last-child) {
-            border-top-right-radius: 0 !important;
-            border-bottom-right-radius: 0 !important;
-        }
-        .input-group .form-control:not(:first-child),
-        .input-group .custom-select:not(:first-child) {
-            border-top-left-radius: 0 !important;
-            border-bottom-left-radius: 0 !important;
-        }
-        .input-group-prepend .input-group-text {
-            border-top-right-radius: 0 !important;
-            border-bottom-right-radius: 0 !important;
-        }
+    /* Top Header */
+    .top-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, transparent 100%);
+    }
 
+    .back-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+    }
 
-        @media (max-width: 600px) {
-            .container {
-                padding: 28px 6vw 20px 6vw;
-                margin-top: 25px;
-            }
-            h2 {
-                font-size: 1.6rem;
-                margin-bottom: 25px;
-            }
-            .form-check-label {
-                font-size: 1rem;
-            }
-            .form-control, .custom-select {
-                font-size: 1rem;
-            }
-            /* *** PERBAIKAN UNTUK UKURAN KOLOM PADA MOBILE *** */
-            .short-select {
-                width: 100px !important; /* Menyesuaikan lebar untuk mobile */
-                min-width: 100px !important;
-                max-width: 100px !important;
-                padding-right: 2rem !important; /* Sedikit kurang padding di mobile */
-                height: calc(1.5em + 1.2rem + 3px) !important; /* Sesuaikan tinggi untuk mobile */
-                padding-top: 0.6rem !important;
-                padding-bottom: 0.6rem !important;
-            }
-            .input-group-text {
-                padding: .6rem .8rem;
-            }
-        }
+    .header-actions {
+      display: flex;
+      gap: 20px;
+    }
 
-        /* Footer styling */
-        footer {
-            width: 100%;
-            text-align: center;
-            padding: 20px 0 15px 0;
-            font-size: 0.95rem; /* Slightly smaller font for footer */
-            color: #7f8c8d; /* Muted grey */
-            background: none;
-            margin-top: auto;
-            letter-spacing: 0.5px;
-            font-family: 'Poppins', sans-serif;
-        }
-    </style>
+    .header-actions button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    /* Right Sidebar */
+    .right-sidebar {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 15;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+      align-items: center;
+    }
+
+    .sidebar-action {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      color: white;
+    }
+
+    .sidebar-action .icon {
+      font-size: 28px;
+      margin-bottom: 2px;
+    }
+
+    .sidebar-action .count {
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .like-btn.liked .icon {
+      color: #ff3040;
+    }
+
+    /* Bottom Info */
+    .bottom-info {
+      position: absolute;
+      bottom: 100px;
+      left: 20px;
+      right: 80px;
+      z-index: 15;
+      color: white;
+    }
+
+    .user-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+      color: white;
+    }
+
+    .username {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .subscribe-btn {
+      background: none;
+      border: 1px solid white;
+      color: white;
+      padding: 5px 12px;
+      border-radius: 2px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+
+    .video-caption {
+      font-size: 14px;
+      line-height: 1.4;
+      margin-top: 5px;
+    }
+
+    .hashtag {
+      color: #1DB954;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #000;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 10px 0;
+      z-index: 25;
+      border-top: 1px solid #333;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: #666;
+      text-decoration: none;
+      cursor: pointer;
+      padding: 5px;
+    }
+
+    .nav-item.active {
+      color: white;
+    }
+
+    .nav-item .nav-icon {
+      font-size: 20px;
+    }
+
+    .nav-item .nav-label {
+      font-size: 10px;
+      font-weight: 500;
+    }
+
+    .upload-btn {
+      background: white;
+      color: black;
+      border: none;
+      border-radius: 2px;
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    .upload-btn .nav-icon {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .profile-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #666;
+    }
+
+    .upload-input {
+      display: none;
+    }
+
+    /* Play Button */
+    .play-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      background: rgba(0,0,0,0.6);
+      border: none;
+      color: white;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .video-slide:hover .play-overlay {
+      opacity: 1;
+    }
+
+    /* Empty State */
+    .empty-state {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: rgba(255,255,255,0.7);
+      z-index: 10;
+    }
+
+    .empty-state .empty-icon {
+      font-size: 60px;
+      opacity: 0.5;
+      margin-bottom: 16px;
+    }
+
+    /* Green placeholder when no video */
+    .video-placeholder {
+      width: 100%;
+      height: 100%;
+      background: #1DB954;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      color: rgba(255,255,255,0.3);
+    }
+  </style>
 </head>
 <body>
-    <div class="container shadow">
-        <h2>
-            Kalkulator Panjang Kabel Drum
-        </h2>
-        <form id="kalkulatorKabel" autocomplete="off">
-            <div class="form-row mb-3">
-                <div class="col-12 d-flex flex-wrap align-items-center justify-content-center">
-                    <div class="form-check mr-4 mb-2 mb-md-0">
-                        <input type="radio" class="form-check-input" id="pilihDiameter" name="jenisInputDrum" value="diameter" checked onchange="toggleInputDrum()">
-                        <label class="form-check-label" for="pilihDiameter">Diameter Drum</label>
-                    </div>
-                    <div class="form-check mb-2 mb-md-0">
-                        <input type="radio" class="form-check-input" id="pilihKeliling" name="jenisInputDrum" value="keliling" onchange="toggleInputDrum()">
-                        <label class="form-check-label" for="pilihKeliling">Keliling Drum</label>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group form-group-diameter">
-                <label for="diameterDrum" class="sr-only">Diameter Drum (meter)</label>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-circle"></i></span>
-                    </div>
-                    <input type="number" class="form-control" id="diameterDrum" step="0.01" placeholder="Diameter Drum (meter)" oninput="hitungPanjang()">
-                </div>
-            </div>
-            <div class="form-group form-group-keliling">
-                <label for="kelilingDrum" class="sr-only">Keliling Drum (meter)</label>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-cogs"></i></span>
-                    </div>
-                    <input type="number" class="form-control" id="kelilingDrum" step="0.01" placeholder="Keliling Drum (meter)" oninput="hitungPanjang()">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="lebarDrum" class="sr-only">Lebar Drum</label>
-                <div class="input-group flex-long">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-ruler-horizontal"></i></span>
-                    </div>
-                    <input type="number" class="form-control flex-grow-input" id="lebarDrum" step="0.01" placeholder="Lebar Drum" oninput="hitungPanjang()">
-                    <select class="custom-select short-select" id="satuanLebarDrum" onchange="hitungPanjang()">
-                        <option value="m" selected>meter</option>
-                        <option value="cm">cm</option>
-                        <option value="mm">mm</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="nilaiDiameterKabel" class="sr-only">Diameter Kabel</label>
-                <div class="input-group flex-long">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-bezier-curve"></i></span>
-                    </div>
-                    <input type="number" class="form-control flex-grow-input" id="nilaiDiameterKabel" step="0.01" placeholder="Diameter Kabel" oninput="hitungPanjang()">
-                    <select class="custom-select short-select" id="satuanDiameterKabel" onchange="hitungPanjang()">
-                        <option value="mm" selected>mm</option>
-                        <option value="cm">cm</option>
-                        <option value="m">m</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="lilitanTanda" class="font-weight-bold">Hitung Panjang Hingga Lilitan Ke-</label>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-sync-alt"></i></span>
-                    </div>
-                    <input type="number" class="form-control" id="lilitanTanda" min="1" placeholder="Lilitan Ke-" oninput="hitungPanjang()">
-                </div>
-                <small class="form-text text-muted">Kosongkan jika tidak ingin menghitung berdasarkan lilitan.</small>
-            </div>
-            <div class="form-group">
-                <label for="jumlahLayer" class="font-weight-bold">Hitung Panjang Total untuk Layer Penuh</label>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-layer-group"></i></span>
-                    </div>
-                    <input type="number" class="form-control" id="jumlahLayer" min="1" placeholder="Jumlah Layer" oninput="hitungPanjang()">
-                </div>
-                <small class="form-text text-muted">Kosongkan jika tidak ingin menghitung total layer.</small>
-            </div>
-        </form>
-        <div id="hasil" class="mt-4"></div> </div>
-    <footer>
-        Dibuat dengan ❤️ oleh Williyanto Adi &copy; 2025
-    </footer>
-    <script>
-        function toggleInputDrum() {
-            const pilihDiameter = document.getElementById("pilihDiameter");
-            const pilihKeliling = document.getElementById("pilihKeliling");
-            const diameterGroup = document.querySelector(".form-group-diameter");
-            const kelilingGroup = document.querySelector(".form-group-keliling");
+  <!-- Top Header -->
+  <div class="top-header">
+    <button class="back-btn">
+      <i class="bi bi-arrow-left"></i>
+    </button>
+    <div class="header-actions">
+      <button><i class="bi bi-search"></i></button>
+      <button><i class="bi bi-three-dots-vertical"></i></button>
+    </div>
+  </div>
 
-            diameterGroup.style.display = pilihDiameter.checked ? "block" : "none";
-            kelilingGroup.style.display = pilihKeliling.checked ? "block" : "none";
+  <!-- Video Container -->
+  <div class="video-container" id="videoContainer">
+    <div class="video-slide">
+      <div class="video-placeholder">
+        <i class="bi bi-play-circle"></i>
+      </div>
+      
+      <button class="play-overlay">
+        <i class="bi bi-play-fill"></i>
+      </button>
 
-            hitungPanjang();
-        }
+      <!-- Right Actions -->
+      <div class="right-sidebar">
+        <div class="sidebar-action like-btn" data-liked="false">
+          <div class="icon"><i class="bi bi-hand-thumbs-up"></i></div>
+          <div class="count">16 K</div>
+        </div>
+        
+        <div class="sidebar-action">
+          <div class="icon"><i class="bi bi-hand-thumbs-down"></i></div>
+          <div class="count">Dislike</div>
+        </div>
+        
+        <div class="sidebar-action">
+          <div class="icon"><i class="bi bi-chat"></i></div>
+          <div class="count">6</div>
+        </div>
+        
+        <div class="sidebar-action">
+          <div class="icon"><i class="bi bi-share"></i></div>
+          <div class="count">Share</div>
+        </div>
+        
+        <div class="sidebar-action">
+          <div class="icon"><i class="bi bi-arrow-repeat"></i></div>
+          <div class="count">17</div>
+        </div>
+        
+        <div class="sidebar-action">
+          <img src="https://i.pravatar.cc/40?u=music" alt="playlist" style="width: 40px; height: 40px; border-radius: 8px;">
+        </div>
+      </div>
 
-        function hitungPanjang() {
-            const pilihDiameter = document.getElementById("pilihDiameter").checked;
-            const diameterDrumInput = document.getElementById("diameterDrum");
-            const kelilingDrumInput = document.getElementById("kelilingDrum");
-            const lebarDrumNilai = parseFloat(document.getElementById("lebarDrum").value);
-            const satuanLebarDrum = document.getElementById("satuanLebarDrum").value;
-            const nilaiDiameterKabel = parseFloat(document.getElementById("nilaiDiameterKabel").value);
-            const satuanDiameterKabel = document.getElementById("satuanDiameterKabel").value;
-            const lilitanTandaInput = document.getElementById("lilitanTanda").value;
-            const jumlahLayerInput = document.getElementById("jumlahLayer").value;
-            const hasilDiv = document.getElementById("hasil");
+      <!-- Bottom Info -->
+      <div class="bottom-info">
+        <div class="user-row">
+          <div class="user-avatar">WLL</div>
+          <span class="username">@aqsa1610</span>
+          <button class="subscribe-btn">Subscribe</button>
+        </div>
+        <div class="video-caption">
+          <span class="hashtag">#YuSup</span> Cot untuk aqsakuuh
+        </div>
+      </div>
+    </div>
+  </div>
 
-            let diameterDrum;
-            let lebarDrumMeter = lebarDrumNilai;
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <a href="#" class="nav-item active">
+      <div class="nav-icon"><i class="bi bi-house-fill"></i></div>
+      <div class="nav-label">Home</div>
+    </a>
+    
+    <a href="#" class="nav-item">
+      <div class="nav-icon"><i class="bi bi-play-btn"></i></div>
+      <div class="nav-label">Shorts</div>
+    </a>
+    
+    <label class="nav-item">
+      <div class="upload-btn">
+        <div class="nav-icon">+</div>
+      </div>
+      <input type="file" class="upload-input" id="videoInput" accept="video/*" multiple>
+    </label>
+    
+    <a href="#" class="nav-item">
+      <div class="nav-icon"><i class="bi bi-collection-play"></i></div>
+      <div class="nav-label">Subscriptions</div>
+    </a>
+    
+    <a href="#" class="nav-item">
+      <div class="nav-icon">
+        <div class="profile-avatar"></div>
+      </div>
+      <div class="nav-label">You</div>
+    </a>
+  </div>
 
-            switch (satuanLebarDrum) {
-                case "cm":
-                    lebarDrumMeter = lebarDrumNilai / 100;
-                    break;
-                case "mm":
-                    lebarDrumMeter = lebarDrumNilai / 1000;
-                    break;
-                case "m":
-                default:
-                    lebarDrumMeter = lebarDrumNilai;
-                    break;
-            }
+  <script>
+    class YouTubeShortsClone {
+      constructor() {
+        this.videoInput = document.getElementById('videoInput');
+        this.videoContainer = document.getElementById('videoContainer');
+        this.currentVideoIndex = 0;
+        this.videos = [];
+        
+        this.init();
+      }
 
-            if (pilihDiameter) {
-                diameterDrum = parseFloat(diameterDrumInput.value);
-                if (isNaN(diameterDrum) || diameterDrum <= 0) {
-                    hasilDiv.innerHTML = '<div class="alert alert-danger" role="alert"><i class="fas fa-exclamation-triangle mr-2"></i>Mohon masukkan angka yang valid untuk Diameter Drum.</div>';
-                    return;
-                }
-            } else {
-                const kelilingDrum = parseFloat(kelilingDrumInput.value);
-                if (isNaN(kelilingDrum) || kelilingDrum <= 0) {
-                    hasilDiv.innerHTML = '<div class="alert alert-danger" role="alert"><i class="fas fa-exclamation-triangle mr-2"></i>Mohon masukkan angka yang valid untuk Keliling Drum.</div>';
-                    return;
-                }
-                diameterDrum = kelilingDrum / Math.PI;
-            }
+      init() {
+        this.videoInput.addEventListener('change', (e) => this.handleFileUpload(e));
+        this.videoContainer.addEventListener('scroll', () => this.handleScroll());
+        this.setupEventListeners();
+      }
 
-            if (isNaN(lebarDrumMeter) || lebarDrumMeter <= 0) {
-                hasilDiv.innerHTML = '<div class="alert alert-danger" role="alert"><i class="fas fa-exclamation-triangle mr-2"></i>Mohon masukkan angka yang valid untuk Lebar Drum.</div>';
-                return;
-            }
-            if (isNaN(nilaiDiameterKabel) || nilaiDiameterKabel <= 0) {
-                hasilDiv.innerHTML = '<div class="alert alert-danger" role="alert"><i class="fas fa-exclamation-triangle mr-2"></i>Mohon masukkan angka yang valid untuk Diameter Kabel.</div>';
-                return;
-            }
-
-            let diameterKabelMeter;
-            switch (satuanDiameterKabel) {
-                case "mm":
-                    diameterKabelMeter = nilaiDiameterKabel / 1000;
-                    break;
-                case "cm":
-                    diameterKabelMeter = nilaiDiameterKabel / 100;
-                    break;
-                case "m":
-                    diameterKabelMeter = nilaiDiameterKabel;
-                    break;
-                default:
-                    diameterKabelMeter = 0;
-                    hasilDiv.innerHTML = '<div class="alert alert-danger" role="alert"><i class="fas fa-exclamation-triangle mr-2"></i>Satuan diameter kabel tidak valid.</div>';
-                    return;
-            }
-
-            // Check if cable diameter is too large for drum width
-            if (diameterKabelMeter > lebarDrumMeter) {
-                hasilDiv.innerHTML = '<div class="alert alert-danger" role="alert"><i class="fas fa-exclamation-triangle mr-2"></i>Diameter kabel tidak boleh lebih besar dari lebar drum.</div>';
-                return;
-            }
-
-            hasilDiv.innerHTML = ""; // Clear previous results
-
-            // Calculate length up to a specific turn if filled
-            if (lilitanTandaInput) {
-                const lilitanTanda = parseInt(lilitanTandaInput);
-                if (!isNaN(lilitanTanda) && lilitanTanda > 0) {
-                    let panjangKabelTanda = 0;
-                    for (let i = 1; i <= lilitanTanda; i++) {
-                        const diameterLilitan = diameterDrum + (i - 1) * diameterKabelMeter;
-                        const kelilingLilitan = Math.PI * diameterLilitan;
-                        panjangKabelTanda += kelilingLilitan;
-                    }
-                    hasilDiv.innerHTML += `<div class="alert alert-info" role="alert">
-                                                <i class="fas fa-info-circle mr-2"></i>Perkiraan panjang kabel hingga lilitan ke-${lilitanTanda} adalah sekitar <strong>${panjangKabelTanda.toFixed(2)} meter</strong>.
-                                            </div>`;
-                } else if (lilitanTandaInput !== "") {
-                    hasilDiv.innerHTML += '<div class="alert alert-warning" role="alert"><i class="fas fa-exclamation-circle mr-2"></i>Nilai lilitan tidak valid.</div>';
-                }
-            }
-
-            // Calculate total length for full layers if filled
-            if (jumlahLayerInput) {
-                const jumlahLayer = parseInt(jumlahLayerInput);
-                if (!isNaN(jumlahLayer) && jumlahLayer > 0) {
-                    const jumlahLilitanPerLayer = Math.floor(lebarDrumMeter / diameterKabelMeter);
-                    if (jumlahLilitanPerLayer === 0) {
-                         hasilDiv.innerHTML = '<div class="alert alert-warning" role="alert"><i class="fas fa-exclamation-circle mr-2"></i>Ukuran kabel terlalu besar untuk lebar drum ini. Tidak ada lilitan yang bisa muat.</div>';
-                         return;
-                    }
-                    let panjangTotalKabel = 0;
-                    let diameterSaatIni = diameterDrum;
-
-                    for (let layer = 1; layer <= jumlahLayer; layer++) {
-                        let panjangLayer = 0;
-                        for (let i = 0; i < jumlahLilitanPerLayer; i++) {
-                            const diameterLilitan = diameterSaatIni + i * diameterKabelMeter;
-                            const kelilingLilitan = Math.PI * diameterLilitan;
-                            panjangLayer += kelilingLilitan;
-                        }
-                        panjangTotalKabel += panjangLayer;
-                        diameterSaatIni += (diameterKabelMeter * 2); // Diameter increases by one cable diameter per side
-                    }
-                    hasilDiv.innerHTML += `<div class="alert alert-success" role="alert">
-                                                <i class="fas fa-check-circle mr-2"></i>Perkiraan panjang total kabel untuk ${jumlahLayer} layer penuh adalah sekitar <strong>${panjangTotalKabel.toFixed(2)} meter</strong>.
-                                            </div>`;
-                } else if (jumlahLayerInput !== "") {
-                    hasilDiv.innerHTML += '<div class="alert alert-warning" role="alert"><i class="fas fa-exclamation-circle mr-2"></i>Jumlah layer tidak valid.</div>';
-                }
-            }
-
-            // If both specific turn and total layer inputs are empty, calculate for one full layer
-            const hitungSatuLayer = !lilitanTandaInput && !jumlahLayerInput && !isNaN(diameterDrum) && !isNaN(lebarDrumMeter) && !isNaN(nilaiDiameterKabel) && diameterDrum > 0 && lebarDrumMeter > 0 && nilaiDiameterKabel > 0;
-            if (hitungSatuLayer) {
-                const jumlahLilitanPerLayer = Math.floor(lebarDrumMeter / diameterKabelMeter);
-                if (jumlahLilitanPerLayer === 0) {
-                     hasilDiv.innerHTML = '<div class="alert alert-warning" role="alert"><i class="fas fa-exclamation-circle mr-2"></i>Ukuran kabel terlalu besar untuk lebar drum ini. Tidak ada lilitan yang bisa muat.</div>';
-                     return;
-                }
-                let panjangSatuLayer = 0;
-                for (let i = 0; i < jumlahLilitanPerLayer; i++) {
-                    const diameterLilitan = diameterDrum + i * diameterKabelMeter;
-                    const kelilingLilitan = Math.PI * diameterLilitan;
-                    panjangSatuLayer += kelilingLilitan;
-                }
-                if (panjangSatuLayer > 0) {
-                    hasilDiv.innerHTML += `<div class="alert alert-info" role="alert">
-                                                <i class="fas fa-info-circle mr-2"></i>Perkiraan panjang kabel untuk satu layer penuh adalah sekitar <strong>${panjangSatuLayer.toFixed(2)} meter</strong>.
-                                            </div>`;
-                }
-            } else if (!pilihDiameter && isNaN(parseFloat(kelilingDrumInput.value))) {
-                // Error handled at the start
-            } else if (pilihDiameter && isNaN(parseFloat(diameterDrumInput.value))) {
-                // Error handled at the start
-            } else if (hasilDiv.innerHTML === "" && (!lilitanTandaInput && !jumlahLayerInput)) {
-                if ( (isNaN(lebarDrumMeter) || lebarDrumMeter <= 0) || (isNaN(nilaiDiameterKabel) || nilaiDiameterKabel <= 0) ) {
-                    hasilDiv.innerHTML = '<div class="alert alert-danger" role="alert"><i class="fas fa-exclamation-triangle mr-2"></i>Mohon masukkan angka yang valid untuk Lebar Drum dan Diameter Kabel.</div>';
-                }
-            }
-        }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            toggleInputDrum(); // Initialize display based on default radio button
-            hitungPanjang(); // Perform initial calculation if any default values are set
+      setupEventListeners() {
+        // Like button functionality
+        document.addEventListener('click', (e) => {
+          if (e.target.closest('.like-btn')) {
+            this.toggleLike(e.target.closest('.like-btn'));
+          }
+          
+          if (e.target.closest('.subscribe-btn')) {
+            this.toggleSubscribe(e.target.closest('.subscribe-btn'));
+          }
+          
+          if (e.target.closest('.play-overlay')) {
+            this.toggleVideoPlay(e.target.closest('.video-slide'));
+          }
         });
-    </script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+        // Keyboard controls
+        document.addEventListener('keydown', (e) => {
+          if (e.code === 'Space') {
+            e.preventDefault();
+            const currentSlide = document.querySelector('.video-slide');
+            this.toggleVideoPlay(currentSlide);
+          }
+        });
+      }
+
+      handleFileUpload(event) {
+        const files = Array.from(event.target.files);
+        if (!files.length) return;
+
+        this.videoContainer.innerHTML = '';
+        this.videos = [];
+
+        files.forEach((file, index) => {
+          this.createVideoSlide(file, index);
+        });
+
+        setTimeout(() => this.playCurrentVideo(), 100);
+      }
+
+      createVideoSlide(file, index) {
+        const url = URL.createObjectURL(file);
+        const slide = document.createElement('div');
+        slide.className = 'video-slide';
+        slide.dataset.index = index;
+
+        const likes = Math.floor(Math.random() * 50) + 10;
+        const comments = Math.floor(Math.random() * 20) + 1;
+        const shares = Math.floor(Math.random() * 30) + 5;
+
+        slide.innerHTML = `
+          <video class="video-element" src="${url}" loop playsinline muted></video>
+          
+          <button class="play-overlay">
+            <i class="bi bi-play-fill"></i>
+          </button>
+
+          <div class="right-sidebar">
+            <div class="sidebar-action like-btn" data-liked="false">
+              <div class="icon"><i class="bi bi-hand-thumbs-up"></i></div>
+              <div class="count">${this.formatCount(likes * 1000)}</div>
+            </div>
+            
+            <div class="sidebar-action">
+              <div class="icon"><i class="bi bi-hand-thumbs-down"></i></div>
+              <div class="count">Dislike</div>
+            </div>
+            
+            <div class="sidebar-action">
+              <div class="icon"><i class="bi bi-chat"></i></div>
+              <div class="count">${comments}</div>
+            </div>
+            
+            <div class="sidebar-action">
+              <div class="icon"><i class="bi bi-share"></i></div>
+              <div class="count">Share</div>
+            </div>
+            
+            <div class="sidebar-action">
+              <div class="icon"><i class="bi bi-arrow-repeat"></i></div>
+              <div class="count">${shares}</div>
+            </div>
+            
+            <div class="sidebar-action">
+              <img src="https://i.pravatar.cc/40?u=${file.name}" alt="playlist" style="width: 40px; height: 40px; border-radius: 8px;">
+            </div>
+          </div>
+
+          <div class="bottom-info">
+            <div class="user-row">
+              <div class="user-avatar">WLL</div>
+              <span class="username">@aqsa1610</span>
+              <button class="subscribe-btn">Subscribe</button>
+            </div>
+            <div class="video-caption">
+              <span class="hashtag">#YuSup</span> ${this.generateCaption()}
+            </div>
+          </div>
+        `;
+
+        this.videoContainer.appendChild(slide);
+        this.videos.push({ element: slide, file, url });
+      }
+
+      generateCaption() {
+        const captions = [
+          'Cot untuk aqsakuuh',
+          'Video keren hari ini!',
+          'Konten seru banget nih',
+          'Jangan lupa like ya!',
+          'Subscribe untuk konten lainnya'
+        ];
+        return captions[Math.floor(Math.random() * captions.length)];
+      }
+
+      toggleLike(likeBtn) {
+        const isLiked = likeBtn.dataset.liked === 'true';
+        const icon = likeBtn.querySelector('.icon i');
+        const countEl = likeBtn.querySelector('.count');
+        let count = parseInt(countEl.textContent.replace(/[^\d]/g, ''));
+
+        if (isLiked) {
+          likeBtn.dataset.liked = 'false';
+          likeBtn.classList.remove('liked');
+          icon.className = 'bi bi-hand-thumbs-up';
+          count--;
+        } else {
+          likeBtn.dataset.liked = 'true';
+          likeBtn.classList.add('liked');
+          icon.className = 'bi bi-hand-thumbs-up-fill';
+          count++;
+          this.createLikeAnimation(likeBtn);
+        }
+
+        countEl.textContent = this.formatCount(count * 1000);
+      }
+
+      createLikeAnimation(likeBtn) {
+        const heart = document.createElement('div');
+        heart.innerHTML = '👍';
+        heart.style.cssText = `
+          position: absolute;
+          font-size: 30px;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          z-index: 100;
+          pointer-events: none;
+          animation: likeFloat 1s ease-out forwards;
+        `;
+        
+        if (!document.querySelector('#likeAnimation')) {
+          const style = document.createElement('style');
+          style.id = 'likeAnimation';
+          style.textContent = `
+            @keyframes likeFloat {
+              0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+              100% { opacity: 0; transform: translate(-50%, -200%) scale(1.5); }
+            }
+          `;
+          document.head.appendChild(style);
+        }
+        
+        likeBtn.style.position = 'relative';
+        likeBtn.appendChild(heart);
+        setTimeout(() => heart.remove(), 1000);
+      }
+
+      toggleSubscribe(subscribeBtn) {
+        if (subscribeBtn.textContent === 'Subscribe') {
+          subscribeBtn.textContent = 'Subscribed';
+          subscribeBtn.style.background = '#666';
+          subscribeBtn.style.borderColor = '#666';
+        } else {
+          subscribeBtn.textContent = 'Subscribe';
+          subscribeBtn.style.background = 'none';
+          subscribeBtn.style.borderColor = 'white';
+        }
+      }
+
+      toggleVideoPlay(slide) {
+        const video = slide.querySelector('video');
+        const playBtn = slide.querySelector('.play-overlay i');
+
+        if (video.paused) {
+          video.play();
+          playBtn.className = 'bi bi-pause-fill';
+        } else {
+          video.pause();
+          playBtn.className = 'bi bi-play-fill';
+        }
+      }
+
+      handleScroll() {
+        this.pauseAllVideos();
+        setTimeout(() => this.playCurrentVideo(), 100);
+      }
+
+      pauseAllVideos() {
+        const videos = document.querySelectorAll('video');
+        videos.forEach(video => {
+          video.pause();
+          const playBtn = video.parentElement.querySelector('.play-overlay i');
+          if (playBtn) playBtn.className = 'bi bi-play-fill';
+        });
+      }
+
+      playCurrentVideo() {
+        const slides = document.querySelectorAll('.video-slide');
+        slides.forEach(slide => {
+          const rect = slide.getBoundingClientRect();
+          if (rect.top >= 0 && rect.bottom <= window.innerHeight) {
+            const video = slide.querySelector('video');
+            const playBtn = slide.querySelector('.play-overlay i');
+            
+            video.play().catch(e => console.log('Autoplay prevented'));
+            if (playBtn) playBtn.className = 'bi bi-pause-fill';
+            
+            this.currentVideoIndex = parseInt(slide.dataset.index);
+          }
+        });
+      }
+
+      formatCount(num) {
+        if (num >= 1000000) {
+          return Math.floor(num / 1000000) + ' M';
+        } else if (num >= 1000) {
+          return Math.floor(num / 1000) + ' K';
+        }
+        return num.toString();
+      }
+    }
+
+    // Initialize the app
+    document.addEventListener('DOMContentLoaded', () => {
+      new YouTubeShortsClone();
+    });
+  </script>
 </body>
 </html>
