@@ -1,139 +1,179 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web App Mobile Android</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            overflow: hidden;
-            font-family: 'Roboto', sans-serif;
-            background-color: #00ff7f; /* Warna hijau solid */
-        }
-        .bg-green {
-            background-color: #00ff7f !important;
-        }
-        .bottom-nav {
-            background-color: #000 !important;
-            border-top: 1px solid #333;
-        }
-        .bottom-nav .nav-link {
-            color: #fff;
-            text-decoration: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .bottom-nav .nav-icon {
-            font-size: 1.2rem;
-            margin-bottom: 5px;
-        }
-        .bottom-nav .shorts-icon {
-            font-size: 2.5rem;
-            color: #fff;
-            position: relative;
-            top: -10px;
-        }
-        .profile-avatar {
-            border: 2px solid #fff;
-        }
-        .interaction-panel {
-            position: absolute;
-            right: 0;
-            bottom: 120px;
-        }
-        .video-info-panel {
-            position: absolute;
-            bottom: 60px;
-            left: 0;
-        }
-        .subscribe-btn {
-            background-color: #fff;
-            color: #000;
-            font-weight: 500;
-        }
-        .container-fluid {
-            padding: 0;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>YuSup Video Player</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      background-color: black;
+      overflow: hidden;
+    }
+
+    .video-container {
+      position: relative;
+      height: 100vh;
+      width: 100vw;
+      background-color: black;
+    }
+
+    video {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+      background: black;
+    }
+
+    .sidebar-right {
+      position: absolute;
+      right: 10px;
+      top: 30%;
+      text-align: center;
+      color: white;
+      z-index: 10;
+    }
+
+    .sidebar-right i {
+      font-size: 24px;
+      margin-bottom: 15px;
+      display: block;
+    }
+
+    .bottom-info {
+      position: absolute;
+      bottom: 70px;
+      left: 10px;
+      color: white;
+      z-index: 10;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: black;
+      color: white;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      height: 60px;
+      z-index: 10;
+    }
+
+    .bottom-nav i {
+      font-size: 20px;
+    }
+
+    .profile-pic {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .subscribe-btn {
+      background: white;
+      color: black;
+      padding: 3px 12px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .upload-btn {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 20;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .custom-upload {
+      background: white;
+      color: black;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  </style>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
-<div class="bg-green text-white vh-100 d-flex flex-column">
-
-    <div class="d-flex justify-content-between align-items-center p-3">
-        <i class="bi bi-arrow-left fs-3"></i>
-        <i class="bi bi-search fs-3"></i>
+  <div class="video-container">
+    <!-- Tombol pilih video -->
+    <div class="upload-btn">
+      <label for="videoInput" class="custom-upload">Pilih Video</label>
+      <input type="file" id="videoInput" accept="video/*">
     </div>
 
-    <div class="flex-grow-1 position-relative">
-        <div class="interaction-panel p-3 d-flex flex-column align-items-center">
-            <div class="text-center mb-4">
-                <i class="bi bi-hand-thumbs-up fs-2"></i>
-                <small class="d-block">16 K</small>
-            </div>
-            <div class="text-center mb-4">
-                <i class="bi bi-hand-thumbs-down fs-2"></i>
-                <small class="d-block">Dislike</small>
-            </div>
-            <div class="text-center mb-4">
-                <i class="bi bi-chat-dots fs-2"></i>
-                <small class="d-block">6</small>
-            </div>
-            <div class="text-center mb-4">
-                <i class="bi bi-share fs-2"></i>
-                <small class="d-block">Share</small>
-            </div>
-            <div class="text-center mb-4">
-                <i class="bi bi-arrow-repeat fs-2"></i>
-                <small class="d-block">17</small>
-            </div>
-            <div class="text-center">
-                <img src="https://i.pravatar.cc/150?img=6" alt="Profile" class="rounded-circle profile-avatar" style="width: 40px; height: 40px;">
-            </div>
+    <!-- Video Player -->
+    <video id="videoPlayer" autoplay muted loop playsinline>
+      <source id="videoSource" src="" type="video/mp4">
+      Browser tidak mendukung video tag.
+    </video>
+
+    <!-- Sidebar kanan -->
+    <div class="sidebar-right">
+      <div><i class="fas fa-thumbs-up"></i><div>16 K</div></div>
+      <div><i class="fas fa-thumbs-down"></i><div>Dislike</div></div>
+      <div><i class="fas fa-comment"></i><div>6</div></div>
+      <div><i class="fas fa-share"></i><div>Share</div></div>
+      <div><i class="fas fa-sync-alt"></i><div>17</div></div>
+    </div>
+
+    <!-- Info bawah -->
+    <div class="bottom-info d-flex align-items-center">
+      <img src="https://via.placeholder.com/36" class="profile-pic me-2" alt="User"/>
+      <div>
+        <div class="d-flex align-items-center">
+          <span>@aqsa1610</span>
+          <button class="ms-2 subscribe-btn">Subscribe</button>
         </div>
-
-        <div class="video-info-panel p-3 w-100">
-            <div class="d-flex align-items-center mb-2">
-                <img src="https://i.pravatar.cc/150?img=11" alt="Profile" class="rounded-circle me-2 profile-avatar" style="width: 32px; height: 32px;">
-                <span class="me-2 fw-bold">@aqsa1610</span>
-                <button class="btn btn-sm rounded-pill subscribe-btn">Subscribe</button>
-            </div>
-            <div class="lh-sm">
-                <span>#YuSup Cot untuk aqsakuuh</span>
-            </div>
+        <div class="mt-1">
+          <span class="text-warning">#YuSup</span> Cot untuk aqsakuuh
         </div>
+      </div>
     </div>
+  </div>
 
-    <div class="bottom-nav d-flex justify-content-around align-items-center p-2">
-        <a href="#" class="nav-link active">
-            <i class="bi bi-house-door-fill nav-icon"></i>
-            <small>Home</small>
-        </a>
-        <a href="#" class="nav-link">
-            <i class="bi bi-play-btn nav-icon"></i>
-            <small>Shorts</small>
-        </a>
-        <a href="#" class="nav-link">
-            <i class="bi bi-plus-circle-fill shorts-icon"></i>
-        </a>
-        <a href="#" class="nav-link">
-            <i class="bi bi-collection-play nav-icon"></i>
-            <small>Subscriptions</small>
-        </a>
-        <a href="#" class="nav-link">
-            <i class="bi bi-person nav-icon"></i>
-            <small>You</small>
-        </a>
-    </div>
+  <!-- Navigasi bawah -->
+  <div class="bottom-nav">
+    <div><i class="fas fa-home"></i><div style="font-size:10px;">Home</div></div>
+    <div><i class="fas fa-play"></i><div style="font-size:10px;">Shorts</div></div>
+    <div><i class="fas fa-plus-circle"></i></div>
+    <div><i class="fas fa-bell"></i><div style="font-size:10px;">Subs</div></div>
+    <div><i class="fas fa-user-circle"></i><div style="font-size:10px;">You</div></div>
+  </div>
 
-</div>
+  <script>
+    const videoInput = document.getElementById('videoInput');
+    const videoPlayer = document.getElementById('videoPlayer');
+    const videoSource = document.getElementById('videoSource');
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    videoInput.addEventListener('change', function() {
+      const file = this.files[0];
+      if (file) {
+        const url = URL.createObjectURL(file);
+        videoSource.src = url;
+        videoPlayer.load();
+        videoPlayer.play();
+      }
+    });
+  </script>
 </body>
 </html>
