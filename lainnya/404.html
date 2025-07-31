@@ -14,10 +14,11 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
+            padding: 20px; /* Tambahkan padding agar tidak terlalu mepet ke ujung layar */
         }
         .container {
             max-width: 600px;
-            padding: 0; /* Hapus padding container default */
+            padding: 0;
         }
         .card {
             border: none;
@@ -33,18 +34,21 @@
         #hasil-container {
             background: linear-gradient(45deg, #007bff, #00c6ff);
             color: white;
-            padding: 1.5rem;
+            padding: 1rem; /* Perkecil padding */
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
             margin-top: 1.5rem;
             text-align: center;
+        }
+        #hasil {
+            font-size: 2rem; /* Perkecil ukuran font */
         }
         .form-control:focus {
             border-color: #007bff;
             box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
         }
         .footer {
-            margin-top: 2rem;
+            margin-top: 1.5rem; /* Jarak footer dari konten di atasnya */
             text-align: center;
             color: #6c757d;
             font-size: 0.875rem;
@@ -57,9 +61,7 @@
         
         <div class="card">
             <h1 class="text-center mb-2 text-primary">Kalkulator Hambatan</h1>
-            <p class="text-center text-muted mb-4">Hitung nilai resistansi dengan mudah</p>
-
-            <div class="row g-3">
+            <hr class="mb-4"> <div class="row g-3">
                 <div class="col-6">
                     <label for="pembacaan_alat" class="form-label">Pembacaan Alat (Ω)</label>
                     <input type="number" step="any" class="form-control" id="pembacaan_alat" value="0">
@@ -94,14 +96,16 @@
                 <div class="col-12 mt-4">
                     <div id="hasil-container">
                         <h5 class="mb-2">Hasil Akhir</h5>
-                        <h2 id="hasil" class="display-5 fw-bold">0.000 Ω/km</h2>
+                        <h2 id="hasil" class="fw-bold">0.000 Ω/km</h2>
                     </div>
+                </div>
+
+                <div class="col-12">
+                    <p class="footer">Dibuat dengan ❤️ & Bootstrap</p>
                 </div>
 
             </div>
         </div>
-
-        <p class="footer">Dibuat dengan ❤️ & Bootstrap</p>
 
     </div>
 
@@ -116,25 +120,20 @@
                 const suhu = parseFloat(document.getElementById('suhu').value) || 0;
                 const faktorKoreksiSuhu = parseFloat(document.getElementById('faktor_koreksi_suhu').value) || 1;
 
-                // Memeriksa jika panjang sama dengan nol untuk menghindari pembagian nol
                 if (panjang === 0) {
                     hasilElement.textContent = "0.000 Ω/km";
                     return;
                 }
                 
-                // Rumus perhitungan (contoh, sesuaikan jika ada rumus yang lebih spesifik)
                 const resistansiPerKm = (pembacaanAlat / panjang) * faktorKoreksiSuhu * 1000;
-                
                 hasilElement.textContent = `${resistansiPerKm.toFixed(3)} Ω/km`;
             }
 
-            // Tambahkan event listener untuk setiap input agar menghitung secara real-time
             const inputs = document.querySelectorAll('.form-control');
             inputs.forEach(input => {
                 input.addEventListener('input', hitungResistansi);
             });
 
-            // Lakukan perhitungan awal saat halaman dimuat
             hitungResistansi();
         });
     </script>
