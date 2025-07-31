@@ -274,6 +274,25 @@
       opacity: 1;
     }
 
+    /* Sound Button */
+    .sound-btn {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      z-index: 15;
+      background: rgba(0,0,0,0.5);
+      border: none;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
     /* Empty State */
     .empty-state {
       position: absolute;
@@ -420,6 +439,7 @@
         this.videos = [];
         this.playOrder = [];
         this.currentPlayOrderIndex = 0;
+        this.isMuted = false;
         
         this.init();
       }
@@ -444,6 +464,10 @@
           if (e.target.closest('.play-overlay')) {
             this.toggleVideoPlay(e.target.closest('.video-slide'));
           }
+          
+          if (e.target.closest('.sound-btn')) {
+            this.toggleSound(e.target.closest('.sound-btn'));
+          }
         });
 
         // Keyboard controls
@@ -459,6 +483,11 @@
             e.preventDefault();
             this.navigateWithKeys(e.code);
           }
+          
+          // Mute/unmute with M key
+          if (e.code === 'KeyM') {
+            this.toggleGlobalMute();
+          }
         });
 
         // Handle video ended event for looping
@@ -467,6 +496,26 @@
             this.playNextVideo();
           }
         }, true);
+      }
+
+      toggleGlobalMute() {
+        this.isMuted = !this.isMuted;
+        const videos = document.querySelectorAll('.video-element');
+        videos.forEach(video => {
+          video.muted = this.isMuted;
+        });
+        
+        const soundButtons = document.querySelectorAll('.sound-btn i');
+        soundButtons.forEach(btn => {
+          btn.className = this.isMuted ? 'bi bi-volume-mute' : 'bi bi-volume-up';
+        });
+      }
+
+      toggleSound(soundBtn) {
+        const video = soundBtn.closest('.video-slide').querySelector('video');
+        video.muted = !video.muted;
+        const icon = soundBtn.querySelector('i');
+        icon.className = video.muted ? 'bi bi-volume-mute' : 'bi bi-volume-up';
       }
 
       playNextVideo() {
@@ -478,7 +527,20 @@
         const slides = document.querySelectorAll('.video-slide');
         if (slides[nextIndex]) {
           slides[nextIndex].scrollIntoView({ behavior: 'smooth' });
+          this.playVideo(slides[nextIndex]);
         }
+      }
+
+      playVideo(slide) {
+        const video = slide.querySelector('video');
+        const playBtn = slide.querySelector('.play-overlay i');
+        
+        video.currentTime = 0;
+        video.play().catch(e => console.log('Autoplay prevented'));
+        if (playBtn) playBtn.className = 'bi bi-pause-fill';
+        
+        this.currentVideoIndex = parseInt(slide.dataset.index);
+        this.currentPlayOrderIndex = this.playOrder.indexOf(this.currentVideoIndex);
       }
 
       generateRandomPlayOrder(count) {
@@ -508,6 +570,7 @@
         
         if (newIndex !== this.currentVideoIndex) {
           slides[newIndex].scrollIntoView({ behavior: 'smooth' });
+          this.playVideo(slides[newIndex]);
         }
       }
 
@@ -532,7 +595,7 @@
           const firstSlide = document.querySelectorAll('.video-slide')[firstIndex];
           if (firstSlide) {
             firstSlide.scrollIntoView();
-            this.playCurrentVideo();
+            this.playVideo(firstSlide);
           }
         }, 100);
       }
@@ -548,10 +611,14 @@
         const shares = Math.floor(Math.random() * 30) + 5;
 
         slide.innerHTML = `
-          <video class="video-element" src="${url}" loop playsinline muted></video>
+          <video class="video-element" src="${url}" loop playsinline></video>
           
           <button class="play-overlay">
             <i class="bi bi-play-fill"></i>
+          </button>
+          
+          <button class="sound-btn">
+            <i class="bi bi-volume-up"></i>
           </button>
 
           <div class="right-sidebar">
@@ -600,10 +667,14 @@
         this.videoContainer.appendChild(slide);
         this.videos.push({ element: slide, file, url });
 
-        // Set video to loop and mute by default
+        // Set video to loop
         const video = slide.querySelector('video');
         video.loop = true;
-        video.muted = true;
+        
+        // Add ended event listener for this specific video
+        video.addEventListener('ended', () => {
+          this.playNextVideo();
+        });
       }
 
       generateCaption() {
@@ -704,8 +775,6 @@
             if (playBtn) playBtn.className = 'bi bi-pause-fill';
             
             this.currentVideoIndex = parseInt(slide.dataset.index);
-            
-            // Find the current index in playOrder
             this.currentPlayOrderIndex = this.playOrder.indexOf(this.currentVideoIndex);
           }
         });
