@@ -39,6 +39,13 @@
             box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
             margin-top: 1.5rem;
             text-align: center;
+            transition: background 0.3s ease; /* Transisi untuk perubahan warna */
+        }
+        #hasil-container.bg-success-gradient {
+            background: linear-gradient(45deg, #28a745, #218838); /* Warna hijau */
+        }
+        #hasil-container.bg-danger-gradient {
+            background: linear-gradient(45deg, #dc3545, #c82333); /* Warna merah */
         }
         #hasil-container h5 {
             margin-bottom: 0.25rem;
@@ -70,16 +77,16 @@
             <div class="row g-3">
                 <div class="col-6">
                     <label for="pembacaan_alat" class="form-label">Pembacaan Alat</label>
-                    <input type="number" step="any" class="form-control" id="pembacaan_alat" value="0" placeholder="Dalam Ohm (Ω)">
+                    <input type="number" step="any" class="form-control" id="pembacaan_alat" value="" placeholder="Dalam Ohm (Ω)">
                 </div>
                 <div class="col-6">
                     <label for="panjang" class="form-label">Panjang</label>
-                    <input type="number" step="any" class="form-control" id="panjang" value="0" placeholder="Dalam meter (m)">
+                    <input type="number" step="any" class="form-control" id="panjang" value="" placeholder="Dalam meter (m)">
                 </div>
                 
                 <div class="col-6">
                     <label for="suhu" class="form-label">Suhu</label>
-                    <input type="number" step="any" class="form-control" id="suhu" value="0" placeholder="Dalam Celsius (°C)">
+                    <input type="number" step="any" class="form-control" id="suhu" value="" placeholder="Dalam Celsius (°C)">
                 </div>
                 <div class="col-6">
                     <label for="faktor_koreksi_suhu" class="form-label">Faktor Koreksi</label>
@@ -102,7 +109,7 @@
                 </div>
                 <div class="col-4">
                     <label for="spek_max" class="form-label">Spek. Max</label>
-                    <input type="number" step="any" class="form-control" id="spek_max" value="0" placeholder="Dalam Ω/km" readonly>
+                    <input type="number" step="any" class="form-control" id="spek_max" value="" placeholder="Dalam Ω/km" readonly>
                 </div>
                 
                 <div class="col-12 mt-4">
@@ -130,6 +137,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const hasilElement = document.getElementById('hasil');
+            const hasilContainer = document.getElementById('hasil-container');
             const spekMaxInput = document.getElementById('spek_max');
             const faktorKoreksiInput = document.getElementById('faktor_koreksi_suhu');
             const konduktorSelect = document.getElementById('konduktor');
@@ -149,52 +157,57 @@
             
             const dataFaktorKoreksi = {
                 "CU": {
-                    "21.0": 0.9961,
-                    "21.1": 0.9957,
-                    "21.2": 0.9953,
-                    "21.3": 0.9949,
-                    "21.4": 0.9945,
-                    "21.5": 0.9941
+                    "21.0": 0.9961, "21.1": 0.9957, "21.2": 0.9953, "21.3": 0.9949, "21.4": 0.9945, "21.5": 0.9941
                 },
                 "AL": {
-                    "21.0": 0.9960,
-                    "21.1": 0.9956,
-                    "21.2": 0.9952,
-                    "21.3": 0.9948,
-                    "21.4": 0.9944,
-                    "21.5": 0.9940
+                    "21.0": 0.9960, "21.1": 0.9956, "21.2": 0.9952, "21.3": 0.9948, "21.4": 0.9944, "21.5": 0.9940
                 }
             };
 
             function updateSpekMax() {
                 const konduktor = konduktorSelect.value;
                 const penampang = penampangSelect.value;
-                const spekValue = dataSpek[konduktor] && dataSpek[konduktor][penampang] ? dataSpek[konduktor][penampang] : 0;
+                const spekValue = dataSpek[konduktor] && dataSpek[konduktor][penampang] ? dataSpek[konduktor][penampang] : '';
                 spekMaxInput.value = spekValue;
             }
 
             function updateFaktorKoreksi() {
                 const konduktor = konduktorSelect.value;
                 const suhu = parseFloat(suhuInput.value).toFixed(1);
-                const faktorValue = dataFaktorKoreksi[konduktor] && dataFaktorKoreksi[konduktor][suhu] ? dataFaktorKoreksi[konduktor][suhu] : 1;
+                const faktorValue = dataFaktorKoreksi[konduktor] && dataFaktorKoreksi[konduktor][suhu] ? dataFaktorKoreksi[konduktor][suhu] : '';
                 faktorKoreksiInput.value = faktorValue;
             }
 
-            // Fungsi utama untuk menghitung dan menampilkan hasil
+            function updateWarnaHasil(hasilHitung, spekMax) {
+                hasilContainer.classList.remove('bg-success-gradient', 'bg-danger-gradient');
+
+                const spekMaxNumber = parseFloat(spekMax);
+                if (!isNaN(spekMaxNumber) && spekMaxNumber > 0 && !isNaN(hasilHitung) && hasilHitung > 0) {
+                    if (hasilHitung < spekMaxNumber) {
+                        hasilContainer.classList.add('bg-success-gradient');
+                    } else {
+                        hasilContainer.classList.add('bg-danger-gradient');
+                    }
+                }
+            }
+
             function hitungResistansi() {
-                const pembacaanAlat = parseFloat(document.getElementById('pembacaan_alat').value) || 0;
-                const panjang = parseFloat(document.getElementById('panjang').value) || 0;
-                const faktorKoreksiSuhu = parseFloat(faktorKoreksiInput.value) || 1;
+                const pembacaanAlat = parseFloat(document.getElementById('pembacaan_alat').value);
+                const panjang = parseFloat(document.getElementById('panjang').value);
+                const faktorKoreksiSuhu = parseFloat(faktorKoreksiInput.value);
+                const spekMax = spekMaxInput.value;
                 
-                // Cek jika panjang adalah nol untuk mencegah pembagian dengan nol
-                if (panjang === 0) {
+                // Cek jika pembacaanAlat, panjang, atau faktorKoreksiSuhu tidak valid atau 0
+                if (isNaN(pembacaanAlat) || isNaN(panjang) || panjang === 0 || isNaN(faktorKoreksiSuhu)) {
                     hasilElement.textContent = "0.0000 Ω/km";
+                    hasilContainer.classList.remove('bg-success-gradient', 'bg-danger-gradient');
                     return;
                 }
                 
-                // Rumus perhitungan baru
                 const hasilHitung = (pembacaanAlat / panjang) * faktorKoreksiSuhu;
                 hasilElement.textContent = `${hasilHitung.toFixed(4)} Ω/km`;
+                
+                updateWarnaHasil(hasilHitung, spekMax);
             }
 
             // Event listener untuk Konduktor dan Penampang
