@@ -120,6 +120,13 @@
                 </div>
 
                 <div class="col-12 mt-3 d-flex justify-content-between">
+                    <button class="btn btn-outline-primary flex-fill me-1">IEC</button>
+                    <button class="btn btn-outline-primary flex-fill me-1">ICEA</button>
+                    <button class="btn btn-outline-primary flex-fill me-1">AS/NZS</button>
+                    <button class="btn btn-outline-primary flex-fill">SPLN</button>
+                </div>
+
+                <div class="col-12 mt-2 d-flex justify-content-between">
                     <button class="btn btn-secondary" onclick="window.history.back()">Kembali</button>
                     <button class="btn btn-primary" onclick="window.location.href='index.html'">Beranda</button>
                 </div>
@@ -197,7 +204,6 @@
                 const faktorKoreksiSuhu = parseFloat(faktorKoreksiInput.value);
                 const spekMax = spekMaxInput.value;
                 
-                // Cek jika pembacaanAlat, panjang, atau faktorKoreksiSuhu tidak valid atau 0
                 if (isNaN(pembacaanAlat) || isNaN(panjang) || panjang === 0 || isNaN(faktorKoreksiSuhu)) {
                     hasilElement.textContent = "0.0000 Ω/km";
                     hasilContainer.classList.remove('bg-success-gradient', 'bg-danger-gradient');
