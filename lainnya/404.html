@@ -1,321 +1,139 @@
-<!doctype html>
-<html lang="id">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Kalkulator Hambatan Resistansi</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web App Mobile Android</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* CSS Kustom untuk Tampilan */
         body {
-            background-color: #f0f2f5;
+            overflow: hidden;
+            font-family: 'Roboto', sans-serif;
+            background-color: #00ff7f; /* Warna hijau solid */
+        }
+        .bg-green {
+            background-color: #00ff7f !important;
+        }
+        .bottom-nav {
+            background-color: #000 !important;
+            border-top: 1px solid #333;
+        }
+        .bottom-nav .nav-link {
+            color: #fff;
+            text-decoration: none;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
         }
-        .container {
-            max-width: 600px;
+        .bottom-nav .nav-icon {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        .bottom-nav .shorts-icon {
+            font-size: 2.5rem;
+            color: #fff;
+            position: relative;
+            top: -10px;
+        }
+        .profile-avatar {
+            border: 2px solid #fff;
+        }
+        .interaction-panel {
+            position: absolute;
+            right: 0;
+            bottom: 120px;
+        }
+        .video-info-panel {
+            position: absolute;
+            bottom: 60px;
+            left: 0;
+        }
+        .subscribe-btn {
+            background-color: #fff;
+            color: #000;
+            font-weight: 500;
+        }
+        .container-fluid {
             padding: 0;
-        }
-        .card {
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 1.5rem;
-            background-color: #ffffff;
-        }
-        .form-label {
-            font-weight: 600;
-            color: #495057;
-        }
-        #hasil-container {
-            background: linear-gradient(45deg, #007bff, #00c6ff);
-            color: white;
-            padding: 0.75rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
-            margin-top: 1.5rem;
-            text-align: center;
-            transition: background 0.3s ease;
-        }
-        #hasil-container.bg-success-gradient {
-            background: linear-gradient(45deg, #28a745, #218838);
-        }
-        #hasil-container.bg-danger-gradient {
-            background: linear-gradient(45deg, #dc3545, #c82333);
-        }
-        #hasil-container h5 {
-            margin-bottom: 0.25rem;
-            font-size: 1rem;
-        }
-        #hasil {
-            font-size: 1.75rem;
-        }
-        .form-control:focus, .form-select:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
-        }
-        .footer {
-            margin-top: 1.5rem;
-            text-align: center;
-            color: #6c757d;
-            font-size: 0.875rem;
-        }
-        /* Gaya untuk tombol-tombol standar */
-        .btn-standar {
-            color: white;
-            border: none;
-            border-radius: 0.25rem;
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
-            cursor: pointer;
-            flex-grow: 1;
-            margin: 0 0.25rem;
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-            text-align: center;
-            font-weight: 600;
-        }
-        /* Gaya spesifik untuk setiap tombol */
-        .btn-iec {
-            background-color: #007bff;
-        }
-        .btn-icea {
-            background-color: #17a2b8;
-        }
-        .btn-anzs {
-            background-color: #28a745;
-        }
-        .btn-spln {
-            background-color: #ffc107;
-            color: #212529;
-        }
-        .btn-standar:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        /* MEDIA QUERY untuk mobile */
-        @media (max-width: 767px) {
-            body {
-                padding: 10px;
-                align-items: flex-start;
-            }
-            .card {
-                padding: 1rem;
-            }
-        }
-        
-        /* GAYA BARU: Membuat placeholder miring */
-        .form-control::placeholder {
-            font-style: italic;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        
-        <div class="card">
-            <h1 class="text-center mb-2 text-primary">Kalkulator Hambatan v4</h1>
-            <hr class="mb-4">
+<div class="bg-green text-white vh-100 d-flex flex-column">
 
-            <div class="row g-3">
-                <div class="col-6">
-                    <label for="pembacaan_alat" class="form-label">Pembacaan Alat</label>
-                    <input type="number" step="any" class="form-control" id="pembacaan_alat" value="" placeholder="Dalam Ohm (Ω)">
-                </div>
-                <div class="col-6">
-                    <label for="panjang" class="form-label">Panjang</label>
-                    <input type="number" step="any" class="form-control" id="panjang" value="" placeholder="Dalam meter (m)">
-                </div>
-                
-                <div class="col-6">
-                    <label for="suhu" class="form-label">Suhu</label>
-                    <input type="number" step="any" class="form-control" id="suhu" value="" placeholder="Dalam Celsius (°C)">
-                </div>
-                <div class="col-6">
-                    <label for="faktor_koreksi_suhu" class="form-label">Faktor Koreksi</label>
-                    <input type="number" step="any" class="form-control" id="faktor_koreksi_suhu" value="" placeholder="Tanpa satuan" readonly>
-                </div>
-
-                <div class="col-4">
-                    <label for="konduktor" class="form-label">Konduktor</label>
-                    <select class="form-select" id="konduktor">
-                        <option value="CU" selected>CU</option>
-                        <option value="AL">AL</option>
-                        <option value="TCU">TCU</option>
-                    </select>
-                </div>
-                <div class="col-4">
-                    <label for="penampang" class="form-label">Penampang</label>
-                    <select class="form-select" id="penampang">
-                        <option value="0.5" selected>0.5 mm²</option>
-                        <option value="0.75">0.75 mm²</option>
-                    </select>
-                </div>
-                <div class="col-4">
-                    <label for="spek_max" class="form-label">Spek. Max</label>
-                    <input type="number" step="any" class="form-control" id="spek_max" value="" placeholder="Dalam Ω/km" readonly>
-                </div>
-                
-                <div class="col-12 mt-2">
-                    <div id="hasil-container">
-                        <h2 id="hasil" class="fw-bold"></h2>
-                        <h5 id="status-hasil" class="mb-2 fst-italic">Mohon lengkapi data untuk memulai aplikasi ini.</h5>
-                    </div>
-                </div>
-
-                <div class="col-12 mt-3 d-flex justify-content-between">
-                    <button class="btn-standar btn-iec">IEC</button>
-                    <button class="btn-standar btn-icea">ICEA</button>
-                    <button class="btn-standar btn-anzs">AS/NZS</button>
-                    <button class="btn-standar btn-spln">SPLN</button>
-                </div>
-
-                <div class="col-12 mt-2 d-flex justify-content-center gap-3">
-                    <button class="btn btn-info" onclick="window.history.back()">Kembali</button>
-                    <button class="btn btn-primary" onclick="window.location.href='index.html'">Beranda</button>
-                </div>
-
-            </div>
-
-            <hr class="mt-4">
-            <div class="col-12">
-                <p class="footer">Dibuat dengan ❤️ & Bootstrap</p>
-            </div>
-            
-        </div>
-
+    <div class="d-flex justify-content-between align-items-center p-3">
+        <i class="bi bi-arrow-left fs-3"></i>
+        <i class="bi bi-search fs-3"></i>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const hasilElement = document.getElementById('hasil');
-            const hasilContainer = document.getElementById('hasil-container');
-            const statusHasilElement = document.getElementById('status-hasil');
-            const spekMaxInput = document.getElementById('spek_max');
-            const faktorKoreksiInput = document.getElementById('faktor_koreksi_suhu');
-            const konduktorSelect = document.getElementById('konduktor');
-            const penampangSelect = document.getElementById('penampang');
-            const suhuInput = document.getElementById('suhu');
+    <div class="flex-grow-1 position-relative">
+        <div class="interaction-panel p-3 d-flex flex-column align-items-center">
+            <div class="text-center mb-4">
+                <i class="bi bi-hand-thumbs-up fs-2"></i>
+                <small class="d-block">16 K</small>
+            </div>
+            <div class="text-center mb-4">
+                <i class="bi bi-hand-thumbs-down fs-2"></i>
+                <small class="d-block">Dislike</small>
+            </div>
+            <div class="text-center mb-4">
+                <i class="bi bi-chat-dots fs-2"></i>
+                <small class="d-block">6</small>
+            </div>
+            <div class="text-center mb-4">
+                <i class="bi bi-share fs-2"></i>
+                <small class="d-block">Share</small>
+            </div>
+            <div class="text-center mb-4">
+                <i class="bi bi-arrow-repeat fs-2"></i>
+                <small class="d-block">17</small>
+            </div>
+            <div class="text-center">
+                <img src="https://i.pravatar.cc/150?img=6" alt="Profile" class="rounded-circle profile-avatar" style="width: 40px; height: 40px;">
+            </div>
+        </div>
 
-            const dataSpek = {
-                "CU": {
-                    "0.5": 36.0,
-                    "0.75": 24.5
-                },
-                "AL": {
-                    "0.5": 653.65,
-                    "0.75": 25.22
-                },
-                "TCU": {
-                    "0.5": 36.7,
-                    "0.75": 24.8
-                }
-            };
-            
-            const dataFaktorKoreksi = {
-                "CU": {
-                    "21.0": 0.9961, "21.1": 0.9957, "21.2": 0.9953, "21.3": 0.9949, "21.4": 0.9945, "21.5": 0.9941
-                },
-                "AL": {
-                    "21.0": 0.9960, "21.1": 0.9956, "21.2": 0.9952, "21.3": 0.9948, "21.4": 0.9944, "21.5": 0.9940
-                },
-                "TCU": {
-                    "21.0": 0.9961, "21.1": 0.9957, "21.2": 0.9953, "21.3": 0.9949, "21.4": 0.9945, "21.5": 0.9941
-                }
-            };
+        <div class="video-info-panel p-3 w-100">
+            <div class="d-flex align-items-center mb-2">
+                <img src="https://i.pravatar.cc/150?img=11" alt="Profile" class="rounded-circle me-2 profile-avatar" style="width: 32px; height: 32px;">
+                <span class="me-2 fw-bold">@aqsa1610</span>
+                <button class="btn btn-sm rounded-pill subscribe-btn">Subscribe</button>
+            </div>
+            <div class="lh-sm">
+                <span>#YuSup Cot untuk aqsakuuh</span>
+            </div>
+        </div>
+    </div>
 
-            function updateSpekMax() {
-                const konduktor = konduktorSelect.value;
-                const penampang = penampangSelect.value;
-                const spekValue = dataSpek[konduktor] && dataSpek[konduktor][penampang] ? dataSpek[konduktor][penampang] : '';
-                spekMaxInput.value = spekValue;
-            }
+    <div class="bottom-nav d-flex justify-content-around align-items-center p-2">
+        <a href="#" class="nav-link active">
+            <i class="bi bi-house-door-fill nav-icon"></i>
+            <small>Home</small>
+        </a>
+        <a href="#" class="nav-link">
+            <i class="bi bi-play-btn nav-icon"></i>
+            <small>Shorts</small>
+        </a>
+        <a href="#" class="nav-link">
+            <i class="bi bi-plus-circle-fill shorts-icon"></i>
+        </a>
+        <a href="#" class="nav-link">
+            <i class="bi bi-collection-play nav-icon"></i>
+            <small>Subscriptions</small>
+        </a>
+        <a href="#" class="nav-link">
+            <i class="bi bi-person nav-icon"></i>
+            <small>You</small>
+        </a>
+    </div>
 
-            function updateFaktorKoreksi() {
-                const konduktor = konduktorSelect.value;
-                const suhu = parseFloat(suhuInput.value).toFixed(1);
-                const faktorValue = dataFaktorKoreksi[konduktor] && dataFaktorKoreksi[konduktor][suhu] ? dataFaktorKoreksi[konduktor][suhu] : '';
-                faktorKoreksiInput.value = faktorValue;
-            }
+</div>
 
-            function updateWarnaHasil(hasilHitung, spekMax) {
-                hasilContainer.classList.remove('bg-success-gradient', 'bg-danger-gradient');
-                
-                const spekMaxNumber = parseFloat(spekMax);
-                
-                const isInputValid = !isNaN(parseFloat(document.getElementById('pembacaan_alat').value)) &&
-                                     !isNaN(parseFloat(document.getElementById('panjang').value)) &&
-                                     parseFloat(document.getElementById('panjang').value) !== 0 &&
-                                     !isNaN(parseFloat(faktorKoreksiInput.value));
-
-                if (isInputValid) {
-                    if (hasilHitung < spekMaxNumber) {
-                        hasilContainer.classList.add('bg-success-gradient');
-                        statusHasilElement.textContent = "Hasil pengujian memenuhi spesifikasi standar.";
-                    } else {
-                        hasilContainer.classList.add('bg-danger-gradient');
-                        statusHasilElement.textContent = "Hasil pengujian tidak memenuhi spesifikasi standar.";
-                    }
-                } else {
-                    hasilElement.textContent = "";
-                    hasilContainer.classList.remove('bg-success-gradient', 'bg-danger-gradient');
-                    statusHasilElement.textContent = "Mohon lengkapi data untuk memulai aplikasi ini.";
-                }
-            }
-
-            function hitungResistansi() {
-                const pembacaanAlat = parseFloat(document.getElementById('pembacaan_alat').value);
-                const panjang = parseFloat(document.getElementById('panjang').value);
-                const faktorKoreksiSuhu = parseFloat(faktorKoreksiInput.value);
-                const spekMax = spekMaxInput.value;
-
-                if (isNaN(pembacaanAlat) || isNaN(panjang) || panjang === 0 || isNaN(faktorKoreksiSuhu)) {
-                    hasilElement.textContent = "";
-                    hasilContainer.classList.remove('bg-success-gradient', 'bg-danger-gradient');
-                    statusHasilElement.textContent = "Mohon lengkapi data untuk memulai aplikasi ini.";
-                    return;
-                }
-                
-                const hasilHitung = (pembacaanAlat / panjang) * faktorKoreksiSuhu;
-                hasilElement.textContent = `${hasilHitung.toFixed(4)} Ω/km`;
-                
-                updateWarnaHasil(hasilHitung, spekMax);
-            }
-
-            // Event listener untuk Konduktor dan Penampang
-            konduktorSelect.addEventListener('change', () => {
-                updateSpekMax();
-                updateFaktorKoreksi();
-                hitungResistansi();
-            });
-            penampangSelect.addEventListener('change', () => {
-                updateSpekMax();
-                hitungResistansi();
-            });
-            
-            // Event listener untuk Suhu
-            suhuInput.addEventListener('input', () => {
-                updateFaktorKoreksi();
-                hitungResistansi();
-            });
-
-            // Event listener untuk input Pembacaan Alat dan Panjang
-            const inputsLain = [document.getElementById('pembacaan_alat'), document.getElementById('panjang')];
-            inputsLain.forEach(input => {
-                input.addEventListener('input', hitungResistansi);
-            });
-
-            // Panggil fungsi-fungsi ini saat halaman dimuat pertama kali
-            updateSpekMax();
-            updateFaktorKoreksi();
-            hitungResistansi();
-        });
-    </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
