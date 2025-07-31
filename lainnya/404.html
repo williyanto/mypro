@@ -149,9 +149,8 @@
       const files = Array.from(videoInput.files);
       if (!files.length) return;
 
-      videoWrapper.innerHTML = ""; // kosongkan dulu
+      videoWrapper.innerHTML = "";
 
-      // Acak urutan video
       files.sort(() => Math.random() - 0.5);
 
       files.forEach(file => {
@@ -159,10 +158,10 @@
         const slide = document.createElement('div');
         slide.className = 'video-slide';
         slide.innerHTML = `
-          <video src="${url}" autoplay loop playsinline></video>
+          <video src="${url}" loop playsinline muted></video>
 
           <div class="controls">
-            <button class="togglePlay"><i class="bi bi-pause-fill"></i></button>
+            <button class="togglePlay"><i class="bi bi-play-fill"></i></button>
           </div>
 
           <div class="bottom-info">
@@ -182,7 +181,8 @@
         videoWrapper.appendChild(slide);
 
         const video = slide.querySelector('video');
-        video.volume = 1; // pastikan suara aktif
+        video.volume = 1;
+        video.muted = false;
 
         const toggleBtn = slide.querySelector('.togglePlay');
         toggleBtn.addEventListener('click', () => {
@@ -195,6 +195,36 @@
           }
         });
       });
+
+      // Play hanya video yang terlihat
+      handleScroll();
+    });
+
+    // Fungsi untuk hanya memutar video yang terlihat penuh
+    function handleScroll() {
+      const videos = document.querySelectorAll('.video-slide video');
+      videos.forEach(video => video.pause());
+
+      const slides = document.querySelectorAll('.video-slide');
+      slides.forEach(slide => {
+        const rect = slide.getBoundingClientRect();
+        const fullyVisible = rect.top >= 0 && rect.bottom <= window.innerHeight;
+        const video = slide.querySelector('video');
+        const playBtn = slide.querySelector('.togglePlay');
+
+        if (fullyVisible) {
+          video.play();
+          playBtn.innerHTML = '<i class="bi bi-pause-fill"></i>';
+        } else {
+          video.pause();
+          playBtn.innerHTML = '<i class="bi bi-play-fill"></i>';
+        }
+      });
+    }
+
+    document.getElementById('videoWrapper').addEventListener('scroll', () => {
+      clearTimeout(window.scrollTimer);
+      window.scrollTimer = setTimeout(handleScroll, 200);
     });
   </script>
 </body>
