@@ -2,30 +2,23 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Video Player</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
-    body, html {
+    html, body {
       height: 100%;
       margin: 0;
-      overflow: hidden;
+      background-color: black;
       font-family: sans-serif;
-    }
-
-    .container-fluid {
-      height: 100%;
-      display: flex;
+      overflow: hidden;
     }
 
     .video-wrapper {
-      flex: 1;
-      position: relative;
+      height: 100vh;
       overflow-y: scroll;
       scroll-snap-type: y mandatory;
-      padding-bottom: 150px;
-      background: black;
     }
 
     .video-container {
@@ -55,16 +48,15 @@
       width: 60px;
       height: 60px;
       border-radius: 50%;
+      font-size: 26px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 26px;
-      box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
     }
 
     .bottom-info {
       position: absolute;
-      bottom: 120px;
+      bottom: 90px;
       left: 10px;
       right: 10px;
       z-index: 10;
@@ -72,7 +64,7 @@
       align-items: center;
       flex-wrap: wrap;
       color: white;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.5);
       padding: 8px;
       border-radius: 10px;
     }
@@ -84,48 +76,79 @@
       margin-right: 10px;
     }
 
-    .sidebar {
-      width: 60px;
-      background: #000;
+    .bottom-navbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #111;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 8px 0;
+      z-index: 200;
+    }
+
+    .bottom-navbar div {
+      color: white;
+      font-size: 12px;
+      text-align: center;
+      flex: 1;
+    }
+
+    .bottom-navbar i {
+      font-size: 22px;
+    }
+
+    .right-navbar {
+      position: fixed;
+      right: 10px;
+      top: 30%;
+      z-index: 150;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      padding-top: 20px;
+      gap: 15px;
     }
 
-    .sidebar i {
+    .right-navbar button {
+      background: rgba(0, 0, 0, 0.5);
+      border: none;
       color: white;
-      font-size: 22px;
-      margin: 20px 0;
+      padding: 10px;
+      border-radius: 50%;
+      font-size: 18px;
     }
 
-    .file-picker {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      z-index: 100;
+    #videoInput {
+      display: none;
     }
   </style>
 </head>
 <body>
-  <div class="container-fluid">
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <i class="fas fa-home"></i>
-      <i class="fas fa-film"></i>
-      <i class="fas fa-video"></i>
-      <i class="fas fa-user"></i>
-      <i class="fas fa-thumbs-up"></i>
-      <i class="fas fa-thumbs-down"></i>
-      <i class="fas fa-share"></i>
-    </div>
+  <!-- File input (hidden) -->
+  <input type="file" id="videoInput" multiple accept="video/*">
 
-    <!-- Video Picker & Wrapper -->
-    <div class="video-wrapper" id="videoWrapper">
-      <input class="file-picker form-control form-control-sm" type="file" id="videoInput" multiple accept="video/*">
+  <!-- Right Navbar -->
+  <div class="right-navbar">
+    <button><i class="fas fa-thumbs-up"></i></button>
+    <button><i class="fas fa-thumbs-down"></i></button>
+    <button><i class="fas fa-comment"></i></button>
+    <button><i class="fas fa-share"></i></button>
+    <button onclick="repeatVideo()"><i class="fas fa-redo"></i></button>
+  </div>
 
-      <!-- Tempat video akan muncul -->
+  <!-- Video Display -->
+  <div class="video-wrapper" id="videoWrapper"></div>
+
+  <!-- Bottom Navbar -->
+  <div class="bottom-navbar">
+    <div><i class="fas fa-home"></i><br>Home</div>
+    <div><i class="fas fa-film"></i><br>Shorts</div>
+    <div onclick="document.getElementById('videoInput').click()">
+      <i class="fas fa-plus-circle"></i><br>Upload
     </div>
+    <div><i class="fas fa-video"></i><br>Subs</div>
+    <div><i class="fas fa-user"></i><br>You</div>
   </div>
 
   <script>
@@ -137,15 +160,14 @@
     videoInput.addEventListener('change', function () {
       videoList = Array.from(this.files);
       if (videoList.length > 0) {
-        videoWrapper.innerHTML = ''; // Kosongkan dulu
+        videoWrapper.innerHTML = '';
         shuffle(videoList);
         videoList.forEach((file, index) => {
           const url = URL.createObjectURL(file);
           const container = document.createElement('div');
           container.className = 'video-container';
-
           container.innerHTML = `
-            <video src="${url}" ${index === 0 ? 'autoplay' : ''} preload="auto"></video>
+            <video src="${url}" ${index === 0 ? 'autoplay' : ''} playsinline></video>
             <div class="controls">
               <button onclick="togglePlayPause(this)">
                 <i class="fas fa-pause"></i>
@@ -163,18 +185,6 @@
       }
     });
 
-    function playVideoAtIndex(index) {
-      const videos = document.querySelectorAll('video');
-      videos.forEach((v, i) => {
-        if (i === index) {
-          v.play();
-          v.currentTime = 0;
-        } else {
-          v.pause();
-        }
-      });
-    }
-
     function togglePlayPause(btn) {
       const video = btn.closest('.video-container').querySelector('video');
       if (video.paused) {
@@ -186,7 +196,32 @@
       }
     }
 
-    // Auto scroll detect
+    function playVideoAtIndex(index) {
+      const videos = document.querySelectorAll('video');
+      videos.forEach((v, i) => {
+        if (i === index) {
+          v.currentTime = 0;
+          v.muted = false;
+          v.play();
+        } else {
+          v.pause();
+        }
+
+        v.onended = () => {
+          currentIndex = Math.floor(Math.random() * videoList.length);
+          const nextVideo = document.querySelectorAll('.video-container')[currentIndex];
+          nextVideo.scrollIntoView({ behavior: 'smooth' });
+          playVideoAtIndex(currentIndex);
+        };
+      });
+    }
+
+    function repeatVideo() {
+      const video = document.querySelectorAll('video')[currentIndex];
+      video.currentTime = 0;
+      video.play();
+    }
+
     videoWrapper.addEventListener('scroll', () => {
       const videos = document.querySelectorAll('.video-container');
       videos.forEach((container, index) => {
