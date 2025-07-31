@@ -60,7 +60,7 @@
     <div class="container">
         
         <div class="card">
-            <h1 class="text-center mb-2 text-primary">Kalkulator Hambatan v1</h1>
+            <h1 class="text-center mb-2 text-primary">Kalkulator Hambatan</h1>
             <hr class="mb-4">
 
             <div class="row g-3">
@@ -84,11 +84,17 @@
 
                 <div class="col-4">
                     <label for="konduktor" class="form-label">Konduktor</label>
-                    <input type="text" class="form-control" id="konduktor" value="Tembaga" placeholder="Tembaga, Aluminium, dll.">
+                    <select class="form-select" id="konduktor">
+                        <option value="CU" selected>CU</option>
+                        <option value="AL">AL</option>
+                    </select>
                 </div>
                 <div class="col-4">
                     <label for="penampang" class="form-label">Penampang</label>
-                    <input type="number" step="any" class="form-control" id="penampang" value="0" placeholder="Dalam mm²">
+                    <select class="form-select" id="penampang">
+                        <option value="0.5" selected>0.5 mm²</option>
+                        <option value="0.75">0.75 mm²</option>
+                    </select>
                 </div>
                 <div class="col-4">
                     <label for="spek_max" class="form-label">Spek. Max</label>
@@ -100,6 +106,11 @@
                         <h5 class="mb-2">Hasil Akhir</h5>
                         <h2 id="hasil" class="fw-bold">0.000 Ω/km</h2>
                     </div>
+                </div>
+
+                <div class="col-12 mt-3 d-flex justify-content-between">
+                    <button class="btn btn-secondary" onclick="window.history.back()">Kembali</button>
+                    <button class="btn btn-primary">Beranda</button>
                 </div>
 
                 <div class="col-12">
@@ -121,17 +132,23 @@
                 const panjang = parseFloat(document.getElementById('panjang').value) || 0;
                 const suhu = parseFloat(document.getElementById('suhu').value) || 0;
                 const faktorKoreksiSuhu = parseFloat(document.getElementById('faktor_koreksi_suhu').value) || 1;
+                
+                // Ambil nilai dari dropdown Konduktor dan Penampang
+                const konduktor = document.getElementById('konduktor').value;
+                const penampang = parseFloat(document.getElementById('penampang').value) || 0;
 
                 if (panjang === 0) {
                     hasilElement.textContent = "0.000 Ω/km";
                     return;
                 }
                 
+                // Rumus perhitungan (contoh, sesuaikan jika ada rumus yang lebih spesifik)
                 const resistansiPerKm = (pembacaanAlat / panjang) * faktorKoreksiSuhu * 1000;
                 hasilElement.textContent = `${resistansiPerKm.toFixed(3)} Ω/km`;
             }
 
-            const inputs = document.querySelectorAll('.form-control');
+            // Pilih semua input dan dropdown untuk event listener
+            const inputs = document.querySelectorAll('.form-control, .form-select');
             inputs.forEach(input => {
                 input.addEventListener('input', hitungResistansi);
             });
