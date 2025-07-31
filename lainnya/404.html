@@ -34,14 +34,18 @@
         #hasil-container {
             background: linear-gradient(45deg, #007bff, #00c6ff);
             color: white;
-            padding: 1rem;
+            padding: 0.75rem; /* Mengurangi padding vertikal dan horizontal */
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
             margin-top: 1.5rem;
             text-align: center;
         }
+        #hasil-container h5 {
+            margin-bottom: 0.25rem; /* Mengurangi jarak di bawah judul */
+            font-size: 1rem; /* Mengurangi ukuran font judul */
+        }
         #hasil {
-            font-size: 2rem;
+            font-size: 1.75rem; /* Mengurangi ukuran font hasil */
         }
         .form-control:focus, .form-select:focus {
             border-color: #007bff;
@@ -101,8 +105,8 @@
                     <input type="number" step="any" class="form-control" id="spek_max" value="0" placeholder="Dalam Ω/km" readonly>
                 </div>
                 
-                <div class="col-12 mt-4 d-flex justify-content-center">
-                    <div id="hasil-container" class="col-12 col-md-8">
+                <div class="col-12 mt-4">
+                    <div id="hasil-container">
                         <h5 class="mb-2">Hasil Akhir</h5>
                         <h2 id="hasil" class="fw-bold">0.000 Ω/km</h2>
                     </div>
