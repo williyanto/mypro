@@ -4,40 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Video Player</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-    }
-    body {
+    body, html {
+      height: 100%;
       margin: 0;
-      background: black;
-      font-family: sans-serif;
       overflow: hidden;
+      font-family: sans-serif;
     }
-    .container {
+
+    .container-fluid {
+      height: 100%;
       display: flex;
-      flex-direction: column;
-      height: 100vh;
-      position: relative;
-    }
-    header {
-      background: #000;
-      padding: 10px;
-      text-align: center;
-      color: white;
-      z-index: 10;
-    }
-    header input[type="file"] {
-      display: none;
-    }
-    .custom-file {
-      display: inline-block;
-      background: #ff0000;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 25px;
-      cursor: pointer;
     }
 
     .video-wrapper {
@@ -45,9 +24,11 @@
       position: relative;
       overflow-y: scroll;
       scroll-snap-type: y mandatory;
+      padding-bottom: 150px;
+      background: black;
     }
 
-    section {
+    .video-container {
       height: 100vh;
       scroll-snap-align: start;
       position: relative;
@@ -59,74 +40,12 @@
       object-fit: cover;
     }
 
-    .sidebar-right {
-      position: absolute;
-      right: 10px;
-      bottom: 80px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 15px;
-      color: white;
-      font-size: 14px;
-      z-index: 10;
-    }
-
-    .sidebar-right i {
-      font-size: 24px;
-    }
-
-    .bottom-info {
-      position: absolute;
-      bottom: 70px;
-      left: 10px;
-      right: 10px;
-      z-index: 10;
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      color: white;
-      background: rgba(0, 0, 0, 0.4);
-      padding: 8px;
-      border-radius: 10px;
-    }
-
-    .bottom-info img {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-right: 10px;
-    }
-
-    .bottom-info .info-text {
-      flex: 1 1 auto;
-      min-width: 0;
-    }
-
-    .bottom-info .info-text span {
-      display: inline-block;
-      font-size: 14px;
-      font-weight: bold;
-      color: white;
-    }
-
-    .subscribe-btn {
-      background: white;
-      color: black;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: bold;
-      margin-left: 8px;
-    }
-
     .controls {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      z-index: 15;
+      z-index: 10;
     }
 
     .controls button {
@@ -141,103 +60,149 @@
       justify-content: center;
       font-size: 26px;
       box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
-      cursor: pointer;
+    }
+
+    .bottom-info {
+      position: absolute;
+      bottom: 120px;
+      left: 10px;
+      right: 10px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      color: white;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 8px;
+      border-radius: 10px;
+    }
+
+    .bottom-info img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    .sidebar {
+      width: 60px;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 20px;
+    }
+
+    .sidebar i {
+      color: white;
+      font-size: 22px;
+      margin: 20px 0;
+    }
+
+    .file-picker {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 100;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <label for="videoInput" class="custom-file">Pilih Video</label>
-      <input type="file" id="videoInput" accept="video/*" multiple />
-    </header>
-    <div class="video-wrapper" id="videoWrapper"></div>
+  <div class="container-fluid">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <i class="fas fa-home"></i>
+      <i class="fas fa-film"></i>
+      <i class="fas fa-video"></i>
+      <i class="fas fa-user"></i>
+      <i class="fas fa-thumbs-up"></i>
+      <i class="fas fa-thumbs-down"></i>
+      <i class="fas fa-share"></i>
+    </div>
+
+    <!-- Video Picker & Wrapper -->
+    <div class="video-wrapper" id="videoWrapper">
+      <input class="file-picker form-control form-control-sm" type="file" id="videoInput" multiple accept="video/*">
+
+      <!-- Tempat video akan muncul -->
+    </div>
   </div>
 
   <script>
-    const videoInput = document.getElementById("videoInput");
-    const videoWrapper = document.getElementById("videoWrapper");
+    const videoInput = document.getElementById('videoInput');
+    const videoWrapper = document.getElementById('videoWrapper');
+    let videoList = [];
+    let currentIndex = 0;
 
-    let videos = [];
+    videoInput.addEventListener('change', function () {
+      videoList = Array.from(this.files);
+      if (videoList.length > 0) {
+        videoWrapper.innerHTML = ''; // Kosongkan dulu
+        shuffle(videoList);
+        videoList.forEach((file, index) => {
+          const url = URL.createObjectURL(file);
+          const container = document.createElement('div');
+          container.className = 'video-container';
 
-    videoInput.addEventListener("change", (e) => {
-      videos = Array.from(e.target.files);
-      shuffleArray(videos);
-      renderVideos(videos);
+          container.innerHTML = `
+            <video src="${url}" ${index === 0 ? 'autoplay' : ''} preload="auto"></video>
+            <div class="controls">
+              <button onclick="togglePlayPause(this)">
+                <i class="fas fa-pause"></i>
+              </button>
+            </div>
+            <div class="bottom-info">
+              <img src="https://via.placeholder.com/40" alt="avatar">
+              <span class="me-auto">@aqsa1610</span>
+              <button class="btn btn-danger btn-sm">Subscribe</button>
+            </div>
+          `;
+          videoWrapper.appendChild(container);
+        });
+        playVideoAtIndex(0);
+      }
     });
 
-    function shuffleArray(array) {
+    function playVideoAtIndex(index) {
+      const videos = document.querySelectorAll('video');
+      videos.forEach((v, i) => {
+        if (i === index) {
+          v.play();
+          v.currentTime = 0;
+        } else {
+          v.pause();
+        }
+      });
+    }
+
+    function togglePlayPause(btn) {
+      const video = btn.closest('.video-container').querySelector('video');
+      if (video.paused) {
+        video.play();
+        btn.innerHTML = '<i class="fas fa-pause"></i>';
+      } else {
+        video.pause();
+        btn.innerHTML = '<i class="fas fa-play"></i>';
+      }
+    }
+
+    // Auto scroll detect
+    videoWrapper.addEventListener('scroll', () => {
+      const videos = document.querySelectorAll('.video-container');
+      videos.forEach((container, index) => {
+        const rect = container.getBoundingClientRect();
+        if (rect.top >= 0 && rect.bottom <= window.innerHeight + 200) {
+          currentIndex = index;
+          playVideoAtIndex(index);
+        }
+      });
+    });
+
+    function shuffle(array) {
       for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
       }
-    }
-
-    function renderVideos(videoFiles) {
-      videoWrapper.innerHTML = "";
-      videoFiles.forEach((file, index) => {
-        const url = URL.createObjectURL(file);
-        const section = document.createElement("section");
-        section.innerHTML = `
-          <video src="${url}" playsinline></video>
-          <div class="controls">
-            <button class="playpause"><i class="fa-solid fa-pause"></i></button>
-          </div>
-          <div class="sidebar-right">
-            <div><i class="fa-solid fa-thumbs-up"></i><div>16 K</div></div>
-            <div><i class="fa-solid fa-thumbs-down"></i><div>Dislike</div></div>
-            <div><i class="fa-solid fa-comment-dots"></i><div>6</div></div>
-            <div><i class="fa-solid fa-share-nodes"></i><div>Share</div></div>
-            <div><i class="fa-solid fa-rotate"></i><div>17</div></div>
-          </div>
-          <div class="bottom-info">
-            <img src="https://via.placeholder.com/36" alt="User"/>
-            <div class="info-text">
-              <div>
-                <span>@aqsa1610</span>
-                <button class="subscribe-btn">Subscribe</button>
-              </div>
-              <div class="mt-1">
-                <span class="text-warning">#YuSup</span> Video ke-${index + 1}
-              </div>
-            </div>
-          </div>
-        `;
-        videoWrapper.appendChild(section);
-
-        const video = section.querySelector("video");
-        const btn = section.querySelector(".playpause");
-        const icon = btn.querySelector("i");
-
-        video.volume = 1.0;
-        video.muted = false;
-
-        video.addEventListener("canplay", () => {
-          video.play();
-        });
-
-        btn.addEventListener("click", () => {
-          if (video.paused) {
-            video.play();
-            icon.className = "fa-solid fa-pause";
-          } else {
-            video.pause();
-            icon.className = "fa-solid fa-play";
-          }
-        });
-
-        video.addEventListener("ended", () => {
-          let nextIndex = (index + 1) % videoFiles.length;
-          const nextSection = videoWrapper.children[nextIndex];
-          if (nextSection) {
-            nextSection.scrollIntoView({ behavior: "smooth" });
-            const nextVideo = nextSection.querySelector("video");
-            if (nextVideo) {
-              nextVideo.play();
-            }
-          }
-        });
-      });
     }
   </script>
 </body>
