@@ -43,7 +43,7 @@
         #hasil {
             font-size: 2rem;
         }
-        .form-control:focus {
+        .form-control:focus, .form-select:focus {
             border-color: #007bff;
             box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
         }
@@ -98,11 +98,11 @@
                 </div>
                 <div class="col-4">
                     <label for="spek_max" class="form-label">Spek. Max</label>
-                    <input type="number" step="any" class="form-control" id="spek_max" value="0" placeholder="Dalam Ω/km">
+                    <input type="number" step="any" class="form-control" id="spek_max" value="0" placeholder="Dalam Ω/km" readonly>
                 </div>
                 
-                <div class="col-12 mt-4">
-                    <div id="hasil-container">
+                <div class="col-12 mt-4 d-flex justify-content-center">
+                    <div id="hasil-container" class="col-12 col-md-8">
                         <h5 class="mb-2">Hasil Akhir</h5>
                         <h2 id="hasil" class="fw-bold">0.000 Ω/km</h2>
                     </div>
@@ -110,7 +110,7 @@
 
                 <div class="col-12 mt-3 d-flex justify-content-between">
                     <button class="btn btn-secondary" onclick="window.history.back()">Kembali</button>
-                    <button class="btn btn-primary">Beranda</button>
+                    <button class="btn btn-primary" onclick="window.location.href='index.html'">Beranda</button>
                 </div>
 
                 <div class="col-12">
@@ -126,6 +126,27 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const hasilElement = document.getElementById('hasil');
+            const spekMaxInput = document.getElementById('spek_max');
+            const konduktorSelect = document.getElementById('konduktor');
+            const penampangSelect = document.getElementById('penampang');
+
+            const dataSpek = {
+                "CU": {
+                    "0.5": 36.0,
+                    "0.75": 24.5
+                },
+                "AL": {
+                    "0.5": 653.65,
+                    "0.75": 25.22
+                }
+            };
+            
+            function updateSpekMax() {
+                const konduktor = konduktorSelect.value;
+                const penampang = penampangSelect.value;
+                const spekValue = dataSpek[konduktor][penampang] || 0;
+                spekMaxInput.value = spekValue;
+            }
 
             function hitungResistansi() {
                 const pembacaanAlat = parseFloat(document.getElementById('pembacaan_alat').value) || 0;
@@ -133,26 +154,30 @@
                 const suhu = parseFloat(document.getElementById('suhu').value) || 0;
                 const faktorKoreksiSuhu = parseFloat(document.getElementById('faktor_koreksi_suhu').value) || 1;
                 
-                // Ambil nilai dari dropdown Konduktor dan Penampang
-                const konduktor = document.getElementById('konduktor').value;
-                const penampang = parseFloat(document.getElementById('penampang').value) || 0;
-
                 if (panjang === 0) {
                     hasilElement.textContent = "0.000 Ω/km";
                     return;
                 }
                 
-                // Rumus perhitungan (contoh, sesuaikan jika ada rumus yang lebih spesifik)
                 const resistansiPerKm = (pembacaanAlat / panjang) * faktorKoreksiSuhu * 1000;
                 hasilElement.textContent = `${resistansiPerKm.toFixed(3)} Ω/km`;
             }
 
-            // Pilih semua input dan dropdown untuk event listener
-            const inputs = document.querySelectorAll('.form-control, .form-select');
+            konduktorSelect.addEventListener('change', () => {
+                updateSpekMax();
+                hitungResistansi();
+            });
+            penampangSelect.addEventListener('change', () => {
+                updateSpekMax();
+                hitungResistansi();
+            });
+
+            const inputs = document.querySelectorAll('.form-control');
             inputs.forEach(input => {
                 input.addEventListener('input', hitungResistansi);
             });
 
+            updateSpekMax();
             hitungResistansi();
         });
     </script>
