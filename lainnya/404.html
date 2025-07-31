@@ -37,15 +37,17 @@
             padding: 0.75rem;
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
-            margin-top: 1.5rem;
+            /* --- PERUBAHAN DI SINI --- */
+            margin-top: 1.5rem; /* Margin di atas kontainer hasil, bisa disesuaikan */
+            /* --- AKHIR PERUBAHAN --- */
             text-align: center;
-            transition: background 0.3s ease; /* Transisi untuk perubahan warna */
+            transition: background 0.3s ease;
         }
         #hasil-container.bg-success-gradient {
-            background: linear-gradient(45deg, #28a745, #218838); /* Warna hijau */
+            background: linear-gradient(45deg, #28a745, #218838);
         }
         #hasil-container.bg-danger-gradient {
-            background: linear-gradient(45deg, #dc3545, #c82333); /* Warna merah */
+            background: linear-gradient(45deg, #dc3545, #c82333);
         }
         #hasil-container h5 {
             margin-bottom: 0.25rem;
@@ -63,6 +65,43 @@
             text-align: center;
             color: #6c757d;
             font-size: 0.875rem;
+        }
+        /* Gaya untuk tombol-tombol standar */
+        .btn-standar {
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            flex-grow: 1; /* Agar tombol mengisi ruang yang tersedia */
+            margin: 0 0.25rem; /* Memberi sedikit jarak antar tombol */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            text-align: center;
+            font-weight: 600;
+        }
+        /* Gaya spesifik untuk setiap tombol */
+        .btn-iec {
+            background-color: #007bff; /* Biru */
+        }
+        .btn-icea {
+            background-color: #17a2b8; /* Cyan */
+        }
+        .btn-anzs {
+            background-color: #28a745; /* Hijau */
+        }
+        .btn-spln {
+            background-color: #ffc107; /* Kuning */
+            color: #212529; /* Teks hitam agar lebih terlihat */
+        }
+        .btn-standar:hover {
+            transform: translateY(-2px); /* Efek terangkat saat di-hover */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-footer {
+            display: flex;
+            justify-content: space-between;
         }
     </style>
 </head>
@@ -90,7 +129,7 @@
                 </div>
                 <div class="col-6">
                     <label for="faktor_koreksi_suhu" class="form-label">Faktor Koreksi</label>
-                    <input type="number" step="any" class="form-control" id="faktor_koreksi_suhu" value="1" placeholder="Tanpa satuan" readonly>
+                    <input type="number" step="any" class="form-control" id="faktor_koreksi_suhu" value="" placeholder="Tanpa satuan" readonly>
                 </div>
 
                 <div class="col-4">
@@ -112,7 +151,7 @@
                     <input type="number" step="any" class="form-control" id="spek_max" value="" placeholder="Dalam Ω/km" readonly>
                 </div>
                 
-                <div class="col-12 mt-4">
+                <div class="col-12 mt-3">
                     <div id="hasil-container">
                         <h5 class="mb-2">Hasil Akhir</h5>
                         <h2 id="hasil" class="fw-bold">0.0000 Ω/km</h2>
@@ -120,10 +159,10 @@
                 </div>
 
                 <div class="col-12 mt-3 d-flex justify-content-between">
-                    <button class="btn btn-outline-primary flex-fill me-1">IEC</button>
-                    <button class="btn btn-outline-primary flex-fill me-1">ICEA</button>
-                    <button class="btn btn-outline-primary flex-fill me-1">AS/NZS</button>
-                    <button class="btn btn-outline-primary flex-fill">SPLN</button>
+                    <button class="btn-standar btn-iec">IEC</button>
+                    <button class="btn-standar btn-icea">ICEA</button>
+                    <button class="btn-standar btn-anzs">AS/NZS</button>
+                    <button class="btn-standar btn-spln">SPLN</button>
                 </div>
 
                 <div class="col-12 mt-2 d-flex justify-content-between">
@@ -131,11 +170,13 @@
                     <button class="btn btn-primary" onclick="window.location.href='index.html'">Beranda</button>
                 </div>
 
-                <div class="col-12">
-                    <p class="footer">Dibuat dengan ❤️ & Bootstrap</p>
-                </div>
-
             </div>
+
+            <hr class="mt-4">
+            <div class="col-12">
+                <p class="footer">Dibuat dengan ❤️ & Bootstrap</p>
+            </div>
+            
         </div>
 
     </div>
