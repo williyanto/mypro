@@ -169,6 +169,11 @@
       text-transform: uppercase;
     }
 
+    .subscribe-btn.subscribed {
+      background: #666;
+      border-color: #666;
+    }
+
     .video-caption {
       font-size: 14px;
       line-height: 1.4;
@@ -297,6 +302,12 @@
       font-size: 48px;
       color: rgba(255,255,255,0.3);
     }
+
+    /* Like animation */
+    @keyframes likeFloat {
+      0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -200%) scale(1.5); }
+    }
   </style>
 </head>
 <body>
@@ -407,6 +418,8 @@
         this.videoContainer = document.getElementById('videoContainer');
         this.currentVideoIndex = 0;
         this.videos = [];
+        this.playOrder = [];
+        this.currentPlayOrderIndex = 0;
         
         this.init();
       }
@@ -440,7 +453,62 @@
             const currentSlide = document.querySelector('.video-slide');
             this.toggleVideoPlay(currentSlide);
           }
+          
+          // Arrow key navigation
+          if (e.code === 'ArrowUp' || e.code === 'ArrowDown') {
+            e.preventDefault();
+            this.navigateWithKeys(e.code);
+          }
         });
+
+        // Handle video ended event for looping
+        document.addEventListener('ended', (e) => {
+          if (e.target.classList.contains('video-element')) {
+            this.playNextVideo();
+          }
+        }, true);
+      }
+
+      playNextVideo() {
+        if (this.playOrder.length === 0) return;
+        
+        this.currentPlayOrderIndex = (this.currentPlayOrderIndex + 1) % this.playOrder.length;
+        const nextIndex = this.playOrder[this.currentPlayOrderIndex];
+        
+        const slides = document.querySelectorAll('.video-slide');
+        if (slides[nextIndex]) {
+          slides[nextIndex].scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+
+      generateRandomPlayOrder(count) {
+        // Create array [0, 1, 2, ..., count-1]
+        const order = Array.from({length: count}, (_, i) => i);
+        
+        // Fisher-Yates shuffle algorithm
+        for (let i = order.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [order[i], order[j]] = [order[j], order[i]];
+        }
+        
+        return order;
+      }
+
+      navigateWithKeys(key) {
+        const slides = document.querySelectorAll('.video-slide');
+        if (slides.length === 0) return;
+        
+        let newIndex = this.currentVideoIndex;
+        
+        if (key === 'ArrowUp' && this.currentVideoIndex > 0) {
+          newIndex = this.currentVideoIndex - 1;
+        } else if (key === 'ArrowDown' && this.currentVideoIndex < slides.length - 1) {
+          newIndex = this.currentVideoIndex + 1;
+        }
+        
+        if (newIndex !== this.currentVideoIndex) {
+          slides[newIndex].scrollIntoView({ behavior: 'smooth' });
+        }
       }
 
       handleFileUpload(event) {
@@ -454,7 +522,19 @@
           this.createVideoSlide(file, index);
         });
 
-        setTimeout(() => this.playCurrentVideo(), 100);
+        // Generate random play order
+        this.playOrder = this.generateRandomPlayOrder(files.length);
+        this.currentPlayOrderIndex = 0;
+
+        // Play first video in random order
+        setTimeout(() => {
+          const firstIndex = this.playOrder[0];
+          const firstSlide = document.querySelectorAll('.video-slide')[firstIndex];
+          if (firstSlide) {
+            firstSlide.scrollIntoView();
+            this.playCurrentVideo();
+          }
+        }, 100);
       }
 
       createVideoSlide(file, index) {
@@ -519,6 +599,11 @@
 
         this.videoContainer.appendChild(slide);
         this.videos.push({ element: slide, file, url });
+
+        // Set video to loop and mute by default
+        const video = slide.querySelector('video');
+        video.loop = true;
+        video.muted = true;
       }
 
       generateCaption() {
@@ -568,33 +653,16 @@
           animation: likeFloat 1s ease-out forwards;
         `;
         
-        if (!document.querySelector('#likeAnimation')) {
-          const style = document.createElement('style');
-          style.id = 'likeAnimation';
-          style.textContent = `
-            @keyframes likeFloat {
-              0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-              100% { opacity: 0; transform: translate(-50%, -200%) scale(1.5); }
-            }
-          `;
-          document.head.appendChild(style);
-        }
-        
         likeBtn.style.position = 'relative';
         likeBtn.appendChild(heart);
         setTimeout(() => heart.remove(), 1000);
       }
 
       toggleSubscribe(subscribeBtn) {
-        if (subscribeBtn.textContent === 'Subscribe') {
-          subscribeBtn.textContent = 'Subscribed';
-          subscribeBtn.style.background = '#666';
-          subscribeBtn.style.borderColor = '#666';
-        } else {
-          subscribeBtn.textContent = 'Subscribe';
-          subscribeBtn.style.background = 'none';
-          subscribeBtn.style.borderColor = 'white';
-        }
+        subscribeBtn.classList.toggle('subscribed');
+        subscribeBtn.textContent = subscribeBtn.classList.contains('subscribed') 
+          ? 'Subscribed' 
+          : 'Subscribe';
       }
 
       toggleVideoPlay(slide) {
@@ -636,6 +704,9 @@
             if (playBtn) playBtn.className = 'bi bi-pause-fill';
             
             this.currentVideoIndex = parseInt(slide.dataset.index);
+            
+            // Find the current index in playOrder
+            this.currentPlayOrderIndex = this.playOrder.indexOf(this.currentVideoIndex);
           }
         });
       }
