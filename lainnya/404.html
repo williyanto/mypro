@@ -119,7 +119,7 @@
     <div class="container">
         
         <div class="card">
-            <h1 class="text-center mb-2 text-primary">Kalkulator Hambatan v3</h1>
+            <h1 class="text-center mb-2 text-primary">Kalkulator Hambatan v4</h1>
             <hr class="mb-4">
 
             <div class="row g-3">
@@ -146,6 +146,7 @@
                     <select class="form-select" id="konduktor">
                         <option value="CU" selected>CU</option>
                         <option value="AL">AL</option>
+                        <option value="TCU">TCU</option>
                     </select>
                 </div>
                 <div class="col-4">
@@ -210,6 +211,10 @@
                 "AL": {
                     "0.5": 653.65,
                     "0.75": 25.22
+                },
+                "TCU": {
+                    "0.5": 36.7,
+                    "0.75": 24.8
                 }
             };
             
@@ -219,6 +224,9 @@
                 },
                 "AL": {
                     "21.0": 0.9960, "21.1": 0.9956, "21.2": 0.9952, "21.3": 0.9948, "21.4": 0.9944, "21.5": 0.9940
+                },
+                "TCU": {
+                    "21.0": 0.9961, "21.1": 0.9957, "21.2": 0.9953, "21.3": 0.9949, "21.4": 0.9945, "21.5": 0.9941
                 }
             };
 
@@ -241,7 +249,6 @@
                 
                 const spekMaxNumber = parseFloat(spekMax);
                 
-                // Cek apakah semua input yang dibutuhkan valid
                 const isInputValid = !isNaN(parseFloat(document.getElementById('pembacaan_alat').value)) &&
                                      !isNaN(parseFloat(document.getElementById('panjang').value)) &&
                                      parseFloat(document.getElementById('panjang').value) !== 0 &&
@@ -256,7 +263,6 @@
                         statusHasilElement.textContent = "Hasil pengujian tidak memenuhi spesifikasi standar.";
                     }
                 } else {
-                    // Jika ada input yang belum lengkap, kembali ke kondisi awal
                     hasilElement.textContent = "";
                     hasilContainer.classList.remove('bg-success-gradient', 'bg-danger-gradient');
                     statusHasilElement.textContent = "Mohon lengkapi data untuk memulai aplikasi ini.";
@@ -308,7 +314,7 @@
             // Panggil fungsi-fungsi ini saat halaman dimuat pertama kali
             updateSpekMax();
             updateFaktorKoreksi();
-            hitungResistansi(); // Panggil saat awal untuk menampilkan teks default
+            hitungResistansi();
         });
     </script>
 </body>
