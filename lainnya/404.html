@@ -1,71 +1,68 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scroll Video Shorts</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aplikasi Video Player Mobile</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
-    html, body {
+    body, html {
       margin: 0;
       padding: 0;
-      height: 100%;
-      overflow: hidden;
+      overflow-x: hidden;
       background: black;
     }
 
-    .scroll-container {
+    main {
       height: 100vh;
-      width: 100%;
       overflow-y: scroll;
       scroll-snap-type: y mandatory;
     }
 
-    .video-section {
+    section {
       height: 100vh;
-      width: 100%;
+      width: 100vw;
       position: relative;
       scroll-snap-align: start;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: black;
     }
 
     video {
-      height: 100%;
       width: 100%;
+      height: 100%;
       object-fit: cover;
     }
 
-    .sidebar-right, .bottom-info, .bottom-nav {
-      position: absolute;
-      z-index: 10;
-      color: white;
-    }
-
     .sidebar-right {
+      position: absolute;
       right: 10px;
       top: 30%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 5;
+      color: white;
+      font-size: 18px;
       text-align: center;
     }
 
-    .sidebar-right div {
-      margin-bottom: 15px;
-    }
-
-    .sidebar-right i {
-      font-size: 24px;
-      display: block;
+    .sidebar-right div i {
+      font-size: 22px;
     }
 
     .bottom-info {
+      position: absolute;
       bottom: 70px;
       left: 10px;
+      right: 10px;
+      z-index: 10;
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
+      color: white;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 8px;
+      border-radius: 10px;
     }
 
     .bottom-info img {
@@ -76,95 +73,120 @@
       margin-right: 10px;
     }
 
+    .bottom-info .info-text {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .bottom-info .info-text span {
+      display: inline-block;
+      font-size: 14px;
+      font-weight: bold;
+      color: white;
+    }
+
     .subscribe-btn {
       background: white;
       color: black;
-      padding: 3px 12px;
+      padding: 4px 10px;
       border-radius: 20px;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: bold;
-      margin-left: 10px;
+      margin-left: 8px;
     }
 
-    .bottom-nav {
+    .controls {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 15;
+    }
+
+    .controls button {
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      font-size: 28px;
+      padding: 12px;
+      border-radius: 50%;
+    }
+
+    .bottom-navbar {
+      position: fixed;
       bottom: 0;
-      width: 100%;
-      background: black;
+      left: 0;
+      right: 0;
+      background: #000;
+      border-top: 1px solid #333;
       display: flex;
       justify-content: space-around;
-      align-items: center;
-      height: 60px;
-      border-top: 1px solid #333;
-    }
-
-    .bottom-nav div {
-      text-align: center;
-      font-size: 11px;
-    }
-
-    .bottom-nav i {
-      font-size: 20px;
-      display: block;
-      margin-bottom: 2px;
-    }
-
-    .upload-btn {
-      position: fixed;
-      top: 10px;
-      left: 10px;
+      padding: 6px 0;
       z-index: 20;
     }
 
-    input[type="file"] {
-      display: none;
+    .bottom-navbar .nav-item {
+      text-align: center;
+      color: white;
+      font-size: 12px;
     }
 
-    .custom-upload {
-      background: white;
-      color: black;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-weight: bold;
-      font-size: 14px;
-      cursor: pointer;
+    .bottom-navbar .nav-item i {
+      display: block;
+      font-size: 18px;
+      margin-bottom: 2px;
+    }
+
+    @media (max-width: 400px) {
+      .subscribe-btn {
+        font-size: 11px;
+        padding: 2px 8px;
+      }
+
+      .bottom-info img {
+        width: 30px;
+        height: 30px;
+      }
+
+      .bottom-info .info-text span {
+        font-size: 12px;
+      }
     }
   </style>
 </head>
 <body>
+  <input type="file" id="videoInput" multiple accept="video/*" hidden />
+  <main id="videoContainer"></main>
 
-  <div class="upload-btn">
-    <label for="videoInput" class="custom-upload">Pilih Video</label>
-    <input type="file" id="videoInput" accept="video/*" multiple>
-  </div>
-
-  <div class="scroll-container" id="scrollContainer">
-    <!-- Video sections will be added dynamically -->
-  </div>
-
-  <div class="bottom-nav">
-    <div><i class="fa-solid fa-house"></i><div>Home</div></div>
-    <div><i class="fa-solid fa-video"></i><div>Shorts</div></div>
-    <div><i class="fa-solid fa-circle-plus"></i></div>
-    <div><i class="fa-solid fa-bell"></i><div>Subs</div></div>
-    <div><i class="fa-solid fa-user"></i><div>You</div></div>
-  </div>
+  <nav class="bottom-navbar">
+    <div class="nav-item"><i class="fa-solid fa-house"></i>Home</div>
+    <div class="nav-item"><i class="fa-solid fa-bolt"></i>Shorts</div>
+    <div class="nav-item"><i class="fa-solid fa-video"></i>Subs</div>
+    <div class="nav-item"><i class="fa-solid fa-user"></i>You</div>
+  </nav>
 
   <script>
-    const videoInput = document.getElementById('videoInput');
-    const scrollContainer = document.getElementById('scrollContainer');
+    const input = document.getElementById('videoInput');
+    const container = document.getElementById('videoContainer');
 
-    videoInput.addEventListener('change', function () {
-      const files = Array.from(this.files);
-      scrollContainer.innerHTML = ''; // bersihkan sebelumnya
+    window.onload = () => {
+      input.click();
+    };
+
+    input.addEventListener('change', (e) => {
+      const files = Array.from(e.target.files);
+      container.innerHTML = '';
 
       files.forEach((file, index) => {
         const url = URL.createObjectURL(file);
-
         const section = document.createElement('section');
-        section.className = 'video-section';
 
         section.innerHTML = `
-          <video src="${url}" playsinline></video>
+          <video src="${url}" playsinline preload="metadata"></video>
+
+          <div class="controls">
+            <button class="playpause"><i class="fa-solid fa-play"></i></button>
+          </div>
 
           <div class="sidebar-right">
             <div><i class="fa-solid fa-thumbs-up"></i><div>16 K</div></div>
@@ -176,8 +198,8 @@
 
           <div class="bottom-info">
             <img src="https://via.placeholder.com/36" alt="User"/>
-            <div>
-              <div class="d-flex align-items-center">
+            <div class="info-text">
+              <div>
                 <span>@aqsa1610</span>
                 <button class="subscribe-btn">Subscribe</button>
               </div>
@@ -188,35 +210,49 @@
           </div>
         `;
 
-        scrollContainer.appendChild(section);
+        container.appendChild(section);
+
+        // auto play and pause based on scroll
+        const video = section.querySelector("video");
+        const btn = section.querySelector(".playpause i");
+
+        section.querySelector(".playpause").onclick = () => {
+          if (video.paused) {
+            video.play();
+            btn.classList.remove("fa-play");
+            btn.classList.add("fa-pause");
+          } else {
+            video.pause();
+            btn.classList.remove("fa-pause");
+            btn.classList.add("fa-play");
+          }
+        };
       });
 
-      setupAutoPlay();
-    });
-
-    function setupAutoPlay() {
-      const options = {
-        root: document.querySelector('#scrollContainer'),
-        rootMargin: '0px',
-        threshold: 0.9
-      };
+      // Auto play/pause on scroll
+      const sections = container.querySelectorAll("section");
 
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-          const video = entry.target.querySelector('video');
+          const video = entry.target.querySelector("video");
+          const icon = entry.target.querySelector(".playpause i");
+
           if (entry.isIntersecting) {
             video.play();
+            icon.classList.remove("fa-play");
+            icon.classList.add("fa-pause");
           } else {
             video.pause();
+            icon.classList.remove("fa-pause");
+            icon.classList.add("fa-play");
           }
         });
-      }, options);
-
-      document.querySelectorAll('.video-section').forEach(section => {
-        observer.observe(section);
+      }, {
+        threshold: 0.6
       });
-    }
-  </script>
 
+      sections.forEach(section => observer.observe(section));
+    });
+  </script>
 </body>
 </html>
