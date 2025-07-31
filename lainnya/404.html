@@ -34,18 +34,18 @@
         #hasil-container {
             background: linear-gradient(45deg, #007bff, #00c6ff);
             color: white;
-            padding: 0.75rem; /* Mengurangi padding vertikal dan horizontal */
+            padding: 0.75rem;
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
             margin-top: 1.5rem;
             text-align: center;
         }
         #hasil-container h5 {
-            margin-bottom: 0.25rem; /* Mengurangi jarak di bawah judul */
-            font-size: 1rem; /* Mengurangi ukuran font judul */
+            margin-bottom: 0.25rem;
+            font-size: 1rem;
         }
         #hasil {
-            font-size: 1.75rem; /* Mengurangi ukuran font hasil */
+            font-size: 1.75rem;
         }
         .form-control:focus, .form-select:focus {
             border-color: #007bff;
@@ -83,7 +83,7 @@
                 </div>
                 <div class="col-6">
                     <label for="faktor_koreksi_suhu" class="form-label">Faktor Koreksi</label>
-                    <input type="number" step="any" class="form-control" id="faktor_koreksi_suhu" value="1" placeholder="Tanpa satuan">
+                    <input type="number" step="any" class="form-control" id="faktor_koreksi_suhu" value="1" placeholder="Tanpa satuan" readonly>
                 </div>
 
                 <div class="col-4">
@@ -131,8 +131,10 @@
         document.addEventListener('DOMContentLoaded', function() {
             const hasilElement = document.getElementById('hasil');
             const spekMaxInput = document.getElementById('spek_max');
+            const faktorKoreksiInput = document.getElementById('faktor_koreksi_suhu');
             const konduktorSelect = document.getElementById('konduktor');
             const penampangSelect = document.getElementById('penampang');
+            const suhuInput = document.getElementById('suhu');
 
             const dataSpek = {
                 "CU": {
@@ -145,18 +147,43 @@
                 }
             };
             
+            const dataFaktorKoreksi = {
+                "CU": {
+                    "21.0": 0.9961,
+                    "21.1": 0.9957,
+                    "21.2": 0.9953,
+                    "21.3": 0.9949,
+                    "21.4": 0.9945,
+                    "21.5": 0.9941
+                },
+                "AL": {
+                    "21.0": 0.9960,
+                    "21.1": 0.9956,
+                    "21.2": 0.9952,
+                    "21.3": 0.9948,
+                    "21.4": 0.9944,
+                    "21.5": 0.9940
+                }
+            };
+
             function updateSpekMax() {
                 const konduktor = konduktorSelect.value;
                 const penampang = penampangSelect.value;
-                const spekValue = dataSpek[konduktor][penampang] || 0;
+                const spekValue = dataSpek[konduktor] && dataSpek[konduktor][penampang] ? dataSpek[konduktor][penampang] : 0;
                 spekMaxInput.value = spekValue;
+            }
+
+            function updateFaktorKoreksi() {
+                const konduktor = konduktorSelect.value;
+                const suhu = parseFloat(suhuInput.value).toFixed(1);
+                const faktorValue = dataFaktorKoreksi[konduktor] && dataFaktorKoreksi[konduktor][suhu] ? dataFaktorKoreksi[konduktor][suhu] : 1;
+                faktorKoreksiInput.value = faktorValue;
             }
 
             function hitungResistansi() {
                 const pembacaanAlat = parseFloat(document.getElementById('pembacaan_alat').value) || 0;
                 const panjang = parseFloat(document.getElementById('panjang').value) || 0;
-                const suhu = parseFloat(document.getElementById('suhu').value) || 0;
-                const faktorKoreksiSuhu = parseFloat(document.getElementById('faktor_koreksi_suhu').value) || 1;
+                const faktorKoreksiSuhu = parseFloat(faktorKoreksiInput.value) || 1;
                 
                 if (panjang === 0) {
                     hasilElement.textContent = "0.000 Ω/km";
@@ -167,21 +194,32 @@
                 hasilElement.textContent = `${resistansiPerKm.toFixed(3)} Ω/km`;
             }
 
+            // Event listener untuk Konduktor dan Suhu agar Faktor Koreksi terisi otomatis
             konduktorSelect.addEventListener('change', () => {
                 updateSpekMax();
+                updateFaktorKoreksi();
                 hitungResistansi();
             });
             penampangSelect.addEventListener('change', () => {
                 updateSpekMax();
                 hitungResistansi();
             });
-
-            const inputs = document.querySelectorAll('.form-control');
-            inputs.forEach(input => {
-                input.addEventListener('input', hitungResistansi);
+            suhuInput.addEventListener('input', () => {
+                updateFaktorKoreksi();
+                hitungResistansi();
             });
 
+            // Event listener untuk input lain agar hasil terupdate real-time
+            const inputs = document.querySelectorAll('.form-control');
+            inputs.forEach(input => {
+                if(input.id !== 'suhu' && input.id !== 'faktor_koreksi_suhu') {
+                    input.addEventListener('input', hitungResistansi);
+                }
+            });
+
+            // Panggil fungsi-fungsi ini saat halaman dimuat pertama kali
             updateSpekMax();
+            updateFaktorKoreksi();
             hitungResistansi();
         });
     </script>
