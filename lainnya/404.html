@@ -14,7 +14,7 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            padding: 20px;
+            padding: 20px; /* Padding default untuk desktop */
         }
         .container {
             max-width: 600px;
@@ -72,29 +72,40 @@
             padding: 0.5rem 1rem;
             font-size: 0.9rem;
             cursor: pointer;
-            flex-grow: 1; /* Agar tombol mengisi ruang yang tersedia */
-            margin: 0 0.25rem; /* Memberi sedikit jarak antar tombol */
+            flex-grow: 1;
+            margin: 0 0.25rem;
             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
             text-align: center;
             font-weight: 600;
         }
         /* Gaya spesifik untuk setiap tombol */
         .btn-iec {
-            background-color: #007bff; /* Biru */
+            background-color: #007bff;
         }
         .btn-icea {
-            background-color: #17a2b8; /* Cyan */
+            background-color: #17a2b8;
         }
         .btn-anzs {
-            background-color: #28a745; /* Hijau */
+            background-color: #28a745;
         }
         .btn-spln {
-            background-color: #ffc107; /* Kuning */
-            color: #212529; /* Teks hitam agar lebih terlihat */
+            background-color: #ffc107;
+            color: #212529;
         }
         .btn-standar:hover {
-            transform: translateY(-2px); /* Efek terangkat saat di-hover */
+            transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* MEDIA QUERY untuk mengurangi padding di perangkat mobile */
+        @media (max-width: 767px) {
+            body {
+                padding: 10px; /* Mengurangi padding vertikal dan horizontal */
+                align-items: flex-start; /* Mengubah posisi konten agar lebih ke atas */
+            }
+            .card {
+                padding: 1rem; /* Mengurangi padding di dalam card */
+            }
         }
     </style>
 </head>
@@ -103,7 +114,7 @@
     <div class="container">
         
         <div class="card">
-            <h1 class="text-center mb-2 text-primary">Kalkulator Hambatan</h1>
+            <h1 class="text-center mb-2 text-primary">Kalkulator Hambatan Konduktor</h1>
             <hr class="mb-4">
 
             <div class="row g-3">
