@@ -37,9 +37,7 @@
             padding: 0.75rem;
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
-            /* --- PERUBAHAN DI SINI --- */
-            margin-top: 1.5rem; /* Margin di atas kontainer hasil, bisa disesuaikan */
-            /* --- AKHIR PERUBAHAN --- */
+            margin-top: 0.25rem; /* DIUBAH: mt-1 = 0.25rem */
             text-align: center;
             transition: background 0.3s ease;
         }
@@ -74,34 +72,33 @@
             padding: 0.5rem 1rem;
             font-size: 0.9rem;
             cursor: pointer;
-            flex-grow: 1; /* Agar tombol mengisi ruang yang tersedia */
-            margin: 0 0.25rem; /* Memberi sedikit jarak antar tombol */
+            flex-grow: 1;
+            margin: 0 0.25rem;
             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
             text-align: center;
             font-weight: 600;
         }
         /* Gaya spesifik untuk setiap tombol */
         .btn-iec {
-            background-color: #007bff; /* Biru */
+            background-color: #007bff;
         }
         .btn-icea {
-            background-color: #17a2b8; /* Cyan */
+            background-color: #17a2b8;
         }
         .btn-anzs {
-            background-color: #28a745; /* Hijau */
+            background-color: #28a745;
         }
         .btn-spln {
-            background-color: #ffc107; /* Kuning */
-            color: #212529; /* Teks hitam agar lebih terlihat */
+            background-color: #ffc107;
+            color: #212529;
         }
         .btn-standar:hover {
-            transform: translateY(-2px); /* Efek terangkat saat di-hover */
+            transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        
-        .btn-footer {
-            display: flex;
-            justify-content: space-between;
+        /* Gaya untuk menempatkan tombol di tengah */
+        .d-flex.justify-content-center .btn {
+            margin: 0 0.5rem;
         }
     </style>
 </head>
@@ -151,7 +148,7 @@
                     <input type="number" step="any" class="form-control" id="spek_max" value="" placeholder="Dalam Ω/km" readonly>
                 </div>
                 
-                <div class="col-12 mt-3">
+                <div class="col-12 mt-1">
                     <div id="hasil-container">
                         <h5 class="mb-2">Hasil Akhir</h5>
                         <h2 id="hasil" class="fw-bold">0.0000 Ω/km</h2>
@@ -165,8 +162,8 @@
                     <button class="btn-standar btn-spln">SPLN</button>
                 </div>
 
-                <div class="col-12 mt-2 d-flex justify-content-between">
-                    <button class="btn btn-secondary" onclick="window.history.back()">Kembali</button>
+                <div class="col-12 mt-2 d-flex justify-content-center">
+                    <button class="btn btn-danger" onclick="window.history.back()">Kembali</button>
                     <button class="btn btn-primary" onclick="window.location.href='index.html'">Beranda</button>
                 </div>
 
