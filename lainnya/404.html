@@ -14,7 +14,7 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            padding: 20px; /* Tambahkan padding agar tidak terlalu mepet ke ujung layar */
+            padding: 20px;
         }
         .container {
             max-width: 600px;
@@ -34,21 +34,21 @@
         #hasil-container {
             background: linear-gradient(45deg, #007bff, #00c6ff);
             color: white;
-            padding: 1rem; /* Perkecil padding */
+            padding: 1rem;
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
             margin-top: 1.5rem;
             text-align: center;
         }
         #hasil {
-            font-size: 2rem; /* Perkecil ukuran font */
+            font-size: 2rem;
         }
         .form-control:focus {
             border-color: #007bff;
             box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
         }
         .footer {
-            margin-top: 1.5rem; /* Jarak footer dari konten di atasnya */
+            margin-top: 1.5rem;
             text-align: center;
             color: #6c757d;
             font-size: 0.875rem;
@@ -60,37 +60,39 @@
     <div class="container">
         
         <div class="card">
-            <h1 class="text-center mb-2 text-primary">Kalkulator Hambatan</h1>
-            <hr class="mb-4"> <div class="row g-3">
+            <h1 class="text-center mb-2 text-primary">Kalkulator Hambatan v1</h1>
+            <hr class="mb-4">
+
+            <div class="row g-3">
                 <div class="col-6">
-                    <label for="pembacaan_alat" class="form-label">Pembacaan Alat (Ω)</label>
-                    <input type="number" step="any" class="form-control" id="pembacaan_alat" value="0">
+                    <label for="pembacaan_alat" class="form-label">Pembacaan Alat</label>
+                    <input type="number" step="any" class="form-control" id="pembacaan_alat" value="0" placeholder="Dalam Ohm (Ω)">
                 </div>
                 <div class="col-6">
-                    <label for="panjang" class="form-label">Panjang (m)</label>
-                    <input type="number" step="any" class="form-control" id="panjang" value="0">
+                    <label for="panjang" class="form-label">Panjang</label>
+                    <input type="number" step="any" class="form-control" id="panjang" value="0" placeholder="Dalam meter (m)">
                 </div>
                 
                 <div class="col-6">
-                    <label for="suhu" class="form-label">Suhu (°C)</label>
-                    <input type="number" step="any" class="form-control" id="suhu" value="0">
+                    <label for="suhu" class="form-label">Suhu</label>
+                    <input type="number" step="any" class="form-control" id="suhu" value="0" placeholder="Dalam Celsius (°C)">
                 </div>
                 <div class="col-6">
                     <label for="faktor_koreksi_suhu" class="form-label">Faktor Koreksi</label>
-                    <input type="number" step="any" class="form-control" id="faktor_koreksi_suhu" value="1">
+                    <input type="number" step="any" class="form-control" id="faktor_koreksi_suhu" value="1" placeholder="Tanpa satuan">
                 </div>
 
                 <div class="col-4">
                     <label for="konduktor" class="form-label">Konduktor</label>
-                    <input type="text" class="form-control" id="konduktor" value="Tembaga">
+                    <input type="text" class="form-control" id="konduktor" value="Tembaga" placeholder="Tembaga, Aluminium, dll.">
                 </div>
                 <div class="col-4">
-                    <label for="penampang" class="form-label">Penampang (mm²)</label>
-                    <input type="number" step="any" class="form-control" id="penampang" value="0">
+                    <label for="penampang" class="form-label">Penampang</label>
+                    <input type="number" step="any" class="form-control" id="penampang" value="0" placeholder="Dalam mm²">
                 </div>
                 <div class="col-4">
-                    <label for="spek_max" class="form-label">Spek. Max (Ω/km)</label>
-                    <input type="number" step="any" class="form-control" id="spek_max" value="0">
+                    <label for="spek_max" class="form-label">Spek. Max</label>
+                    <input type="number" step="any" class="form-control" id="spek_max" value="0" placeholder="Dalam Ω/km">
                 </div>
                 
                 <div class="col-12 mt-4">
