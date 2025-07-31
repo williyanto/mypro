@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Kalkulator Hambatan Resistansi Konduktor</title>
+    <title>Kalkulator Hambatan Resistansi</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
         /* CSS Kustom untuk Tampilan */
@@ -14,7 +14,7 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            padding: 20px; /* Padding default untuk desktop */
+            padding: 20px;
         }
         .container {
             max-width: 600px;
@@ -97,15 +97,20 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        /* MEDIA QUERY untuk mengurangi padding di perangkat mobile */
+        /* MEDIA QUERY untuk mobile */
         @media (max-width: 767px) {
             body {
-                padding: 10px; /* Mengurangi padding vertikal dan horizontal */
-                align-items: flex-start; /* Mengubah posisi konten agar lebih ke atas */
+                padding: 10px;
+                align-items: flex-start;
             }
             .card {
-                padding: 1rem; /* Mengurangi padding di dalam card */
+                padding: 1rem;
             }
+        }
+        
+        /* GAYA BARU: Membuat placeholder miring */
+        .form-control::placeholder {
+            font-style: italic;
         }
     </style>
 </head>
@@ -114,7 +119,7 @@
     <div class="container">
         
         <div class="card">
-            <h1 class="text-center mb-2 text-primary">Kalkulator Hambatan Resistansi Konduktor</h1>
+            <h1 class="text-center mb-2 text-primary">Kalkulator Hambatan v2</h1>
             <hr class="mb-4">
 
             <div class="row g-3">
@@ -157,8 +162,8 @@
                 
                 <div class="col-12 mt-2">
                     <div id="hasil-container">
-                        <h5 class="mb-2">Hasil Akhir</h5>
                         <h2 id="hasil" class="fw-bold">0.0000 Ω/km</h2>
+                        <h5 id="status-hasil" class="mb-2 fst-italic">Hasil Akhir</h5>
                     </div>
                 </div>
 
@@ -178,7 +183,7 @@
 
             <hr class="mt-4">
             <div class="col-12">
-                <p class="footer">Williyanto Adi 2025</p>
+                <p class="footer">Dibuat dengan ❤️ & Bootstrap</p>
             </div>
             
         </div>
@@ -190,6 +195,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const hasilElement = document.getElementById('hasil');
             const hasilContainer = document.getElementById('hasil-container');
+            const statusHasilElement = document.getElementById('status-hasil');
             const spekMaxInput = document.getElementById('spek_max');
             const faktorKoreksiInput = document.getElementById('faktor_koreksi_suhu');
             const konduktorSelect = document.getElementById('konduktor');
@@ -232,14 +238,20 @@
 
             function updateWarnaHasil(hasilHitung, spekMax) {
                 hasilContainer.classList.remove('bg-success-gradient', 'bg-danger-gradient');
-
+                
                 const spekMaxNumber = parseFloat(spekMax);
-                if (!isNaN(spekMaxNumber) && spekMaxNumber > 0 && !isNaN(hasilHitung) && hasilHitung > 0) {
+                
+                if (!isNaN(spekMaxNumber) && spekMaxNumber > 0 && !isNaN(hasilHitung) && hasilHitung >= 0) {
                     if (hasilHitung < spekMaxNumber) {
                         hasilContainer.classList.add('bg-success-gradient');
+                        statusHasilElement.textContent = "Hasil pengujian memenuhi spesifikasi standar.";
                     } else {
                         hasilContainer.classList.add('bg-danger-gradient');
+                        statusHasilElement.textContent = "Hasil pengujian tidak memenuhi spesifikasi standar.";
                     }
+                } else {
+                    // Reset ke kondisi awal jika input tidak valid
+                    statusHasilElement.textContent = "Hasil Akhir";
                 }
             }
 
@@ -252,6 +264,7 @@
                 if (isNaN(pembacaanAlat) || isNaN(panjang) || panjang === 0 || isNaN(faktorKoreksiSuhu)) {
                     hasilElement.textContent = "0.0000 Ω/km";
                     hasilContainer.classList.remove('bg-success-gradient', 'bg-danger-gradient');
+                    statusHasilElement.textContent = "Hasil Akhir"; // Mengembalikan teks ke default
                     return;
                 }
                 
