@@ -119,7 +119,7 @@
     <div class="container">
         
         <div class="card">
-            <h1 class="text-center mb-2 text-primary">Kalkulator Hambatan v2</h1>
+            <h1 class="text-center mb-2 text-primary">Kalkulator Hambatan v3</h1>
             <hr class="mb-4">
 
             <div class="row g-3">
@@ -162,8 +162,8 @@
                 
                 <div class="col-12 mt-2">
                     <div id="hasil-container">
-                        <h2 id="hasil" class="fw-bold">0.0000 Ω/km</h2>
-                        <h5 id="status-hasil" class="mb-2 fst-italic">Hasil Akhir</h5>
+                        <h2 id="hasil" class="fw-bold"></h2>
+                        <h5 id="status-hasil" class="mb-2 fst-italic">Mohon lengkapi data untuk memulai aplikasi ini.</h5>
                     </div>
                 </div>
 
@@ -241,7 +241,13 @@
                 
                 const spekMaxNumber = parseFloat(spekMax);
                 
-                if (!isNaN(spekMaxNumber) && spekMaxNumber > 0 && !isNaN(hasilHitung) && hasilHitung >= 0) {
+                // Cek apakah semua input yang dibutuhkan valid
+                const isInputValid = !isNaN(parseFloat(document.getElementById('pembacaan_alat').value)) &&
+                                     !isNaN(parseFloat(document.getElementById('panjang').value)) &&
+                                     parseFloat(document.getElementById('panjang').value) !== 0 &&
+                                     !isNaN(parseFloat(faktorKoreksiInput.value));
+
+                if (isInputValid) {
                     if (hasilHitung < spekMaxNumber) {
                         hasilContainer.classList.add('bg-success-gradient');
                         statusHasilElement.textContent = "Hasil pengujian memenuhi spesifikasi standar.";
@@ -250,8 +256,10 @@
                         statusHasilElement.textContent = "Hasil pengujian tidak memenuhi spesifikasi standar.";
                     }
                 } else {
-                    // Reset ke kondisi awal jika input tidak valid
-                    statusHasilElement.textContent = "Hasil Akhir";
+                    // Jika ada input yang belum lengkap, kembali ke kondisi awal
+                    hasilElement.textContent = "";
+                    hasilContainer.classList.remove('bg-success-gradient', 'bg-danger-gradient');
+                    statusHasilElement.textContent = "Mohon lengkapi data untuk memulai aplikasi ini.";
                 }
             }
 
@@ -260,11 +268,11 @@
                 const panjang = parseFloat(document.getElementById('panjang').value);
                 const faktorKoreksiSuhu = parseFloat(faktorKoreksiInput.value);
                 const spekMax = spekMaxInput.value;
-                
+
                 if (isNaN(pembacaanAlat) || isNaN(panjang) || panjang === 0 || isNaN(faktorKoreksiSuhu)) {
-                    hasilElement.textContent = "0.0000 Ω/km";
+                    hasilElement.textContent = "";
                     hasilContainer.classList.remove('bg-success-gradient', 'bg-danger-gradient');
-                    statusHasilElement.textContent = "Hasil Akhir"; // Mengembalikan teks ke default
+                    statusHasilElement.textContent = "Mohon lengkapi data untuk memulai aplikasi ini.";
                     return;
                 }
                 
@@ -300,7 +308,7 @@
             // Panggil fungsi-fungsi ini saat halaman dimuat pertama kali
             updateSpekMax();
             updateFaktorKoreksi();
-            hitungResistansi();
+            hitungResistansi(); // Panggil saat awal untuk menampilkan teks default
         });
     </script>
 </body>
