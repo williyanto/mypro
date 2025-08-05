@@ -137,7 +137,6 @@
             transition: background-color 0.3s, border-color 0.3s;
         }
         
-        /* [PERBAIKAN] Menggunakan !important untuk memastikan perubahan warna langsung terjadi */
         .subscribe-btn.subscribed {
             background-color: #0d6efd !important;
             border-color: #0d6efd !important;
@@ -292,6 +291,77 @@
         body.show-profile-page #profile-page {
             display: flex;
         }
+        
+        /* [BARU] Gaya untuk wadah komentar */
+        #comments-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 80%; /* Atur tinggi sesuai kebutuhan */
+            background-color: #fff;
+            color: #000;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.2);
+            transform: translateY(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        body.show-comments-page #comments-container {
+            transform: translateY(0);
+        }
+        
+        body.show-comments-page #fullscreen-video-container,
+        body.show-comments-page .fixed-bottom-container,
+        body.show-comments-page .right-nav {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .comments-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        .comments-header h5 {
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .comments-list {
+            flex-grow: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .comment-item {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+            padding: 5px 0;
+        }
+
+        .comment-user {
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: #000;
+        }
+
+        .comment-text {
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.2;
+        }
+
     </style>
 </head>
 <body>
@@ -348,7 +418,7 @@
             <i class="bi bi-hand-thumbs-down-fill" id="dislike-icon"></i>
             <span>Dislike</span>
         </a>
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="#" id="comment-button">
             <i class="bi bi-chat-dots-fill"></i>
             <span>Comment</span>
         </a>
@@ -361,6 +431,15 @@
             <span>Repeat</span>
         </a>
     </nav>
+
+    <div id="comments-container">
+        <div class="comments-header">
+            <h5>Comments</h5>
+            <button id="close-comments-btn" type="button" class="btn-close" aria-label="Close"></button>
+        </div>
+        <div class="comments-list" id="comments-list">
+            </div>
+    </div>
 
     <nav class="navbar fixed-bottom bottom-nav" id="bottom-navbar">
         <div class="container-fluid d-flex justify-content-around">
@@ -419,13 +498,15 @@
 
             const profilePage = document.getElementById('profile-page');
             const profileButton = document.getElementById('profile-button');
+            
+            // [BARU] Elemen komentar
+            const commentButton = document.getElementById('comment-button');
+            const commentsContainer = document.getElementById('comments-container');
+            const closeCommentsBtn = document.getElementById('close-comments-btn');
+            const commentsList = document.getElementById('comments-list');
 
             const captions = [
                 'chots hati ini',
-                'mama chots mama',
-                'maunya chots terus',
-                'tung tung tung sahurr',
-                'ikan hiu ikan lele, aqsa lucu banget lee',
                 'video ini bikin nagih',
                 'malam minggu sendirian',
                 'kenangan masa lalu',
@@ -444,6 +525,14 @@
                 { username: '@music_lover', icon: 'bi-music-note-beamed' },
                 { username: '@explore_id', icon: 'bi-geo-alt' }
             ];
+            
+            // [BARU] Data komentar yang telah ditentukan
+            const commentsData = [
+                { user: 'Bude Anung', text: 'aqsa lucu banget' },
+                { user: 'Bude Wati', text: 'aqsa lagi apa itu' },
+                { user: 'Mbah Uti', text: 'aqsa 😍😍' },
+            ];
+
 
             let allVideoFiles = [];
             let currentPlaylist = [];
@@ -481,7 +570,7 @@
             }
             
             function showVideoPage() {
-                body.classList.remove('show-profile-page');
+                body.classList.remove('show-profile-page', 'show-comments-page');
                 if (videoPlayer.paused) {
                     videoPlayer.play();
                 }
@@ -648,6 +737,41 @@
                     subscribeIcon.classList.add('bi-play-circle-fill');
                     subscribeText.textContent = 'Subscribe';
                 }
+            });
+            
+            // [BARU] Fungsi untuk menampilkan komentar
+            function displayComments() {
+                commentsList.innerHTML = ''; // Hapus komentar lama
+                commentsData.forEach(comment => {
+                    const commentItem = document.createElement('div');
+                    commentItem.className = 'comment-item';
+                    
+                    const userElement = document.createElement('span');
+                    userElement.className = 'comment-user';
+                    userElement.textContent = comment.user;
+                    
+                    const textElement = document.createElement('span');
+                    textElement.className = 'comment-text';
+                    textElement.textContent = comment.text;
+
+                    commentItem.appendChild(userElement);
+                    commentItem.appendChild(textElement);
+                    commentsList.appendChild(commentItem);
+                });
+            }
+
+            // [BARU] Event Listener untuk tombol komentar
+            commentButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                body.classList.add('show-comments-page');
+                videoPlayer.pause();
+                displayComments();
+            });
+
+            // [BARU] Event Listener untuk tombol tutup komentar
+            closeCommentsBtn.addEventListener('click', () => {
+                body.classList.remove('show-comments-page');
+                videoPlayer.play();
             });
 
             window.addEventListener('wheel', (e) => {
