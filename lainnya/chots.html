@@ -38,50 +38,33 @@
             z-index: 10;
         }
 
+        /* [PERUBAHAN] Mengubah navbar bawah menjadi solid putih secara permanen */
         .bottom-nav {
-            background-color: transparent;
-            box-shadow: none;
-            transition: background-color 0.3s ease-in-out;
-        }
-
-        .bottom-nav.bottom-nav-solid {
             background-color: #f8f9fa !important;
             box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .bottom-nav .nav-link {
-            color: #fff;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+            color: #6c757d;
             font-size: 0.75rem;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 2px;
-        }
-
-        .bottom-nav.bottom-nav-solid .nav-link {
-            color: #6c757d;
-            text-shadow: none;
+            text-shadow: none; /* Menghilangkan text-shadow karena background sudah putih */
         }
 
         .bottom-nav .nav-link.active {
-            color: #fff;
-        }
-
-        .bottom-nav.bottom-nav-solid .nav-link.active {
             color: #0d6efd;
         }
-
+        
         .bottom-nav .nav-link i {
             font-size: 1.5rem;
         }
         
+        /* [PERUBAHAN] Mengembalikan warna ikon plus ke warna biru */
         .bottom-nav .plus-icon i {
             font-size: 2.5rem;
-            color: #fff;
-        }
-        
-        .bottom-nav.bottom-nav-solid .plus-icon i {
             color: #0d6efd;
         }
 
@@ -144,7 +127,6 @@
             border-color: #cc0000;
         }
 
-        /* [PERUBAHAN] Posisi navbar vertikal di kanan dinaikkan */
         .right-nav {
             position: fixed;
             bottom: 120px;
@@ -278,7 +260,6 @@
             const fullscreenVideoContainer = document.getElementById('fullscreen-video-container');
             const playPauseBtnContainer = document.getElementById('play-pause-btn-container');
             const playPauseIcon = document.getElementById('play-pause-icon');
-            const bottomNavbar = document.getElementById('bottom-navbar');
 
             let videoFiles = [];
             let currentVideoIndex = 0;
@@ -297,6 +278,7 @@
                 }
             });
 
+            // [PERUBAHAN] Event listener untuk gulir (scroll) di desktop
             window.addEventListener('wheel', (e) => {
                 if (videoFiles.length <= 1 || isScrolling) {
                     return;
@@ -306,16 +288,53 @@
                 
                 if (e.deltaY > 0) {
                     currentVideoIndex = (currentVideoIndex + 1) % videoFiles.length;
-                    playVideo(videoFiles[currentVideoIndex]);
                 } else if (e.deltaY < 0) {
                     currentVideoIndex = (currentVideoIndex - 1 + videoFiles.length) % videoFiles.length;
-                    playVideo(videoFiles[currentVideoIndex]);
                 }
+                playVideo(videoFiles[currentVideoIndex]);
 
                 setTimeout(() => {
                     isScrolling = false;
                 }, 500);
             });
+
+            // [BARU] Event listener untuk sentuhan (swipe) di mobile
+            let touchstartY = 0;
+            let touchendY = 0;
+            const swipeThreshold = 50; // Jarak swipe minimum dalam piksel
+
+            window.addEventListener('touchstart', (e) => {
+                touchstartY = e.changedTouches[0].screenY;
+            });
+
+            window.addEventListener('touchend', (e) => {
+                touchendY = e.changedTouches[0].screenY;
+                handleSwipe();
+            });
+
+            function handleSwipe() {
+                if (videoFiles.length <= 1 || isScrolling) {
+                    return;
+                }
+
+                if (touchendY < touchstartY - swipeThreshold) {
+                    // Swipe ke atas (video selanjutnya)
+                    isScrolling = true;
+                    currentVideoIndex = (currentVideoIndex + 1) % videoFiles.length;
+                    playVideo(videoFiles[currentVideoIndex]);
+                } else if (touchendY > touchstartY + swipeThreshold) {
+                    // Swipe ke bawah (video sebelumnya)
+                    isScrolling = true;
+                    currentVideoIndex = (currentVideoIndex - 1 + videoFiles.length) % videoFiles.length;
+                    playVideo(videoFiles[currentVideoIndex]);
+                }
+
+                if (isScrolling) {
+                     setTimeout(() => {
+                        isScrolling = false;
+                    }, 500);
+                }
+            }
 
             function playVideo(file) {
                 if (videoPlayer.src) {
@@ -351,14 +370,12 @@
             videoPlayer.addEventListener('play', () => {
                 playPauseIcon.classList.remove('bi-play-fill');
                 playPauseIcon.classList.add('bi-pause-fill');
-                bottomNavbar.classList.add('bottom-nav-solid');
             });
 
             videoPlayer.addEventListener('pause', () => {
                 playPauseIcon.classList.remove('bi-pause-fill');
                 playPauseIcon.classList.add('bi-play-fill');
                 playPauseBtnContainer.classList.add('show');
-                bottomNavbar.classList.remove('bottom-nav-solid');
             });
         });
     </script>
