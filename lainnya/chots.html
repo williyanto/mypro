@@ -26,11 +26,12 @@
             z-index: -1;
         }
 
+        /* [PERUBAHAN] Transisi dipercepat menjadi 0.2s */
         #video-player {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: opacity 0.5s ease-in-out;
+            transition: opacity 0.2s ease-in-out;
         }
 
         .bottom-nav,
@@ -264,7 +265,6 @@
             let currentVideoIndex = 0;
             let isScrolling = false;
 
-            // Fungsi untuk mengacak array
             function shuffleArray(array) {
                 for (let i = array.length - 1; i > 0; i--) {
                     const j = Math.floor(Math.random() * (i + 1));
@@ -273,7 +273,6 @@
                 return array;
             }
 
-            // Fungsi untuk memulai pemutaran video
             function startPlayback(files) {
                 allVideoFiles = Array.from(files);
                 if (allVideoFiles.length > 0) {
@@ -283,18 +282,15 @@
                 }
             }
 
-            // Listener untuk tombol plus
             plusButton.addEventListener('click', (e) => {
                 e.preventDefault();
                 videoFileInput.click();
             });
 
-            // Listener untuk input file
             videoFileInput.addEventListener('change', (e) => {
                 startPlayback(e.target.files);
             });
 
-            // Listener untuk gulir (scroll) di desktop
             window.addEventListener('wheel', (e) => {
                 if (currentPlaylist.length <= 1 || isScrolling) {
                     return;
@@ -313,7 +309,6 @@
                 }, 500);
             });
 
-            // Listener untuk sentuhan (swipe) di mobile
             let touchstartY = 0;
             let touchendY = 0;
             const swipeThreshold = 50;
@@ -334,10 +329,8 @@
                 
                 isScrolling = true;
                 if (touchendY < touchstartY - swipeThreshold) {
-                    // Swipe ke atas (video selanjutnya)
                     playNextVideo();
                 } else if (touchendY > touchstartY + swipeThreshold) {
-                    // Swipe ke bawah (video sebelumnya)
                     playPreviousVideo();
                 }
                 
@@ -346,33 +339,28 @@
                 }, 500);
             }
 
-            // Fungsi untuk memutar video selanjutnya
             function playNextVideo() {
                 currentVideoIndex++;
                 if (currentVideoIndex >= currentPlaylist.length) {
-                    // Jika video terakhir selesai, acak ulang daftar dan mulai dari awal
                     currentPlaylist = shuffleArray([...allVideoFiles]);
                     currentVideoIndex = 0;
                 }
                 playVideo(currentPlaylist[currentVideoIndex]);
             }
 
-            // Fungsi untuk memutar video sebelumnya
             function playPreviousVideo() {
                 currentVideoIndex--;
                 if (currentVideoIndex < 0) {
-                    // Jika video pertama, kembali ke video terakhir
                     currentVideoIndex = currentPlaylist.length - 1;
                 }
                 playVideo(currentPlaylist[currentVideoIndex]);
             }
 
-            // Listener saat video selesai
             videoPlayer.addEventListener('ended', () => {
                 playNextVideo();
             });
 
-            // Fungsi utama untuk memutar video dengan transisi
+            /* [PERUBAHAN] Fungsi playVideo dengan transisi yang lebih cepat */
             function playVideo(file) {
                 if (!file) return;
 
@@ -383,13 +371,12 @@
                     }
                     const videoURL = URL.createObjectURL(file);
                     videoPlayer.src = videoURL;
-                    videoPlayer.load(); // Memuat video baru
+                    videoPlayer.load();
                     videoPlayer.play();
                     videoPlayer.style.opacity = 1;
-                }, 500);
+                }, 200); // Durasi timeout disesuaikan dengan transisi CSS
             }
             
-            // Logika untuk tombol play/pause di tengah
             fullscreenVideoContainer.addEventListener('click', () => {
                 if (videoPlayer.paused) {
                     videoPlayer.play();
