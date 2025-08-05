@@ -257,23 +257,20 @@
             z-index: 9;
             display: none;
             flex-direction: column;
-            /* [PERUBAHAN] Menempatkan elemen di bagian atas dan bawah */
             justify-content: space-between;
             align-items: center;
             text-align: center;
-            /* [PERUBAHAN] Padding bawah dihapus */
             padding-bottom: 0;
         }
         #profile-page .welcome-text {
             font-size: 1.5rem;
             max-width: 80%;
             margin-bottom: 20px;
-            margin-top: 20px; /* Menambahkan margin atas agar tidak menempel */
+            margin-top: 20px;
         }
 
         /* Gaya untuk footer */
         #profile-page .footer {
-            /* [PERUBAHAN] Mengubah bottom: 0 menjadi bottom: 70px */
             position: absolute;
             bottom: 70px; 
             width: 100%;
@@ -447,13 +444,10 @@
             let currentPlaylist = [];
             let currentVideoIndex = 0;
             let isScrolling = false;
-            let player;
-            let isOnlineVideoPlaying = false;
-            
-            let currentMainVideoUrl = null;
-            let currentPreloadVideoUrl = null;
             let isSubscribed = false;
 
+            let currentVideoUrl = null;
+            let preloadedVideoUrl = null;
 
             function updateCaption() {
                 const randomIndex = Math.floor(Math.random() * captions.length);
@@ -480,6 +474,90 @@
                 }
                 return array;
             }
+            
+            function showVideoPage() {
+                body.classList.remove('show-profile-page');
+                if (videoPlayer.paused) {
+                    videoPlayer.play();
+                }
+            }
+            
+            // [PERUBAHAN] Fungsi untuk memuat dan memutar video
+            function loadAndPlayVideo(index) {
+                if (currentPlaylist.length === 0) {
+                    videoPlayer.style.display = 'none';
+                    return;
+                }
+                
+                currentVideoIndex = index;
+                
+                // Hapus URL sebelumnya untuk mencegah memory leak
+                if (currentVideoUrl) {
+                    URL.revokeObjectURL(currentVideoUrl);
+                }
+
+                const file = currentPlaylist[currentVideoIndex];
+                currentVideoUrl = URL.createObjectURL(file);
+                
+                videoPlayer.src = currentVideoUrl;
+                videoPlayer.loop = true;
+                videoPlayer.load();
+                videoPlayer.play();
+                
+                videoPlayer.style.display = 'block';
+                
+                updateCaption();
+                updateProfile();
+            }
+
+            // [PERBAIKAN] Mengubah logika preloading
+            function preloadNextVideo(index) {
+                if (currentPlaylist.length <= 1) return;
+                
+                const nextIndex = (index + 1) % currentPlaylist.length;
+                const file = currentPlaylist[nextIndex];
+
+                if (preloadedVideoUrl) {
+                    URL.revokeObjectURL(preloadedVideoUrl);
+                }
+                preloadedVideoUrl = URL.createObjectURL(file);
+                preloadVideoPlayer.src = preloadedVideoUrl;
+                preloadVideoPlayer.load();
+            }
+            
+            // [PERBAIKAN] Fungsi utama untuk memutar video (menggunakan preloading)
+            function playVideo(index) {
+                if (!currentPlaylist || currentPlaylist.length === 0) return;
+                
+                const prevIndex = currentVideoIndex;
+                currentVideoIndex = index;
+                
+                // Jika video berikutnya sudah di-preload, tukar sumbernya
+                if (preloadedVideoUrl && index === (prevIndex + 1) % currentPlaylist.length) {
+                    // Tukar sumber video secara instan
+                    const temp = videoPlayer.src;
+                    videoPlayer.src = preloadVideoPlayer.src;
+                    preloadVideoPlayer.src = temp;
+
+                    // Hapus URL yang lama
+                    if (currentVideoUrl) {
+                        URL.revokeObjectURL(currentVideoUrl);
+                    }
+                    currentVideoUrl = videoPlayer.src;
+                    preloadedVideoUrl = preloadVideoPlayer.src;
+
+                    // Mainkan video yang sudah ditukar
+                    videoPlayer.play();
+                    
+                    // Lakukan preloading untuk video berikutnya lagi
+                    preloadNextVideo(currentVideoIndex);
+
+                } else {
+                    // Jika tidak di-preload (misal: memutar video pertama atau kembali ke video sebelumnya)
+                    loadAndPlayVideo(currentVideoIndex);
+                    preloadNextVideo(currentVideoIndex);
+                }
+            }
 
             function startPlayback(files) {
                 allVideoFiles = Array.from(files).filter(file => file.type.startsWith('video/'));
@@ -487,25 +565,22 @@
                 if (allVideoFiles.length > 0) {
                     currentPlaylist = shuffleArray([...allVideoFiles]);
                     currentVideoIndex = 0;
-                    isOnlineVideoPlaying = false;
-                    playVideo(0);
+                    playVideo(0); // Memuat video pertama dan preload video kedua
                 } else {
                     alert('Tidak ada file video yang ditemukan di folder yang Anda pilih.');
                 }
             }
 
-            function resetPlaylist() {
-                if (currentPlaylist.length > 0) {
-                    currentVideoIndex = 0;
-                    playVideo(0);
-                }
+            function playNextVideo() {
+                if (currentPlaylist.length === 0) return;
+                let nextIndex = (currentVideoIndex + 1) % currentPlaylist.length;
+                playVideo(nextIndex);
             }
-            
-            function showVideoPage() {
-                body.classList.remove('show-profile-page');
-                if (videoPlayer.paused) {
-                    videoPlayer.play();
-                }
+
+            function playPreviousVideo() {
+                if (currentPlaylist.length === 0) return;
+                let prevIndex = (currentVideoIndex - 1 + currentPlaylist.length) % currentPlaylist.length;
+                playVideo(prevIndex);
             }
 
             plusButton.addEventListener('click', (e) => {
@@ -521,7 +596,9 @@
                 button.addEventListener('click', (e) => {
                     e.preventDefault();
                     showVideoPage();
-                    resetPlaylist();
+                    if (currentPlaylist.length > 0) {
+                        playVideo(0);
+                    }
                 });
             });
             
@@ -618,60 +695,6 @@
                 setTimeout(() => { isScrolling = false; }, 500);
             }
 
-            function playNextVideo() {
-                if (currentPlaylist.length === 0) return;
-                currentVideoIndex = (currentVideoIndex + 1) % currentPlaylist.length;
-                playVideo(currentVideoIndex);
-            }
-
-            function playPreviousVideo() {
-                if (currentPlaylist.length === 0) return;
-                currentVideoIndex = (currentVideoIndex - 1 + currentPlaylist.length) % currentPlaylist.length;
-                playVideo(currentVideoIndex);
-            }
-            
-            function preloadNextVideo(index) {
-                if (currentPlaylist.length <= 1) return;
-                
-                const nextIndex = (index + 1) % currentPlaylist.length;
-                const file = currentPlaylist[nextIndex];
-                
-                if (currentPreloadVideoUrl) {
-                    URL.revokeObjectURL(currentPreloadVideoUrl);
-                }
-                currentPreloadVideoUrl = URL.createObjectURL(file);
-                preloadVideoPlayer.src = currentPreloadVideoUrl;
-                preloadVideoPlayer.load();
-            }
-
-            function playVideo(index) {
-                isOnlineVideoPlaying = false;
-                videoPlayer.style.display = 'block';
-                
-                if (!currentPlaylist || currentPlaylist.length === 0) {
-                    videoPlayer.style.display = 'none';
-                    return;
-                }
-                
-                currentVideoIndex = index;
-                const file = currentPlaylist[currentVideoIndex];
-                
-                if (currentMainVideoUrl) {
-                    URL.revokeObjectURL(currentMainVideoUrl);
-                }
-                currentMainVideoUrl = URL.createObjectURL(file);
-                
-                videoPlayer.src = currentMainVideoUrl;
-                videoPlayer.loop = true;
-                videoPlayer.load();
-                videoPlayer.play();
-                
-                preloadNextVideo(currentVideoIndex);
-                
-                updateCaption();
-                updateProfile();
-            }
-
             fullscreenVideoContainer.addEventListener('click', () => {
                 if (videoPlayer.paused) { videoPlayer.play(); } else { videoPlayer.pause(); }
             });
@@ -701,7 +724,6 @@
 
             updateCaption();
             updateProfile();
-            
             showVideoPage();
         });
     </script>
