@@ -14,35 +14,32 @@
         body {
             background-color: #000;
             padding-bottom: 0;
-            overflow: hidden; /* Mencegah halaman bergulir saat mengganti video */
+            overflow: hidden;
         }
         
-        /* [PERUBAHAN] Kontainer video layar penuh */
         #fullscreen-video-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1; /* Menempatkan video di belakang semua UI */
+            z-index: -1;
         }
 
         #video-player {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Memastikan video mengisi seluruh layar tanpa distorsi */
+            object-fit: cover;
         }
 
-        /* Menempatkan UI di atas video dengan z-index yang lebih tinggi */
         .bottom-nav,
         .fixed-bottom-container,
         .right-nav {
             z-index: 10;
         }
 
-        /* Kustomisasi untuk navbar bawah */
         .bottom-nav {
-            background-color: transparent !important; /* Membuat latar belakang transparan */
+            background-color: transparent !important;
             box-shadow: none;
         }
 
@@ -64,13 +61,11 @@
             font-size: 1.5rem;
         }
         
-        /* Menyesuaikan ikon '+' */
         .bottom-nav .plus-icon i {
             font-size: 2.5rem;
             color: #fff;
         }
 
-        /* CSS untuk konten di kiri bawah, di atas navbar */
         .fixed-bottom-container {
             position: fixed;
             bottom: 70px;
@@ -129,7 +124,6 @@
             border-color: #cc0000;
         }
 
-        /* CSS untuk navbar vertikal di kanan */
         .right-nav {
             position: fixed;
             bottom: 70px;
@@ -155,12 +149,38 @@
         .right-nav .nav-link i {
             font-size: 1.5rem;
         }
+
+        /* [BARU] Gaya untuk tombol play/pause di tengah */
+        #play-pause-btn-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 3rem;
+            opacity: 0;
+            pointer-events: none; /* Mencegah tombol mengganggu interaksi lain */
+            transition: opacity 0.3s ease-in-out;
+            z-index: 20;
+        }
+
+        #play-pause-btn-container.show {
+            opacity: 1;
+            pointer-events: auto; /* Mengaktifkan interaksi saat ditampilkan */
+        }
     </style>
 </head>
 <body>
 
     <div id="fullscreen-video-container">
         <video id="video-player" controls autoplay loop></video>
+        
+        <div id="play-pause-btn-container">
+            <i id="play-pause-icon" class="bi bi-pause-fill"></i>
+        </div>
     </div>
 
     <div class="fixed-bottom-container">
@@ -235,6 +255,10 @@
             const plusButton = document.getElementById('plus-button');
             const videoFileInput = document.getElementById('video-file-input');
             const videoPlayer = document.getElementById('video-player');
+            const fullscreenVideoContainer = document.getElementById('fullscreen-video-container');
+            const playPauseBtnContainer = document.getElementById('play-pause-btn-container');
+            const playPauseIcon = document.getElementById('play-pause-icon');
+
             let videoFiles = [];
             let currentVideoIndex = 0;
             let isScrolling = false;
@@ -260,19 +284,16 @@
                 isScrolling = true;
                 
                 if (e.deltaY > 0) {
-                    // Gulir ke bawah (video selanjutnya)
                     currentVideoIndex = (currentVideoIndex + 1) % videoFiles.length;
                     playVideo(videoFiles[currentVideoIndex]);
                 } else if (e.deltaY < 0) {
-                    // Gulir ke atas (video sebelumnya)
                     currentVideoIndex = (currentVideoIndex - 1 + videoFiles.length) % videoFiles.length;
                     playVideo(videoFiles[currentVideoIndex]);
                 }
 
-                // Mengatur jeda untuk mencegah perubahan video yang terlalu cepat
                 setTimeout(() => {
                     isScrolling = false;
-                }, 500); // Jeda 0.5 detik
+                }, 500);
             });
 
             function playVideo(file) {
@@ -283,6 +304,40 @@
                 videoPlayer.src = videoURL;
                 videoPlayer.play();
             }
+            
+            // Logika untuk tombol play/pause
+            fullscreenVideoContainer.addEventListener('click', () => {
+                if (videoPlayer.paused) {
+                    videoPlayer.play();
+                } else {
+                    videoPlayer.pause();
+                }
+            });
+            
+            fullscreenVideoContainer.addEventListener('mouseover', () => {
+                if (videoPlayer.paused) {
+                    playPauseBtnContainer.classList.add('show');
+                } else {
+                    playPauseBtnContainer.classList.add('show');
+                }
+            });
+
+            fullscreenVideoContainer.addEventListener('mouseout', () => {
+                if (!videoPlayer.paused) {
+                    playPauseBtnContainer.classList.remove('show');
+                }
+            });
+
+            videoPlayer.addEventListener('play', () => {
+                playPauseIcon.classList.remove('bi-play-fill');
+                playPauseIcon.classList.add('bi-pause-fill');
+            });
+
+            videoPlayer.addEventListener('pause', () => {
+                playPauseIcon.classList.remove('bi-pause-fill');
+                playPauseIcon.classList.add('bi-play-fill');
+                playPauseBtnContainer.classList.add('show'); // Tampilkan tombol saat video dijeda
+            });
         });
     </script>
 </body>
