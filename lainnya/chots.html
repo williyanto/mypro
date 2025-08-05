@@ -262,7 +262,7 @@
         </div>
     </nav>
 
-    <input type="file" id="video-file-input" accept="video/*" multiple style="display: none;">
+    <input type="file" id="video-file-input" webkitdirectory directory multiple style="display: none;">
 
     <div class="modal fade" id="onlineVideoModal" tabindex="-1" aria-labelledby="onlineVideoModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
@@ -354,12 +354,15 @@
             }
 
             function startPlayback(files) {
-                allVideoFiles = Array.from(files);
+                allVideoFiles = Array.from(files).filter(file => file.type.startsWith('video/'));
+                
                 if (allVideoFiles.length > 0) {
                     currentPlaylist = shuffleArray([...allVideoFiles]);
                     currentVideoIndex = 0;
                     isOnlineVideoPlaying = false;
                     playVideo(currentPlaylist[currentVideoIndex]);
+                } else {
+                    alert('Tidak ada file video yang ditemukan di folder yang Anda pilih.');
                 }
             }
 
@@ -438,7 +441,7 @@
                     }
                     const videoURL = URL.createObjectURL(file);
                     videoPlayer.src = videoURL;
-                    videoPlayer.loop = true; // [PERUBAHAN] Menambahkan loop untuk video lokal
+                    videoPlayer.loop = true;
                     videoPlayer.load();
                     videoPlayer.play();
                     videoPlayer.style.opacity = 1;
@@ -520,7 +523,7 @@
                 
                 videoPlayer.style.opacity = 0;
                 videoPlayer.src = url;
-                videoPlayer.loop = true; // [PERUBAHAN] Menambahkan loop untuk video tautan langsung
+                videoPlayer.loop = true;
                 videoPlayer.load();
                 videoPlayer.play();
                 videoPlayer.style.opacity = 1;
