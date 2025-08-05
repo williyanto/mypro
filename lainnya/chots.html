@@ -434,7 +434,6 @@
             const profilePage = document.getElementById('profile-page');
             const profileButton = document.getElementById('profile-button');
 
-            // [PERUBAHAN] Variabel dan elemen baru untuk komentar
             const commentButton = document.getElementById('comment-button');
             const commentModal = document.getElementById('commentModal');
             const commentDisplay = document.getElementById('comment-display');
@@ -446,7 +445,7 @@
                 { user: "Pakde Iron", text: "aqsa mancing yukk" },
                 { user: "Mbah Uti", text: "aqsa 😍😍" }
             ];
-            const commentMap = {}; // Objek untuk menyimpan komentar per video
+            const commentMap = {};
 
             const captions = [
                 'chots hati ini',
@@ -460,6 +459,8 @@
                 'vibesnya dapet banget',
                 'pemandangan di akhir pekan'
             ];
+            
+            const captionMap = {};
 
             const profiles = [
                 { username: '@aqsa1610', icon: 'bi-person-circle' },
@@ -468,6 +469,8 @@
                 { username: '@music_lover', icon: 'bi-music-note-beamed' },
                 { username: '@explore_id', icon: 'bi-geo-alt' }
             ];
+            
+            const profileMap = {};
 
             let allVideoFiles = [];
             let currentPlaylist = [];
@@ -478,14 +481,20 @@
             let currentVideoUrl = null;
             let preloadedVideoUrl = null;
 
-            function updateCaption() {
-                const randomIndex = Math.floor(Math.random() * captions.length);
-                videoCaptionElement.textContent = captions[randomIndex];
+            function setCaptionForVideo(index) {
+                if (!captionMap[index]) {
+                    const randomIndex = Math.floor(Math.random() * captions.length);
+                    captionMap[index] = captions[randomIndex];
+                }
+                videoCaptionElement.textContent = captionMap[index];
             }
             
-            function updateProfile() {
-                const randomIndex = Math.floor(Math.random() * profiles.length);
-                const selectedProfile = profiles[randomIndex];
+            function setProfileForVideo(index) {
+                if (!profileMap[index]) {
+                    const randomIndex = Math.floor(Math.random() * profiles.length);
+                    profileMap[index] = profiles[randomIndex];
+                }
+                const selectedProfile = profileMap[index];
                 
                 usernameElement.textContent = selectedProfile.username;
                 
@@ -533,8 +542,9 @@
                 
                 videoPlayer.style.display = 'block';
                 
-                updateCaption();
-                updateProfile();
+                // [PERUBAHAN] Hapus pemanggilan di sini karena akan dipanggil di playVideo()
+                // setCaptionForVideo(currentVideoIndex);
+                // setProfileForVideo(currentVideoIndex);
             }
 
             function preloadNextVideo(index) {
@@ -556,6 +566,11 @@
                 
                 const prevIndex = currentVideoIndex;
                 currentVideoIndex = index;
+                
+                // [PERBAIKAN UTAMA] Memanggil fungsi update di sini
+                // Ini akan memastikan caption dan profil diperbarui setiap kali video berganti
+                setCaptionForVideo(currentVideoIndex);
+                setProfileForVideo(currentVideoIndex);
                 
                 if (preloadedVideoUrl && index === (prevIndex + 1) % currentPlaylist.length) {
                     const temp = videoPlayer.src;
@@ -674,10 +689,8 @@
                 }
             });
 
-            // [PERUBAHAN] Menambahkan event listener untuk tombol komentar
             commentButton.addEventListener('click', (e) => {
                 e.preventDefault();
-                // Ambil atau tetapkan komentar untuk video saat ini
                 if (!commentMap[currentVideoIndex]) {
                     const randomIndex = Math.floor(Math.random() * comments.length);
                     commentMap[currentVideoIndex] = comments[randomIndex];
@@ -686,7 +699,6 @@
                 const comment = commentMap[currentVideoIndex];
                 commentDisplay.innerHTML = `<p><b>${comment.user}</b><br>${comment.text}</p>`;
 
-                // Tampilkan modal
                 const myModal = new bootstrap.Modal(commentModal);
                 myModal.show();
             });
@@ -758,8 +770,9 @@
                 playNextVideo();
             });
 
-            updateCaption();
-            updateProfile();
+            // Panggil saat halaman dimuat untuk video pertama
+            // setCaptionForVideo(0); 
+            // setProfileForVideo(0); 
             showVideoPage();
         });
     </script>
