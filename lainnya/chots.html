@@ -15,7 +15,6 @@
             background-color: #000;
             padding-bottom: 0;
             overflow: hidden;
-            /* Tambahkan transisi untuk animasi yang lebih halus */
             transition: background-color 0.3s ease-in-out;
         }
 
@@ -262,7 +261,7 @@
             border-top: 1px solid #dee2e6;
         }
 
-        /* [PERUBAHAN] Aturan untuk menyembunyikan elemen saat halaman Kamu aktif */
+        /* Aturan untuk menyembunyikan elemen saat halaman Kamu aktif */
         body.show-profile-page #fullscreen-video-container,
         body.show-profile-page .fixed-bottom-container,
         body.show-profile-page .right-nav {
@@ -279,6 +278,7 @@
 
     <div id="fullscreen-video-container">
         <video id="video-player" autoplay></video>
+        <video id="preload-video-player" style="display: none;"></video>
         <div id="youtube-player-container">
             </div>
         
@@ -375,6 +375,7 @@
             const plusButton = document.getElementById('plus-button');
             const videoFileInput = document.getElementById('video-file-input');
             const videoPlayer = document.getElementById('video-player');
+            const preloadVideoPlayer = document.getElementById('preload-video-player'); // [PERUBAHAN]
             const fullscreenVideoContainer = document.getElementById('fullscreen-video-container');
             const playPauseBtnContainer = document.getElementById('play-pause-btn-container');
             const playPauseIcon = document.getElementById('play-pause-icon');
@@ -419,6 +420,10 @@
             let isScrolling = false;
             let player;
             let isOnlineVideoPlaying = false;
+            
+            let currentMainVideoUrl = null;
+            let currentPreloadVideoUrl = null;
+
 
             function updateCaption() {
                 const randomIndex = Math.floor(Math.random() * captions.length);
@@ -453,7 +458,7 @@
                     currentPlaylist = shuffleArray([...allVideoFiles]);
                     currentVideoIndex = 0;
                     isOnlineVideoPlaying = false;
-                    playVideo(currentPlaylist[currentVideoIndex]);
+                    playVideo(0); // [PERUBAHAN] Memanggil playVideo dengan indeks
                 } else {
                     alert('Tidak ada file video yang ditemukan di folder yang Anda pilih.');
                 }
@@ -462,11 +467,10 @@
             function resetPlaylist() {
                 if (currentPlaylist.length > 0) {
                     currentVideoIndex = 0;
-                    playVideo(currentPlaylist[currentVideoIndex]);
+                    playVideo(0);
                 }
             }
             
-            // [PERUBAHAN] Menangani tampilan halaman video
             function showVideoPage() {
                 body.classList.remove('show-profile-page');
                 if (videoPlayer.paused) {
@@ -491,14 +495,10 @@
                 });
             });
             
-            // [PERUBAHAN] Menangani tampilan halaman profil
             profileButton.addEventListener('click', (e) => {
                 e.preventDefault();
                 body.classList.add('show-profile-page');
                 videoPlayer.pause();
-                if (player) {
-                    player.pauseVideo();
-                }
             });
 
             likeButton.addEventListener('click', (e) => {
@@ -562,16 +562,38 @@
             }
 
             function playNextVideo() {
+                if (currentPlaylist.length === 0) return;
+                
+                // [PERUBAHAN] Menghandle perpindahan ke video selanjutnya dengan preloading
                 currentVideoIndex = (currentVideoIndex + 1) % currentPlaylist.length;
-                playVideo(currentPlaylist[currentVideoIndex]);
+                playVideo(currentVideoIndex);
             }
 
             function playPreviousVideo() {
+                if (currentPlaylist.length === 0) return;
+                
+                // [PERUBAHAN] Menghandle perpindahan ke video sebelumnya
                 currentVideoIndex = (currentVideoIndex - 1 + currentPlaylist.length) % currentPlaylist.length;
-                playVideo(currentPlaylist[currentVideoIndex]);
+                playVideo(currentVideoIndex);
             }
             
-            function playVideo(source) {
+            // [PERUBAHAN] Fungsi baru untuk preloading
+            function preloadNextVideo(index) {
+                if (currentPlaylist.length <= 1) return;
+                
+                const nextIndex = (index + 1) % currentPlaylist.length;
+                const file = currentPlaylist[nextIndex];
+                
+                if (currentPreloadVideoUrl) {
+                    URL.revokeObjectURL(currentPreloadVideoUrl);
+                }
+                currentPreloadVideoUrl = URL.createObjectURL(file);
+                preloadVideoPlayer.src = currentPreloadVideoUrl;
+                preloadVideoPlayer.load();
+            }
+
+            // [PERUBAHAN] Fungsi inti untuk memutar video
+            function playVideo(index) {
                 isOnlineVideoPlaying = false;
                 videoPlayer.style.display = 'block';
                 
@@ -580,20 +602,25 @@
                     return;
                 }
                 
+                currentVideoIndex = index;
                 const file = currentPlaylist[currentVideoIndex];
-                if (videoPlayer.src) {
-                    URL.revokeObjectURL(videoPlayer.src);
+                
+                if (currentMainVideoUrl) {
+                    URL.revokeObjectURL(currentMainVideoUrl);
                 }
-                const videoURL = URL.createObjectURL(file);
-                videoPlayer.src = videoURL;
+                currentMainVideoUrl = URL.createObjectURL(file);
+                
+                videoPlayer.src = currentMainVideoUrl;
                 videoPlayer.loop = true;
                 videoPlayer.load();
                 videoPlayer.play();
                 
+                preloadNextVideo(currentVideoIndex); // Memulai preloading untuk video berikutnya
+                
                 updateCaption();
                 updateProfile();
             }
-            
+
             fullscreenVideoContainer.addEventListener('click', () => {
                 if (videoPlayer.paused) { videoPlayer.play(); } else { videoPlayer.pause(); }
             });
@@ -615,6 +642,11 @@
                 playPauseIcon.classList.remove('bi-play-fill');
                 playPauseIcon.classList.add('bi-play-fill');
                 playPauseBtnContainer.classList.add('show');
+            });
+            
+            // [PERUBAHAN] Event listener saat video selesai diputar
+            videoPlayer.addEventListener('ended', () => {
+                playNextVideo();
             });
 
             updateCaption();
