@@ -11,21 +11,44 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
-        /* Menambahkan padding di bawah body agar konten tidak tertutup oleh navbar */
         body {
-            background-color: #f0f2f5;
-            padding-bottom: 80px;
+            background-color: #000;
+            padding-bottom: 0;
+            overflow: hidden; /* Mencegah halaman bergulir saat mengganti video */
         }
         
-        /* [PERUBAHAN] Kustomisasi untuk navbar bawah */
+        /* [PERUBAHAN] Kontainer video layar penuh */
+        #fullscreen-video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Menempatkan video di belakang semua UI */
+        }
+
+        #video-player {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Memastikan video mengisi seluruh layar tanpa distorsi */
+        }
+
+        /* Menempatkan UI di atas video dengan z-index yang lebih tinggi */
+        .bottom-nav,
+        .fixed-bottom-container,
+        .right-nav {
+            z-index: 10;
+        }
+
+        /* Kustomisasi untuk navbar bawah */
         .bottom-nav {
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-            padding-top: 5px;
-            padding-bottom: 5px;
+            background-color: transparent !important; /* Membuat latar belakang transparan */
+            box-shadow: none;
         }
 
         .bottom-nav .nav-link {
-            color: #6c757d;
+            color: #fff;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
             font-size: 0.75rem;
             display: flex;
             flex-direction: column;
@@ -34,22 +57,17 @@
         }
 
         .bottom-nav .nav-link.active {
-            color: #0d6efd;
+            color: #fff;
         }
         
-        /* [PERUBAHAN] Menyesuaikan ikon '+' */
+        .bottom-nav .nav-link i {
+            font-size: 1.5rem;
+        }
+        
+        /* Menyesuaikan ikon '+' */
         .bottom-nav .plus-icon i {
             font-size: 2.5rem;
-            color: #0d6efd;
-        }
-
-        /* [PERUBAHAN] CSS untuk video player */
-        #video-player {
-            width: 100%;
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            color: #fff;
         }
 
         /* CSS untuk konten di kiri bawah, di atas navbar */
@@ -59,11 +77,8 @@
             left: 0;
             right: 0;
             padding: 10px 15px;
-            color: #333;
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
+            color: #fff;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
         }
         
         .main-content-row {
@@ -128,7 +143,8 @@
         }
 
         .right-nav .nav-link {
-            color: #333;
+            color: #fff;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
             font-size: 0.75rem;
             display: flex;
             flex-direction: column;
@@ -139,31 +155,13 @@
         .right-nav .nav-link i {
             font-size: 1.5rem;
         }
-
-        /* [BARU] CSS untuk daftar video */
-        #video-list-container {
-            margin-top: 15px;
-            margin-bottom: 10px;
-        }
-
-        #video-list-container button {
-            margin-right: 5px;
-            margin-bottom: 5px;
-        }
-
     </style>
 </head>
 <body>
 
-    <main class="container mt-3">
-        <div id="video-player-container" class="mb-3">
-            <video id="video-player" controls autoplay></video>
-        </div>
-
-        <div id="video-list-container" class="d-flex flex-wrap">
-            </div>
-
-    </main>
+    <div id="fullscreen-video-container">
+        <video id="video-player" controls autoplay loop></video>
+    </div>
 
     <div class="fixed-bottom-container">
         <div class="main-content-row">
@@ -204,8 +202,7 @@
         </a>
     </nav>
 
-
-    <nav class="navbar fixed-bottom bg-light bottom-nav">
+    <nav class="navbar fixed-bottom bottom-nav">
         <div class="container-fluid d-flex justify-content-around">
             <a class="nav-link active" href="#">
                 <i class="bi bi-house-door-fill"></i>
@@ -238,9 +235,9 @@
             const plusButton = document.getElementById('plus-button');
             const videoFileInput = document.getElementById('video-file-input');
             const videoPlayer = document.getElementById('video-player');
-            const videoListContainer = document.getElementById('video-list-container');
             let videoFiles = [];
             let currentVideoIndex = 0;
+            let isScrolling = false;
 
             plusButton.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -252,20 +249,30 @@
                 if (videoFiles.length > 0) {
                     currentVideoIndex = 0;
                     playVideo(videoFiles[currentVideoIndex]);
-                    displayVideoList();
                 }
             });
 
-            videoPlayer.addEventListener('ended', () => {
-                currentVideoIndex++;
-                if (currentVideoIndex < videoFiles.length) {
-                    playVideo(videoFiles[currentVideoIndex]);
-                } else {
-                    currentVideoIndex = 0; // Mengulang playlist jika selesai
-                    if (videoFiles.length > 0) {
-                         playVideo(videoFiles[currentVideoIndex]);
-                    }
+            window.addEventListener('wheel', (e) => {
+                if (videoFiles.length <= 1 || isScrolling) {
+                    return;
                 }
+
+                isScrolling = true;
+                
+                if (e.deltaY > 0) {
+                    // Gulir ke bawah (video selanjutnya)
+                    currentVideoIndex = (currentVideoIndex + 1) % videoFiles.length;
+                    playVideo(videoFiles[currentVideoIndex]);
+                } else if (e.deltaY < 0) {
+                    // Gulir ke atas (video sebelumnya)
+                    currentVideoIndex = (currentVideoIndex - 1 + videoFiles.length) % videoFiles.length;
+                    playVideo(videoFiles[currentVideoIndex]);
+                }
+
+                // Mengatur jeda untuk mencegah perubahan video yang terlalu cepat
+                setTimeout(() => {
+                    isScrolling = false;
+                }, 500); // Jeda 0.5 detik
             });
 
             function playVideo(file) {
@@ -275,20 +282,6 @@
                 const videoURL = URL.createObjectURL(file);
                 videoPlayer.src = videoURL;
                 videoPlayer.play();
-            }
-
-            function displayVideoList() {
-                videoListContainer.innerHTML = '';
-                videoFiles.forEach((file, index) => {
-                    const button = document.createElement('button');
-                    button.classList.add('btn', 'btn-secondary', 'btn-sm');
-                    button.textContent = `Video ${index + 1}`;
-                    button.addEventListener('click', () => {
-                        currentVideoIndex = index;
-                        playVideo(videoFiles[currentVideoIndex]);
-                    });
-                    videoListContainer.appendChild(button);
-                });
             }
         });
     </script>
