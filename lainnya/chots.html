@@ -137,9 +137,10 @@
             transition: background-color 0.3s, border-color 0.3s;
         }
         
+        /* [PERBAIKAN] Menggunakan !important untuk memastikan perubahan warna langsung terjadi */
         .subscribe-btn.subscribed {
-            background-color: #0d6efd;
-            border-color: #0d6efd;
+            background-color: #0d6efd !important;
+            border-color: #0d6efd !important;
         }
 
         .subscribe-btn:hover {
@@ -482,7 +483,6 @@
                 }
             }
             
-            // [PERUBAHAN] Fungsi untuk memuat dan memutar video
             function loadAndPlayVideo(index) {
                 if (currentPlaylist.length === 0) {
                     videoPlayer.style.display = 'none';
@@ -491,7 +491,6 @@
                 
                 currentVideoIndex = index;
                 
-                // Hapus URL sebelumnya untuk mencegah memory leak
                 if (currentVideoUrl) {
                     URL.revokeObjectURL(currentVideoUrl);
                 }
@@ -510,7 +509,6 @@
                 updateProfile();
             }
 
-            // [PERBAIKAN] Mengubah logika preloading
             function preloadNextVideo(index) {
                 if (currentPlaylist.length <= 1) return;
                 
@@ -525,35 +523,28 @@
                 preloadVideoPlayer.load();
             }
             
-            // [PERBAIKAN] Fungsi utama untuk memutar video (menggunakan preloading)
             function playVideo(index) {
                 if (!currentPlaylist || currentPlaylist.length === 0) return;
                 
                 const prevIndex = currentVideoIndex;
                 currentVideoIndex = index;
                 
-                // Jika video berikutnya sudah di-preload, tukar sumbernya
                 if (preloadedVideoUrl && index === (prevIndex + 1) % currentPlaylist.length) {
-                    // Tukar sumber video secara instan
                     const temp = videoPlayer.src;
                     videoPlayer.src = preloadVideoPlayer.src;
                     preloadVideoPlayer.src = temp;
 
-                    // Hapus URL yang lama
                     if (currentVideoUrl) {
                         URL.revokeObjectURL(currentVideoUrl);
                     }
                     currentVideoUrl = videoPlayer.src;
                     preloadedVideoUrl = preloadVideoPlayer.src;
 
-                    // Mainkan video yang sudah ditukar
                     videoPlayer.play();
                     
-                    // Lakukan preloading untuk video berikutnya lagi
                     preloadNextVideo(currentVideoIndex);
 
                 } else {
-                    // Jika tidak di-preload (misal: memutar video pertama atau kembali ke video sebelumnya)
                     loadAndPlayVideo(currentVideoIndex);
                     preloadNextVideo(currentVideoIndex);
                 }
@@ -565,7 +556,7 @@
                 if (allVideoFiles.length > 0) {
                     currentPlaylist = shuffleArray([...allVideoFiles]);
                     currentVideoIndex = 0;
-                    playVideo(0); // Memuat video pertama dan preload video kedua
+                    playVideo(0);
                 } else {
                     alert('Tidak ada file video yang ditemukan di folder yang Anda pilih.');
                 }
