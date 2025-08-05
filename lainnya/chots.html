@@ -33,7 +33,6 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            /* [PERUBAHAN] Menghilangkan transisi */
             display: none;
         }
         
@@ -308,8 +307,8 @@
             const onlineVideoModal = new bootstrap.Modal(document.getElementById('onlineVideoModal'));
             const youtubePlayerContainer = document.getElementById('youtube-player-container');
             const videoCaptionElement = document.getElementById('video-caption');
-            const usernameElement = document.getElementById('username-element'); // [PERUBAHAN] Elemen username
-            const profileIconElement = document.getElementById('profile-icon-element'); // [PERUBAHAN] Elemen ikon profil
+            const usernameElement = document.getElementById('username-element');
+            const profileIconElement = document.getElementById('profile-icon-element');
 
             const captions = [
                 'chots hati ini',
@@ -324,7 +323,6 @@
                 'pemandangan di akhir pekan'
             ];
 
-            // [PERUBAHAN] Daftar profil acak
             const profiles = [
                 { username: '@aqsa1610', icon: 'bi-person-circle' },
                 { username: '@video_addict', icon: 'bi-camera-video' },
@@ -356,14 +354,12 @@
                 videoCaptionElement.textContent = captions[randomIndex];
             }
             
-            // [PERUBAHAN] Fungsi untuk mengganti profil secara acak
             function updateProfile() {
                 const randomIndex = Math.floor(Math.random() * profiles.length);
                 const selectedProfile = profiles[randomIndex];
                 
                 usernameElement.textContent = selectedProfile.username;
                 
-                // Menghapus ikon lama dan menambahkan ikon baru
                 const currentIconClass = profileIconElement.className.split(' ').find(cls => cls.startsWith('bi-'));
                 if (currentIconClass) {
                     profileIconElement.classList.remove(currentIconClass);
@@ -392,17 +388,49 @@
                 }
             }
 
+            // [PERUBAHAN] Fungsi untuk menyimpan playlist online ke localStorage
+            function saveOnlinePlaylist(playlist) {
+                try {
+                    const onlineUrls = playlist.filter(item => typeof item === 'string');
+                    localStorage.setItem('onlinePlaylist', JSON.stringify(onlineUrls));
+                } catch (e) {
+                    console.error('Gagal menyimpan playlist ke localStorage', e);
+                }
+            }
+
+            // [PERUBAHAN] Fungsi untuk memuat playlist online dari localStorage
+            function loadOnlinePlaylist() {
+                try {
+                    const savedPlaylist = localStorage.getItem('onlinePlaylist');
+                    if (savedPlaylist) {
+                        const onlineUrls = JSON.parse(savedPlaylist);
+                        if (onlineUrls.length > 0) {
+                            currentPlaylist = onlineUrls;
+                            currentVideoIndex = 0;
+                            isOnlineVideoPlaying = true;
+                            playVideo(currentPlaylist[currentVideoIndex]);
+                            return true;
+                        }
+                    }
+                } catch (e) {
+                    console.error('Gagal memuat playlist dari localStorage', e);
+                }
+                return false;
+            }
+
             plusButton.addEventListener('click', (e) => {
                 e.preventDefault();
                 videoFileInput.click();
             });
 
             videoFileInput.addEventListener('change', (e) => {
+                // [PERUBAHAN] Menghapus playlist online saat memuat folder lokal
+                localStorage.removeItem('onlinePlaylist');
                 startPlayback(e.target.files);
             });
 
             window.addEventListener('wheel', (e) => {
-                if (isOnlineVideoPlaying || currentPlaylist.length <= 1 || isScrolling) {
+                if (currentPlaylist.length <= 1 || isScrolling) {
                     return;
                 }
                 isScrolling = true;
@@ -423,7 +451,7 @@
             });
 
             window.addEventListener('touchend', (e) => {
-                if (isOnlineVideoPlaying) return;
+                if (currentPlaylist.length <= 1 || isScrolling) return;
                 touchendY = e.changedTouches[0].screenY;
                 handleSwipe();
             });
@@ -451,27 +479,36 @@
                 playVideo(currentPlaylist[currentVideoIndex]);
             }
 
-            function playVideo(file) {
-                isOnlineVideoPlaying = false;
-                videoPlayer.style.display = 'block';
-                youtubePlayerContainer.style.display = 'none';
-                
-                if (!file) {
-                    videoPlayer.style.display = 'none';
-                    return;
+            function playVideo(source) {
+                if (typeof source === 'string') { // Memutar video online (URL)
+                    isOnlineVideoPlaying = true;
+                    let videoId = getYouTubeVideoId(source);
+                    if (videoId) {
+                        playYouTubeVideo(videoId);
+                    } else {
+                        playDirectUrlVideo(source);
+                    }
+                } else { // Memutar video lokal (File object)
+                    isOnlineVideoPlaying = false;
+                    videoPlayer.style.display = 'block';
+                    youtubePlayerContainer.style.display = 'none';
+
+                    if (!source) {
+                        videoPlayer.style.display = 'none';
+                        return;
+                    }
+                    if (videoPlayer.src) {
+                        URL.revokeObjectURL(videoPlayer.src);
+                    }
+                    const videoURL = URL.createObjectURL(source);
+                    videoPlayer.src = videoURL;
+                    videoPlayer.loop = true;
+                    videoPlayer.load();
+                    videoPlayer.play();
                 }
-                // [PERUBAHAN] Menghilangkan transisi dari JavaScript
-                if (videoPlayer.src) {
-                    URL.revokeObjectURL(videoPlayer.src);
-                }
-                const videoURL = URL.createObjectURL(file);
-                videoPlayer.src = videoURL;
-                videoPlayer.loop = true;
-                videoPlayer.load();
-                videoPlayer.play();
                 
-                updateCaption(); // [PERUBAHAN] Memanggil updateCaption
-                updateProfile(); // [PERUBAHAN] Memanggil updateProfile
+                updateCaption();
+                updateProfile();
             }
             
             playOnlineVideoButton.addEventListener('click', () => {
@@ -479,16 +516,14 @@
                 urlErrorAlert.classList.add('d-none');
                 
                 let videoId = getYouTubeVideoId(url);
-                if (videoId) {
-                    playYouTubeVideo(videoId);
+                if (videoId || url.match(/\.(mp4|webm|ogg)$/i)) {
                     onlineVideoModal.hide();
-                    updateCaption();
-                    updateProfile(); // [PERUBAHAN] Memanggil updateProfile
-                } else if (url.match(/\.(mp4|webm|ogg)$/i)) {
-                    playDirectUrlVideo(url);
-                    onlineVideoModal.hide();
-                    updateCaption();
-                    updateProfile(); // [PERUBAHAN] Memanggil updateProfile
+                    
+                    // [PERUBAHAN] Memperbarui playlist online dan menyimpannya
+                    currentPlaylist = [url];
+                    currentVideoIndex = 0;
+                    saveOnlinePlaylist(currentPlaylist);
+                    playVideo(url);
                 } else {
                     urlErrorAlert.classList.remove('d-none');
                 }
@@ -505,7 +540,6 @@
             }
 
             function playYouTubeVideo(videoId) {
-                isOnlineVideoPlaying = true;
                 videoPlayer.style.display = 'none';
                 youtubePlayerContainer.style.display = 'block';
 
@@ -544,7 +578,6 @@
             }
             
             function playDirectUrlVideo(url) {
-                isOnlineVideoPlaying = true;
                 videoPlayer.style.display = 'block';
                 youtubePlayerContainer.style.display = 'none';
                 
@@ -617,11 +650,15 @@
                 playPauseBtnContainer.classList.add('show');
             });
 
-            // Memanggil fungsi-fungsi ini saat halaman dimuat pertama kali
             updateCaption();
             updateProfile();
-
             loadYouTubeAPI();
+
+            // [PERUBAHAN] Memuat playlist online saat aplikasi dibuka
+            if (!loadOnlinePlaylist()) {
+                // Jika tidak ada playlist online yang disimpan, tampilkan pemutar video kosong
+                videoPlayer.style.display = 'none';
+            }
         });
     </script>
 </body>
