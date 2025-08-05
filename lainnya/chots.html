@@ -251,6 +251,10 @@
             <a class="nav-link plus-icon" href="#" id="plus-button">
                 <i class="bi bi-plus-circle-fill"></i>
             </a>
+            <a class="nav-link" href="#">
+                <i class="bi bi-collection-play-fill"></i>
+                <span>Subrek</span>
+            </a>
             <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#onlineVideoModal">
                 <i class="bi bi-person-circle"></i>
                 <span>Kamu</span>
@@ -438,7 +442,6 @@
                 }
             });
             
-            // [PERBAIKAN] Regex untuk YouTube, termasuk Shorts
             function getYouTubeVideoId(url) {
                 let videoId = null;
                 const regExp = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:shorts\/|watch\?v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
