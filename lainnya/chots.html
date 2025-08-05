@@ -24,6 +24,9 @@
             width: 100%;
             height: 100%;
             z-index: -1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         #video-player {
@@ -31,6 +34,17 @@
             height: 100%;
             object-fit: cover;
             transition: opacity 0.2s ease-in-out;
+            display: none;
+        }
+
+        #youtube-player-container {
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+        #youtube-player {
+            width: 100%;
+            height: 100%;
         }
 
         .bottom-nav,
@@ -176,7 +190,9 @@
 <body>
 
     <div id="fullscreen-video-container">
-        <video id="video-player" autoplay loop></video>
+        <video id="video-player" autoplay></video>
+        <div id="youtube-player-container">
+            </div>
 
         <div id="play-pause-btn-container">
             <i id="play-pause-icon" class="bi bi-pause-fill"></i>
@@ -235,11 +251,7 @@
             <a class="nav-link plus-icon" href="#" id="plus-button">
                 <i class="bi bi-plus-circle-fill"></i>
             </a>
-            <a class="nav-link" href="#">
-                <i class="bi bi-collection-play-fill"></i>
-                <span>Subrek</span>
-            </a>
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#onlineVideoModal">
                 <i class="bi bi-person-circle"></i>
                 <span>Kamu</span>
             </a>
@@ -248,6 +260,32 @@
 
     <input type="file" id="video-file-input" accept="video/*" multiple style="display: none;">
 
+    <div class="modal fade" id="onlineVideoModal" tabindex="-1" aria-labelledby="onlineVideoModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-white">
+          <div class="modal-header border-secondary">
+            <h5 class="modal-title" id="onlineVideoModalLabel">Putar Video Online</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p class="text-white-50">Masukkan URL video (YouTube atau tautan file langsung, misal .mp4).</p>
+            <p class="text-white-50 small">Untuk video Google Drive, pastikan link dibagikan ke publik dan ubah format linknya: <code>https://www.youtube.com/iframe_api4</code> menjadi <code>https://www.youtube.com/iframe_api5</code></p>
+            <div class="mb-3">
+              <label for="videoUrlInput" class="form-label">URL Video:</label>
+              <input type="text" class="form-control" id="videoUrlInput" placeholder="https://www.youtube.com/watch?v=xxxxxxxxxxx">
+            </div>
+            <div class="alert alert-danger d-none" id="urlErrorAlert" role="alert">
+              URL tidak valid atau tidak didukung.
+            </div>
+          </div>
+          <div class="modal-footer border-secondary">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            <button type="button" class="btn btn-primary" id="playOnlineVideoButton">Putar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <script>
@@ -258,11 +296,28 @@
             const fullscreenVideoContainer = document.getElementById('fullscreen-video-container');
             const playPauseBtnContainer = document.getElementById('play-pause-btn-container');
             const playPauseIcon = document.getElementById('play-pause-icon');
+            const playOnlineVideoButton = document.getElementById('playOnlineVideoButton');
+            const videoUrlInput = document.getElementById('videoUrlInput');
+            const urlErrorAlert = document.getElementById('urlErrorAlert');
+            const onlineVideoModal = new bootstrap.Modal(document.getElementById('onlineVideoModal'));
 
             let allVideoFiles = [];
             let currentPlaylist = [];
             let currentVideoIndex = 0;
             let isScrolling = false;
+            let player;
+            let isOnlineVideoPlaying = false;
+
+            function loadYouTubeAPI() {
+                const tag = document.createElement('script');
+                tag.src = "https://www.youtube.com/iframe_api3";
+                const firstScriptTag = document.getElementsByTagName('script')[0];
+                firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+            }
+
+            window.onYouTubeIframeAPIReady = () => {
+                console.log('YouTube API is ready.');
+            };
 
             function shuffleArray(array) {
                 for (let i = array.length - 1; i > 0; i--) {
@@ -277,6 +332,7 @@
                 if (allVideoFiles.length > 0) {
                     currentPlaylist = shuffleArray([...allVideoFiles]);
                     currentVideoIndex = 0;
+                    isOnlineVideoPlaying = false;
                     playVideo(currentPlaylist[currentVideoIndex]);
                 }
             }
@@ -291,21 +347,16 @@
             });
 
             window.addEventListener('wheel', (e) => {
-                if (currentPlaylist.length <= 1 || isScrolling) {
+                if (isOnlineVideoPlaying || currentPlaylist.length <= 1 || isScrolling) {
                     return;
                 }
-
                 isScrolling = true;
-                
                 if (e.deltaY > 0) {
                     playNextVideo();
                 } else if (e.deltaY < 0) {
                     playPreviousVideo();
                 }
-
-                setTimeout(() => {
-                    isScrolling = false;
-                }, 500);
+                setTimeout(() => { isScrolling = false; }, 500);
             });
 
             let touchstartY = 0;
@@ -317,6 +368,7 @@
             });
 
             window.addEventListener('touchend', (e) => {
+                if (isOnlineVideoPlaying) return;
                 touchendY = e.changedTouches[0].screenY;
                 handleSwipe();
             });
@@ -325,39 +377,38 @@
                 if (currentPlaylist.length <= 1 || isScrolling) {
                     return;
                 }
-                
                 isScrolling = true;
                 if (touchendY < touchstartY - swipeThreshold) {
                     playNextVideo();
                 } else if (touchendY > touchstartY + swipeThreshold) {
                     playPreviousVideo();
                 }
-                
-                setTimeout(() => {
-                    isScrolling = false;
-                }, 500);
+                setTimeout(() => { isScrolling = false; }, 500);
             }
 
             function playNextVideo() {
-                currentVideoIndex++;
-                if (currentVideoIndex >= currentPlaylist.length) {
-                    currentPlaylist = shuffleArray([...allVideoFiles]);
-                    currentVideoIndex = 0;
-                }
+                currentVideoIndex = (currentVideoIndex + 1) % currentPlaylist.length;
                 playVideo(currentPlaylist[currentVideoIndex]);
             }
 
             function playPreviousVideo() {
-                currentVideoIndex--;
-                if (currentVideoIndex < 0) {
-                    currentVideoIndex = currentPlaylist.length - 1;
-                }
+                currentVideoIndex = (currentVideoIndex - 1 + currentPlaylist.length) % currentPlaylist.length;
                 playVideo(currentPlaylist[currentVideoIndex]);
             }
+            
+            videoPlayer.addEventListener('ended', () => {
+                playNextVideo();
+            });
 
             function playVideo(file) {
-                if (!file) return;
-
+                isOnlineVideoPlaying = false;
+                videoPlayer.style.display = 'block';
+                document.getElementById('youtube-player-container').style.display = 'none';
+                
+                if (!file) {
+                    videoPlayer.style.display = 'none';
+                    return;
+                }
                 videoPlayer.style.opacity = 0;
                 setTimeout(() => {
                     if (videoPlayer.src) {
@@ -371,22 +422,129 @@
                 }, 200);
             }
             
-            fullscreenVideoContainer.addEventListener('click', () => {
-                if (videoPlayer.paused) {
-                    videoPlayer.play();
+            playOnlineVideoButton.addEventListener('click', () => {
+                const url = videoUrlInput.value;
+                urlErrorAlert.classList.add('d-none');
+                
+                let videoId = getYouTubeVideoId(url);
+                if (videoId) {
+                    playYouTubeVideo(videoId);
+                    onlineVideoModal.hide();
+                } else if (url.match(/\.(mp4|webm|ogg)$/i)) {
+                    playDirectUrlVideo(url);
+                    onlineVideoModal.hide();
                 } else {
-                    videoPlayer.pause();
+                    urlErrorAlert.classList.remove('d-none');
+                }
+            });
+            
+            // [PERBAIKAN] Regex untuk YouTube, termasuk Shorts
+            function getYouTubeVideoId(url) {
+                let videoId = null;
+                const regExp = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:shorts\/|watch\?v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+                const match = url.match(regExp);
+                if (match && match[1]) {
+                    videoId = match[1];
+                }
+                return videoId;
+            }
+
+            function playYouTubeVideo(videoId) {
+                isOnlineVideoPlaying = true;
+                videoPlayer.style.display = 'none';
+                document.getElementById('youtube-player-container').style.display = 'block';
+
+                if (player) {
+                    player.loadVideoById(videoId);
+                } else {
+                    document.getElementById('youtube-player-container').innerHTML = '<div id="youtube-player"></div>';
+                    player = new YT.Player('youtube-player', {
+                        videoId: videoId,
+                        playerVars: {
+                            'autoplay': 1,
+                            'controls': 0,
+                            'disablekb': 1,
+                            'modestbranding': 1,
+                            'rel': 0,
+                            'showinfo': 0,
+                            'loop': 1,
+                            'playlist': videoId
+                        },
+                        events: {
+                            'onReady': (event) => event.target.playVideo(),
+                            'onStateChange': (event) => {
+                                if (event.data === YT.PlayerState.PAUSED) {
+                                    playPauseIcon.classList.remove('bi-pause-fill');
+                                    playPauseIcon.classList.add('bi-play-fill');
+                                    playPauseBtnContainer.classList.add('show');
+                                } else if (event.data === YT.PlayerState.PLAYING) {
+                                    playPauseIcon.classList.remove('bi-play-fill');
+                                    playPauseIcon.classList.add('bi-pause-fill');
+                                    playPauseBtnContainer.classList.remove('show');
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+            
+            function playDirectUrlVideo(url) {
+                isOnlineVideoPlaying = true;
+                videoPlayer.style.display = 'block';
+                document.getElementById('youtube-player-container').style.display = 'none';
+                
+                videoPlayer.style.opacity = 0;
+                videoPlayer.src = url;
+                videoPlayer.load();
+                videoPlayer.play();
+                videoPlayer.style.opacity = 1;
+                videoPlayer.loop = true;
+            }
+            
+            fullscreenVideoContainer.addEventListener('click', () => {
+                if (isOnlineVideoPlaying) {
+                    if (videoPlayer.style.display === 'block') {
+                        if (videoPlayer.paused) { videoPlayer.play(); } else { videoPlayer.pause(); }
+                    } else if (player) {
+                         if (player.getPlayerState() === YT.PlayerState.PLAYING) {
+                            player.pauseVideo();
+                        } else {
+                            player.playVideo();
+                        }
+                    }
+                } else {
+                    if (videoPlayer.paused) { videoPlayer.play(); } else { videoPlayer.pause(); }
                 }
             });
 
             fullscreenVideoContainer.addEventListener('mouseover', () => {
-                playPauseBtnContainer.classList.add('show');
+                if (isOnlineVideoPlaying) {
+                    if (videoPlayer.style.display === 'block' && videoPlayer.paused) {
+                        playPauseBtnContainer.classList.add('show');
+                    } else if (player && player.getPlayerState() === YT.PlayerState.PAUSED) {
+                         playPauseBtnContainer.classList.add('show');
+                    } else if (videoPlayer.style.display === 'block' && !videoPlayer.paused) {
+                         playPauseBtnContainer.classList.remove('show');
+                    } else if (player && player.getPlayerState() === YT.PlayerState.PLAYING) {
+                         playPauseBtnContainer.classList.remove('show');
+                    } else {
+                        playPauseBtnContainer.classList.remove('show');
+                    }
+                } else {
+                     if (videoPlayer.paused) { playPauseBtnContainer.classList.add('show'); }
+                }
             });
 
             fullscreenVideoContainer.addEventListener('mouseout', () => {
-                if (!videoPlayer.paused) {
-                    playPauseBtnContainer.classList.remove('show');
-                }
+                 if (isOnlineVideoPlaying) {
+                    if (videoPlayer.style.display === 'block' && !videoPlayer.paused) {
+                        playPauseBtnContainer.classList.remove('show');
+                    } else if (player && player.getPlayerState() === YT.PlayerState.PLAYING) {
+                         playPauseBtnContainer.classList.remove('show');
+                    }
+                 } else {
+                    if (!videoPlayer.paused) { playPauseBtnContainer.classList.remove('show'); }
+                 }
             });
 
             videoPlayer.addEventListener('play', () => {
@@ -395,10 +553,12 @@
             });
 
             videoPlayer.addEventListener('pause', () => {
-                playPauseIcon.classList.remove('bi-pause-fill');
+                playPauseIcon.classList.remove('bi-play-fill');
                 playPauseIcon.classList.add('bi-play-fill');
                 playPauseBtnContainer.classList.add('show');
             });
+
+            loadYouTubeAPI();
         });
     </script>
 </body>
