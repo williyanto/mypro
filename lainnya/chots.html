@@ -239,7 +239,7 @@
 
     <nav class="navbar fixed-bottom bottom-nav" id="bottom-navbar">
         <div class="container-fluid d-flex justify-content-around">
-            <a class="nav-link active" href="#">
+            <a class="nav-link active" href="#" id="home-button">
                 <i class="bi bi-house-door-fill"></i>
                 <span>Home</span>
             </a>
@@ -309,6 +309,7 @@
             const videoCaptionElement = document.getElementById('video-caption');
             const usernameElement = document.getElementById('username-element');
             const profileIconElement = document.getElementById('profile-icon-element');
+            const homeButton = document.getElementById('home-button'); // [PERUBAHAN] Tombol Home
 
             const captions = [
                 'chots hati ini',
@@ -388,7 +389,6 @@
                 }
             }
 
-            // [PERUBAHAN] Fungsi untuk menyimpan playlist online ke localStorage
             function saveOnlinePlaylist(playlist) {
                 try {
                     const onlineUrls = playlist.filter(item => typeof item === 'string');
@@ -398,7 +398,6 @@
                 }
             }
 
-            // [PERUBAHAN] Fungsi untuk memuat playlist online dari localStorage
             function loadOnlinePlaylist() {
                 try {
                     const savedPlaylist = localStorage.getItem('onlinePlaylist');
@@ -418,13 +417,27 @@
                 return false;
             }
 
+            // [PERUBAHAN] Fungsi untuk kembali ke video pertama
+            function resetPlaylist() {
+                if (currentPlaylist.length > 0) {
+                    currentVideoIndex = 0;
+                    playVideo(currentPlaylist[currentVideoIndex]);
+                }
+            }
+
             plusButton.addEventListener('click', (e) => {
                 e.preventDefault();
                 videoFileInput.click();
             });
+            
+            // [PERUBAHAN] Menambahkan event listener pada tombol Home
+            homeButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                resetPlaylist();
+            });
+
 
             videoFileInput.addEventListener('change', (e) => {
-                // [PERUBAHAN] Menghapus playlist online saat memuat folder lokal
                 localStorage.removeItem('onlinePlaylist');
                 startPlayback(e.target.files);
             });
@@ -480,7 +493,7 @@
             }
 
             function playVideo(source) {
-                if (typeof source === 'string') { // Memutar video online (URL)
+                if (typeof source === 'string') {
                     isOnlineVideoPlaying = true;
                     let videoId = getYouTubeVideoId(source);
                     if (videoId) {
@@ -488,7 +501,7 @@
                     } else {
                         playDirectUrlVideo(source);
                     }
-                } else { // Memutar video lokal (File object)
+                } else {
                     isOnlineVideoPlaying = false;
                     videoPlayer.style.display = 'block';
                     youtubePlayerContainer.style.display = 'none';
@@ -519,7 +532,6 @@
                 if (videoId || url.match(/\.(mp4|webm|ogg)$/i)) {
                     onlineVideoModal.hide();
                     
-                    // [PERUBAHAN] Memperbarui playlist online dan menyimpannya
                     currentPlaylist = [url];
                     currentVideoIndex = 0;
                     saveOnlinePlaylist(currentPlaylist);
@@ -654,9 +666,7 @@
             updateProfile();
             loadYouTubeAPI();
 
-            // [PERUBAHAN] Memuat playlist online saat aplikasi dibuka
             if (!loadOnlinePlaylist()) {
-                // Jika tidak ada playlist online yang disimpan, tampilkan pemutar video kosong
                 videoPlayer.style.display = 'none';
             }
         });
