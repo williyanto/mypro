@@ -26,7 +26,6 @@
             z-index: -1;
         }
 
-        /* [PERUBAHAN] Transisi dipercepat menjadi 0.2s */
         #video-player {
             width: 100%;
             height: 100%;
@@ -356,11 +355,12 @@
                 playVideo(currentPlaylist[currentVideoIndex]);
             }
 
-            videoPlayer.addEventListener('ended', () => {
-                playNextVideo();
-            });
+            // [PERUBAHAN] Menghapus event listener 'ended'
+            // Video tidak lagi berganti secara otomatis setelah selesai
+            // videoPlayer.addEventListener('ended', () => {
+            //     playNextVideo();
+            // });
 
-            /* [PERUBAHAN] Fungsi playVideo dengan transisi yang lebih cepat */
             function playVideo(file) {
                 if (!file) return;
 
@@ -374,7 +374,7 @@
                     videoPlayer.load();
                     videoPlayer.play();
                     videoPlayer.style.opacity = 1;
-                }, 200); // Durasi timeout disesuaikan dengan transisi CSS
+                }, 200);
             }
             
             fullscreenVideoContainer.addEventListener('click', () => {
