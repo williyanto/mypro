@@ -33,7 +33,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: opacity 0.2s ease-in-out;
+            /* [PERUBAHAN] Menghilangkan transisi */
             display: none;
         }
         
@@ -202,8 +202,8 @@
     <div class="fixed-bottom-container">
         <div class="main-content-row">
             <div class="profile-section">
-                <i class="bi bi-person-circle profile-icon"></i>
-                <div class="username">@aqsa1610</div>
+                <i id="profile-icon-element" class="bi profile-icon"></i>
+                <div id="username-element" class="username">@aqsa1610</div>
             </div>
             <button class="btn btn-danger btn-sm subscribe-btn">
                 <i class="bi bi-play-circle-fill"></i>
@@ -308,6 +308,8 @@
             const onlineVideoModal = new bootstrap.Modal(document.getElementById('onlineVideoModal'));
             const youtubePlayerContainer = document.getElementById('youtube-player-container');
             const videoCaptionElement = document.getElementById('video-caption');
+            const usernameElement = document.getElementById('username-element'); // [PERUBAHAN] Elemen username
+            const profileIconElement = document.getElementById('profile-icon-element'); // [PERUBAHAN] Elemen ikon profil
 
             const captions = [
                 'chots hati ini',
@@ -320,6 +322,15 @@
                 'pengen balik ke masa ini',
                 'vibesnya dapet banget',
                 'pemandangan di akhir pekan'
+            ];
+
+            // [PERUBAHAN] Daftar profil acak
+            const profiles = [
+                { username: '@aqsa1610', icon: 'bi-person-circle' },
+                { username: '@video_addict', icon: 'bi-camera-video' },
+                { username: '@user_keren', icon: 'bi-emoji-sunglasses' },
+                { username: '@music_lover', icon: 'bi-music-note-beamed' },
+                { username: '@explore_id', icon: 'bi-geo-alt' }
             ];
 
             let allVideoFiles = [];
@@ -345,6 +356,21 @@
                 videoCaptionElement.textContent = captions[randomIndex];
             }
             
+            // [PERUBAHAN] Fungsi untuk mengganti profil secara acak
+            function updateProfile() {
+                const randomIndex = Math.floor(Math.random() * profiles.length);
+                const selectedProfile = profiles[randomIndex];
+                
+                usernameElement.textContent = selectedProfile.username;
+                
+                // Menghapus ikon lama dan menambahkan ikon baru
+                const currentIconClass = profileIconElement.className.split(' ').find(cls => cls.startsWith('bi-'));
+                if (currentIconClass) {
+                    profileIconElement.classList.remove(currentIconClass);
+                }
+                profileIconElement.classList.add(selectedProfile.icon);
+            }
+
             function shuffleArray(array) {
                 for (let i = array.length - 1; i > 0; i--) {
                     const j = Math.floor(Math.random() * (i + 1));
@@ -434,19 +460,18 @@
                     videoPlayer.style.display = 'none';
                     return;
                 }
-                videoPlayer.style.opacity = 0;
-                setTimeout(() => {
-                    if (videoPlayer.src) {
-                        URL.revokeObjectURL(videoPlayer.src);
-                    }
-                    const videoURL = URL.createObjectURL(file);
-                    videoPlayer.src = videoURL;
-                    videoPlayer.loop = true;
-                    videoPlayer.load();
-                    videoPlayer.play();
-                    videoPlayer.style.opacity = 1;
-                    updateCaption();
-                }, 200);
+                // [PERUBAHAN] Menghilangkan transisi dari JavaScript
+                if (videoPlayer.src) {
+                    URL.revokeObjectURL(videoPlayer.src);
+                }
+                const videoURL = URL.createObjectURL(file);
+                videoPlayer.src = videoURL;
+                videoPlayer.loop = true;
+                videoPlayer.load();
+                videoPlayer.play();
+                
+                updateCaption(); // [PERUBAHAN] Memanggil updateCaption
+                updateProfile(); // [PERUBAHAN] Memanggil updateProfile
             }
             
             playOnlineVideoButton.addEventListener('click', () => {
@@ -458,10 +483,12 @@
                     playYouTubeVideo(videoId);
                     onlineVideoModal.hide();
                     updateCaption();
+                    updateProfile(); // [PERUBAHAN] Memanggil updateProfile
                 } else if (url.match(/\.(mp4|webm|ogg)$/i)) {
                     playDirectUrlVideo(url);
                     onlineVideoModal.hide();
                     updateCaption();
+                    updateProfile(); // [PERUBAHAN] Memanggil updateProfile
                 } else {
                     urlErrorAlert.classList.remove('d-none');
                 }
@@ -521,12 +548,10 @@
                 videoPlayer.style.display = 'block';
                 youtubePlayerContainer.style.display = 'none';
                 
-                videoPlayer.style.opacity = 0;
                 videoPlayer.src = url;
                 videoPlayer.loop = true;
                 videoPlayer.load();
                 videoPlayer.play();
-                videoPlayer.style.opacity = 1;
 
                 videoPlayer.onerror = () => {
                     console.error("Gagal memutar tautan online, kemungkinan karena kebijakan CORS.");
@@ -592,7 +617,9 @@
                 playPauseBtnContainer.classList.add('show');
             });
 
+            // Memanggil fungsi-fungsi ini saat halaman dimuat pertama kali
             updateCaption();
+            updateProfile();
 
             loadYouTubeAPI();
         });
