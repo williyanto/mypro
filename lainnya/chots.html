@@ -176,7 +176,7 @@
 <body>
 
     <div id="fullscreen-video-container">
-        <video id="video-player" autoplay></video>
+        <video id="video-player" autoplay loop></video>
 
         <div id="play-pause-btn-container">
             <i id="play-pause-icon" class="bi bi-pause-fill"></i>
@@ -354,12 +354,6 @@
                 }
                 playVideo(currentPlaylist[currentVideoIndex]);
             }
-
-            // [PERUBAHAN] Menghapus event listener 'ended'
-            // Video tidak lagi berganti secara otomatis setelah selesai
-            // videoPlayer.addEventListener('ended', () => {
-            //     playNextVideo();
-            // });
 
             function playVideo(file) {
                 if (!file) return;
