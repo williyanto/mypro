@@ -184,6 +184,42 @@
             opacity: 1;
             pointer-events: auto;
         }
+
+        /* [PERBAIKAN] Gaya untuk efek Like */
+        #like-effect-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            z-index: 30;
+            
+            /* Kondisi awal (tersembunyi) */
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.5);
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+        
+        /* Kondisi aktif (muncul dan membesar) */
+        #like-effect-container.active {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+            pointer-events: auto;
+        }
+
+        #like-effect-container .like-emoji {
+            font-size: 5rem;
+        }
+
+        #like-effect-container .like-text {
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
     </style>
 </head>
 <body>
@@ -192,6 +228,11 @@
         <video id="video-player" autoplay></video>
         <div id="youtube-player-container">
             </div>
+        
+        <div id="like-effect-container">
+            <span class="like-emoji">🥰</span>
+            <span class="like-text">Kamu menyukai video ini</span>
+        </div>
 
         <div id="play-pause-btn-container">
             <i id="play-pause-icon" class="bi bi-pause-fill"></i>
@@ -215,7 +256,7 @@
     </div>
 
     <nav class="right-nav">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="#" id="like-button">
             <i class="bi bi-heart-fill"></i>
             <span>Like</span>
         </a>
@@ -309,8 +350,10 @@
             const videoCaptionElement = document.getElementById('video-caption');
             const usernameElement = document.getElementById('username-element');
             const profileIconElement = document.getElementById('profile-icon-element');
-            // [PERUBAHAN] Menambahkan elemen untuk tombol refresh
             const refreshButtons = document.querySelectorAll('.refresh-trigger');
+            
+            const likeButton = document.getElementById('like-button');
+            const likeEffectContainer = document.getElementById('like-effect-container');
 
             const captions = [
                 'chots hati ini',
@@ -418,7 +461,6 @@
                 return false;
             }
 
-            // [PERUBAHAN] Fungsi baru untuk me-refresh playlist
             function resetPlaylist() {
                 if (currentPlaylist.length > 0) {
                     currentVideoIndex = 0;
@@ -436,12 +478,22 @@
                 startPlayback(e.target.files);
             });
 
-            // [PERUBAHAN] Menambahkan event listener untuk tombol refresh
             refreshButtons.forEach(button => {
                 button.addEventListener('click', (e) => {
                     e.preventDefault();
                     resetPlaylist();
                 });
+            });
+
+            // [PERBAIKAN] Logika efek like yang disederhanakan
+            likeButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (!likeEffectContainer.classList.contains('active')) {
+                    likeEffectContainer.classList.add('active');
+                    setTimeout(() => {
+                        likeEffectContainer.classList.remove('active');
+                    }, 1500); // Durasi efek: 1.5 detik
+                }
             });
 
             window.addEventListener('wheel', (e) => {
