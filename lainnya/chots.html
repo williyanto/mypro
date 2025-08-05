@@ -36,15 +36,15 @@
             transition: opacity 0.2s ease-in-out;
             display: none;
         }
-
+        
         #youtube-player-container {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             display: none;
-        }
-        #youtube-player {
-            width: 100%;
-            height: 100%;
+            z-index: -1;
         }
 
         .bottom-nav,
@@ -210,7 +210,7 @@
                 <span>Subscribe</span>
             </button>
         </div>
-        <div class="caption-row">
+        <div class="caption-row" id="video-caption">
             chots hati ini
         </div>
     </div>
@@ -272,11 +272,13 @@
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <p class="text-white-50">Masukkan URL video (YouTube atau tautan file langsung, misal .mp4).</p>
-            <p class="text-white-50 small">Untuk video Google Drive, pastikan link dibagikan ke publik dan ubah format linknya: <code>https://www.youtube.com/iframe_api4</code> menjadi <code>https://www.youtube.com/iframe_api5</code></p>
+            <p class="text-white-50">Masukkan URL video dari sumber online. Tautan YouTube dan tautan file langsung sangat disarankan.</p>
             <div class="mb-3">
               <label for="videoUrlInput" class="form-label">URL Video:</label>
-              <input type="text" class="form-control" id="videoUrlInput" placeholder="https://www.youtube.com/watch?v=xxxxxxxxxxx">
+              <input type="text" class="form-control" id="videoUrlInput" placeholder="Contoh: https://www.youtube.com/watch?v=xxxxxxxxxxx atau tautan .mp4">
+            </div>
+            <div class="alert alert-warning small">
+                <i class="bi bi-exclamation-triangle-fill"></i> Tautan berbagi dari platform seperti Google Drive atau TikTok mungkin tidak akan berfungsi karena alasan keamanan.
             </div>
             <div class="alert alert-danger d-none" id="urlErrorAlert" role="alert">
               URL tidak valid atau tidak didukung.
@@ -304,6 +306,27 @@
             const videoUrlInput = document.getElementById('videoUrlInput');
             const urlErrorAlert = document.getElementById('urlErrorAlert');
             const onlineVideoModal = new bootstrap.Modal(document.getElementById('onlineVideoModal'));
+            const youtubePlayerContainer = document.getElementById('youtube-player-container');
+            const videoCaptionElement = document.getElementById('video-caption'); // [PERUBAHAN] Elemen caption
+
+            // [PERUBAHAN] Daftar caption acak
+            const captions = [
+                'chots hati ini',
+                'video ini bikin nagih',
+                'malam minggu sendirian',
+                'kenangan masa lalu',
+                'senyum-senyum sendiri',
+                'ketemu jodoh di sini',
+                'lagu ini enak banget!',
+                'pengen balik ke masa ini',
+                'aqsa banget',
+                'kegiatan seru bareng teman',
+                'aqsa hari ini',
+                'aqsa nih gaes',
+                'halo teman-teman',
+                'vibesnya dapet banget',
+                'pemandangan di akhir pekan'
+            ];
 
             let allVideoFiles = [];
             let currentPlaylist = [];
@@ -311,7 +334,7 @@
             let isScrolling = false;
             let player;
             let isOnlineVideoPlaying = false;
-
+            
             function loadYouTubeAPI() {
                 const tag = document.createElement('script');
                 tag.src = "https://www.youtube.com/iframe_api3";
@@ -323,6 +346,12 @@
                 console.log('YouTube API is ready.');
             };
 
+            // [PERUBAHAN] Fungsi untuk mengganti caption secara acak
+            function updateCaption() {
+                const randomIndex = Math.floor(Math.random() * captions.length);
+                videoCaptionElement.textContent = captions[randomIndex];
+            }
+            
             function shuffleArray(array) {
                 for (let i = array.length - 1; i > 0; i--) {
                     const j = Math.floor(Math.random() * (i + 1));
@@ -407,7 +436,7 @@
             function playVideo(file) {
                 isOnlineVideoPlaying = false;
                 videoPlayer.style.display = 'block';
-                document.getElementById('youtube-player-container').style.display = 'none';
+                youtubePlayerContainer.style.display = 'none';
                 
                 if (!file) {
                     videoPlayer.style.display = 'none';
@@ -423,6 +452,7 @@
                     videoPlayer.load();
                     videoPlayer.play();
                     videoPlayer.style.opacity = 1;
+                    updateCaption(); // [PERUBAHAN] Memanggil fungsi updateCaption() saat video lokal baru diputar
                 }, 200);
             }
             
@@ -434,9 +464,11 @@
                 if (videoId) {
                     playYouTubeVideo(videoId);
                     onlineVideoModal.hide();
+                    updateCaption(); // [PERUBAHAN] Memanggil fungsi updateCaption() saat video online baru diputar
                 } else if (url.match(/\.(mp4|webm|ogg)$/i)) {
                     playDirectUrlVideo(url);
                     onlineVideoModal.hide();
+                    updateCaption(); // [PERUBAHAN] Memanggil fungsi updateCaption() saat video online baru diputar
                 } else {
                     urlErrorAlert.classList.remove('d-none');
                 }
@@ -455,12 +487,12 @@
             function playYouTubeVideo(videoId) {
                 isOnlineVideoPlaying = true;
                 videoPlayer.style.display = 'none';
-                document.getElementById('youtube-player-container').style.display = 'block';
+                youtubePlayerContainer.style.display = 'block';
 
                 if (player) {
                     player.loadVideoById(videoId);
                 } else {
-                    document.getElementById('youtube-player-container').innerHTML = '<div id="youtube-player"></div>';
+                    youtubePlayerContainer.innerHTML = '<div id="youtube-player"></div>';
                     player = new YT.Player('youtube-player', {
                         videoId: videoId,
                         playerVars: {
@@ -494,7 +526,7 @@
             function playDirectUrlVideo(url) {
                 isOnlineVideoPlaying = true;
                 videoPlayer.style.display = 'block';
-                document.getElementById('youtube-player-container').style.display = 'none';
+                youtubePlayerContainer.style.display = 'none';
                 
                 videoPlayer.style.opacity = 0;
                 videoPlayer.src = url;
@@ -502,6 +534,12 @@
                 videoPlayer.play();
                 videoPlayer.style.opacity = 1;
                 videoPlayer.loop = true;
+
+                videoPlayer.onerror = () => {
+                    console.error("Gagal memutar tautan online, kemungkinan karena kebijakan CORS.");
+                    urlErrorAlert.innerHTML = 'Gagal memutar video. Tautan ini mungkin tidak mengizinkan pemutaran langsung (CORS).';
+                    urlErrorAlert.classList.remove('d-none');
+                };
             }
             
             fullscreenVideoContainer.addEventListener('click', () => {
@@ -556,10 +594,13 @@
             });
 
             videoPlayer.addEventListener('pause', () => {
-                playPauseIcon.classList.remove('bi-play-fill');
+                playPauseIcon.classList.remove('bi-pause-fill');
                 playPauseIcon.classList.add('bi-play-fill');
                 playPauseBtnContainer.classList.add('show');
             });
+
+            // Memanggil fungsi updateCaption saat halaman dimuat pertama kali
+            updateCaption();
 
             loadYouTubeAPI();
         });
