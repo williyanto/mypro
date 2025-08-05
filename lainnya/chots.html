@@ -242,7 +242,6 @@
             font-size: 1.2rem;
             font-weight: bold;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-            /* Pastikan teks rata tengah */
             text-align: center;
         }
 
@@ -258,21 +257,25 @@
             z-index: 9;
             display: none;
             flex-direction: column;
-            justify-content: center;
+            /* [PERUBAHAN] Menempatkan elemen di bagian atas dan bawah */
+            justify-content: space-between;
             align-items: center;
             text-align: center;
-            padding-bottom: 70px;
+            /* [PERUBAHAN] Padding bawah dihapus */
+            padding-bottom: 0;
         }
         #profile-page .welcome-text {
             font-size: 1.5rem;
             max-width: 80%;
             margin-bottom: 20px;
+            margin-top: 20px; /* Menambahkan margin atas agar tidak menempel */
         }
 
         /* Gaya untuk footer */
         #profile-page .footer {
+            /* [PERUBAHAN] Mengubah bottom: 0 menjadi bottom: 70px */
             position: absolute;
-            bottom: 0;
+            bottom: 70px; 
             width: 100%;
             padding: 10px;
             background-color: #f8f9fa;
