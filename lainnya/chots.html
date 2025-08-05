@@ -38,14 +38,12 @@
             z-index: 10;
         }
 
-        /* Kustomisasi untuk navbar bawah */
         .bottom-nav {
-            background-color: transparent; /* Default transparan */
+            background-color: transparent;
             box-shadow: none;
             transition: background-color 0.3s ease-in-out;
         }
 
-        /* [BARU] Kelas untuk membuat navbar solid/tidak transparan */
         .bottom-nav.bottom-nav-solid {
             background-color: #f8f9fa !important;
             box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
@@ -61,7 +59,6 @@
             gap: 2px;
         }
 
-        /* [BARU] Mengubah warna teks ikon saat navbar solid */
         .bottom-nav.bottom-nav-solid .nav-link {
             color: #6c757d;
             text-shadow: none;
@@ -147,9 +144,10 @@
             border-color: #cc0000;
         }
 
+        /* [PERUBAHAN] Posisi navbar vertikal di kanan dinaikkan */
         .right-nav {
             position: fixed;
-            bottom: 70px;
+            bottom: 120px;
             right: 10px;
             z-index: 10;
             display: flex;
@@ -173,7 +171,6 @@
             font-size: 1.5rem;
         }
 
-        /* Gaya untuk tombol play/pause di tengah */
         #play-pause-btn-container {
             position: absolute;
             top: 50%;
@@ -329,7 +326,6 @@
                 videoPlayer.play();
             }
             
-            // Logika untuk tombol play/pause
             fullscreenVideoContainer.addEventListener('click', () => {
                 if (videoPlayer.paused) {
                     videoPlayer.play();
