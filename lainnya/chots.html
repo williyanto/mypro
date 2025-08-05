@@ -134,12 +134,24 @@
             gap: 5px;
             background-color: #ff0000;
             border-color: #ff0000;
+            transition: background-color 0.3s, border-color 0.3s;
         }
 
         .subscribe-btn:hover {
             background-color: #cc0000;
             border-color: #cc0000;
         }
+
+        /* [PERUBAHAN] Gaya untuk tombol Subscribe yang sudah ditekan */
+        .subscribe-btn.subscribed {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+        }
+        .subscribe-btn.subscribed:hover {
+            background-color: #0b5ed7;
+            border-color: #0b5ed7;
+        }
+
 
         .right-nav {
             position: fixed;
@@ -162,10 +174,22 @@
             flex-direction: column;
             align-items: center;
             gap: 2px;
+            transition: color 0.3s;
         }
 
         .right-nav .nav-link i {
             font-size: 1.5rem;
+        }
+
+        /* [PERUBAHAN] Gaya untuk tombol Like/Dislike yang aktif */
+        .right-nav .nav-link.active-like,
+        .right-nav .nav-link.active-like i,
+        .right-nav .nav-link.active-like span,
+        .right-nav .nav-link.active-dislike,
+        .right-nav .nav-link.active-dislike i,
+        .right-nav .nav-link.active-dislike span {
+            color: #0d6efd;
+            text-shadow: none;
         }
 
         #play-pause-btn-container {
@@ -309,9 +333,9 @@
                 <i id="profile-icon-element" class="bi profile-icon"></i>
                 <div id="username-element" class="username">@aqsa1610</div>
             </div>
-            <button class="btn btn-danger btn-sm subscribe-btn">
-                <i class="bi bi-play-circle-fill"></i>
-                <span>Subscribe</span>
+            <button class="btn btn-danger btn-sm subscribe-btn" id="subscribe-button">
+                <i class="bi bi-play-circle-fill" id="subscribe-icon"></i>
+                <span id="subscribe-text">Subscribe</span>
             </button>
         </div>
         <div class="caption-row" id="video-caption">
@@ -375,7 +399,7 @@
             const plusButton = document.getElementById('plus-button');
             const videoFileInput = document.getElementById('video-file-input');
             const videoPlayer = document.getElementById('video-player');
-            const preloadVideoPlayer = document.getElementById('preload-video-player'); // [PERUBAHAN]
+            const preloadVideoPlayer = document.getElementById('preload-video-player');
             const fullscreenVideoContainer = document.getElementById('fullscreen-video-container');
             const playPauseBtnContainer = document.getElementById('play-pause-btn-container');
             const playPauseIcon = document.getElementById('play-pause-icon');
@@ -392,6 +416,11 @@
             
             const profilePage = document.getElementById('profile-page');
             const profileButton = document.getElementById('profile-button');
+
+            // [PERUBAHAN] Mendapatkan elemen tombol Subscribe
+            const subscribeButton = document.getElementById('subscribe-button');
+            const subscribeIcon = document.getElementById('subscribe-icon');
+            const subscribeText = document.getElementById('subscribe-text');
 
             const captions = [
                 'chots hati ini',
@@ -458,7 +487,7 @@
                     currentPlaylist = shuffleArray([...allVideoFiles]);
                     currentVideoIndex = 0;
                     isOnlineVideoPlaying = false;
-                    playVideo(0); // [PERUBAHAN] Memanggil playVideo dengan indeks
+                    playVideo(0);
                 } else {
                     alert('Tidak ada file video yang ditemukan di folder yang Anda pilih.');
                 }
@@ -501,23 +530,66 @@
                 videoPlayer.pause();
             });
 
+            // [PERUBAHAN] Logika tombol Like
             likeButton.addEventListener('click', (e) => {
                 e.preventDefault();
-                if (!likeEffectContainer.classList.contains('active')) {
-                    likeEffectContainer.classList.add('active');
-                    setTimeout(() => {
-                        likeEffectContainer.classList.remove('active');
-                    }, 1500);
+                
+                // Hapus kelas dislike jika ada
+                if (dislikeButton.classList.contains('active-dislike')) {
+                    dislikeButton.classList.remove('active-dislike');
+                }
+                
+                // Toggle kelas active-like
+                likeButton.classList.toggle('active-like');
+
+                if (likeButton.classList.contains('active-like')) {
+                    if (!likeEffectContainer.classList.contains('active')) {
+                        likeEffectContainer.classList.add('active');
+                        setTimeout(() => {
+                            likeEffectContainer.classList.remove('active');
+                        }, 1500);
+                    }
                 }
             });
             
+            // [PERUBAHAN] Logika tombol Dislike
             dislikeButton.addEventListener('click', (e) => {
                 e.preventDefault();
-                if (!dislikeEffectContainer.classList.contains('active')) {
-                    dislikeEffectContainer.classList.add('active');
-                    setTimeout(() => {
-                        dislikeEffectContainer.classList.remove('active');
-                    }, 1500);
+                
+                // Hapus kelas like jika ada
+                if (likeButton.classList.contains('active-like')) {
+                    likeButton.classList.remove('active-like');
+                }
+                
+                // Toggle kelas active-dislike
+                dislikeButton.classList.toggle('active-dislike');
+
+                if (dislikeButton.classList.contains('active-dislike')) {
+                    if (!dislikeEffectContainer.classList.contains('active')) {
+                        dislikeEffectContainer.classList.add('active');
+                        setTimeout(() => {
+                            dislikeEffectContainer.classList.remove('active');
+                        }, 1500);
+                    }
+                }
+            });
+            
+            // [PERUBAHAN] Logika tombol Subscribe
+            subscribeButton.addEventListener('click', (e) => {
+                e.preventDefault();
+
+                if (subscribeButton.classList.contains('subscribed')) {
+                    // Jika sudah subscribed, kembalikan ke kondisi awal
+                    subscribeButton.classList.remove('subscribed');
+                    subscribeIcon.classList.remove('bi-check-circle-fill');
+                    subscribeIcon.classList.add('bi-play-circle-fill');
+                    subscribeText.textContent = 'Subscribe';
+                } else {
+                    // Jika belum, ubah ke status subscribed
+                    subscribeButton.classList.add('subscribed');
+                    subscribeIcon.classList.remove('bi-play-circle-fill');
+                    subscribeIcon.classList.add('bi-check-circle-fill');
+                    subscribeText.textContent = 'Subscribed';
                 }
             });
 
@@ -564,7 +636,6 @@
             function playNextVideo() {
                 if (currentPlaylist.length === 0) return;
                 
-                // [PERUBAHAN] Menghandle perpindahan ke video selanjutnya dengan preloading
                 currentVideoIndex = (currentVideoIndex + 1) % currentPlaylist.length;
                 playVideo(currentVideoIndex);
             }
@@ -572,12 +643,10 @@
             function playPreviousVideo() {
                 if (currentPlaylist.length === 0) return;
                 
-                // [PERUBAHAN] Menghandle perpindahan ke video sebelumnya
                 currentVideoIndex = (currentVideoIndex - 1 + currentPlaylist.length) % currentPlaylist.length;
                 playVideo(currentVideoIndex);
             }
             
-            // [PERUBAHAN] Fungsi baru untuk preloading
             function preloadNextVideo(index) {
                 if (currentPlaylist.length <= 1) return;
                 
@@ -592,7 +661,6 @@
                 preloadVideoPlayer.load();
             }
 
-            // [PERUBAHAN] Fungsi inti untuk memutar video
             function playVideo(index) {
                 isOnlineVideoPlaying = false;
                 videoPlayer.style.display = 'block';
@@ -615,7 +683,7 @@
                 videoPlayer.load();
                 videoPlayer.play();
                 
-                preloadNextVideo(currentVideoIndex); // Memulai preloading untuk video berikutnya
+                preloadNextVideo(currentVideoIndex);
                 
                 updateCaption();
                 updateProfile();
@@ -644,7 +712,6 @@
                 playPauseBtnContainer.classList.add('show');
             });
             
-            // [PERUBAHAN] Event listener saat video selesai diputar
             videoPlayer.addEventListener('ended', () => {
                 playNextVideo();
             });
