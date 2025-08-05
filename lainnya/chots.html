@@ -45,28 +45,28 @@
             color: #0d6efd;
         }
 
-        /* [BARU] CSS untuk konten di kiri bawah, di atas navbar */
+        /* CSS untuk konten di kiri bawah, di atas navbar */
         .fixed-bottom-content {
             position: fixed;
-            bottom: 70px; /* Jarak di atas navbar */
+            bottom: 70px;
             left: 0;
             right: 0;
             padding: 10px 15px;
             color: #333;
             z-index: 10;
             display: flex;
-            align-items: flex-end; /* Memastikan konten berada di bagian bawah */
-            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
         }
         
         .profile-section {
             display: flex;
             align-items: center;
+            gap: 10px;
         }
 
         .profile-icon {
             font-size: 2.5rem;
-            margin-right: 10px;
         }
 
         .text-content {
@@ -97,6 +97,33 @@
             background-color: #cc0000;
             border-color: #cc0000;
         }
+
+        /* [BARU] CSS untuk navbar vertikal di kanan */
+        .right-nav {
+            position: fixed;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%); /* Menempatkan navbar di tengah vertikal */
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px; /* Jarak antar ikon */
+            background-color: transparent; /* Membuat latar belakang transparan */
+        }
+
+        .right-nav .nav-link {
+            color: #333;
+            font-size: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .right-nav .nav-link i {
+            font-size: 1.5rem;
+        }
     </style>
 </head>
 <body>
@@ -117,6 +144,34 @@
             <span>Subscribe</span>
         </button>
     </div>
+
+    <nav class="right-nav">
+        <a class="nav-link" href="#">
+            <i class="bi bi-heart-fill"></i>
+            <span>Like</span>
+        </a>
+        <a class="nav-link" href="#">
+            <i class="bi bi-hand-thumbs-down-fill"></i>
+            <span>Dislike</span>
+        </a>
+        <a class="nav-link" href="#">
+            <i class="bi bi-chat-dots-fill"></i>
+            <span>Comment</span>
+        </a>
+        <a class="nav-link" href="#">
+            <i class="bi bi-share-fill"></i>
+            <span>Share</span>
+        </a>
+        <a class="nav-link" href="#">
+            <i class="bi bi-repeat"></i>
+            <span>Repeat</span>
+        </a>
+        <a class="nav-link" href="#">
+            <i class="bi bi-person-circle"></i>
+            <span>User</span>
+        </a>
+    </nav>
+
 
     <nav class="navbar fixed-bottom bg-light bottom-nav">
         <div class="container-fluid d-flex justify-content-around">
