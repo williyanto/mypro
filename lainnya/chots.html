@@ -239,18 +239,18 @@
 
     <nav class="navbar fixed-bottom bottom-nav" id="bottom-navbar">
         <div class="container-fluid d-flex justify-content-around">
-            <a class="nav-link active" href="#" id="home-button">
+            <a class="nav-link active refresh-trigger" href="#">
                 <i class="bi bi-house-door-fill"></i>
                 <span>Home</span>
             </a>
-            <a class="nav-link" href="#">
+            <a class="nav-link refresh-trigger" href="#">
                 <i class="bi bi-chat-dots-fill"></i>
                 <span>Chots</span>
             </a>
             <a class="nav-link plus-icon" href="#" id="plus-button">
                 <i class="bi bi-plus-circle-fill"></i>
             </a>
-            <a class="nav-link" href="#">
+            <a class="nav-link refresh-trigger" href="#">
                 <i class="bi bi-collection-play-fill"></i>
                 <span>Subrek</span>
             </a>
@@ -309,7 +309,8 @@
             const videoCaptionElement = document.getElementById('video-caption');
             const usernameElement = document.getElementById('username-element');
             const profileIconElement = document.getElementById('profile-icon-element');
-            const homeButton = document.getElementById('home-button'); // [PERUBAHAN] Tombol Home
+            // [PERUBAHAN] Menambahkan elemen untuk tombol refresh
+            const refreshButtons = document.querySelectorAll('.refresh-trigger');
 
             const captions = [
                 'chots hati ini',
@@ -417,7 +418,7 @@
                 return false;
             }
 
-            // [PERUBAHAN] Fungsi untuk kembali ke video pertama
+            // [PERUBAHAN] Fungsi baru untuk me-refresh playlist
             function resetPlaylist() {
                 if (currentPlaylist.length > 0) {
                     currentVideoIndex = 0;
@@ -429,17 +430,18 @@
                 e.preventDefault();
                 videoFileInput.click();
             });
-            
-            // [PERUBAHAN] Menambahkan event listener pada tombol Home
-            homeButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                resetPlaylist();
-            });
-
 
             videoFileInput.addEventListener('change', (e) => {
                 localStorage.removeItem('onlinePlaylist');
                 startPlayback(e.target.files);
+            });
+
+            // [PERUBAHAN] Menambahkan event listener untuk tombol refresh
+            refreshButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    resetPlaylist();
+                });
             });
 
             window.addEventListener('wheel', (e) => {
