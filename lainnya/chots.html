@@ -26,7 +26,6 @@
             z-index: -1;
         }
 
-        /* [PERUBAHAN] Menambahkan transisi opacity */
         #video-player {
             width: 100%;
             height: 100%;
@@ -177,7 +176,7 @@
 <body>
 
     <div id="fullscreen-video-container">
-        <video id="video-player" autoplay loop></video>
+        <video id="video-player" autoplay></video>
 
         <div id="play-pause-btn-container">
             <i id="play-pause-icon" class="bi bi-pause-fill"></i>
@@ -260,42 +259,53 @@
             const playPauseBtnContainer = document.getElementById('play-pause-btn-container');
             const playPauseIcon = document.getElementById('play-pause-icon');
 
-            let videoFiles = [];
+            let allVideoFiles = [];
+            let currentPlaylist = [];
             let currentVideoIndex = 0;
             let isScrolling = false;
 
+            // Fungsi untuk mengacak array
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+
+            // Fungsi untuk memulai pemutaran video
+            function startPlayback(files) {
+                allVideoFiles = Array.from(files);
+                if (allVideoFiles.length > 0) {
+                    currentPlaylist = shuffleArray([...allVideoFiles]);
+                    currentVideoIndex = 0;
+                    playVideo(currentPlaylist[currentVideoIndex]);
+                }
+            }
+
+            // Listener untuk tombol plus
             plusButton.addEventListener('click', (e) => {
                 e.preventDefault();
                 videoFileInput.click();
             });
 
+            // Listener untuk input file
             videoFileInput.addEventListener('change', (e) => {
-                videoFiles = Array.from(e.target.files);
-                if (videoFiles.length > 0) {
-                    currentVideoIndex = 0;
-                    playVideo(videoFiles.length > 0 ? videoFiles.shift() : null); // Putar video pertama dan hapus dari array
-                }
+                startPlayback(e.target.files);
             });
 
+            // Listener untuk gulir (scroll) di desktop
             window.addEventListener('wheel', (e) => {
-                if (videoFiles.length === 0 || isScrolling) {
+                if (currentPlaylist.length <= 1 || isScrolling) {
                     return;
                 }
 
                 isScrolling = true;
-
+                
                 if (e.deltaY > 0) {
-                    const nextVideo = videoFiles.shift();
-                    if (nextVideo) {
-                        playVideo(nextVideo);
-                    } else {
-                        // Jika sudah di akhir daftar, bisa diatur untuk kembali ke awal atau tidak melakukan apa-apa
-                        console.log("Daftar video berakhir.");
-                    }
+                    playNextVideo();
                 } else if (e.deltaY < 0) {
-                    // Untuk implementasi 'video sebelumnya', kita perlu menyimpan riwayat video yang telah diputar
-                    console.log("Fitur video sebelumnya belum diimplementasikan dengan baik untuk array yang di shift.");
-                    // Implementasi yang lebih baik mungkin melibatkan penggunaan indeks dan tidak menghapus dari array
+                    playPreviousVideo();
                 }
 
                 setTimeout(() => {
@@ -303,45 +313,69 @@
                 }, 500);
             });
 
+            // Listener untuk sentuhan (swipe) di mobile
             let touchstartY = 0;
             let touchendY = 0;
             const swipeThreshold = 50;
 
             window.addEventListener('touchstart', (e) => {
-                touchstartY = e.changedTouches [0].screenY;
+                touchstartY = e.changedTouches[0].screenY;
             });
 
             window.addEventListener('touchend', (e) => {
-                touchendY = e.changedTouches [0].screenY;
+                touchendY = e.changedTouches[0].screenY;
                 handleSwipe();
             });
 
             function handleSwipe() {
-                if (videoFiles.length === 0 || isScrolling) {
+                if (currentPlaylist.length <= 1 || isScrolling) {
                     return;
                 }
-
+                
+                isScrolling = true;
                 if (touchendY < touchstartY - swipeThreshold) {
-                    isScrolling = true;
-                    const nextVideo = videoFiles.shift();
-                    if (nextVideo) {
-                        playVideo(nextVideo);
-                    } else {
-                        console.log("Daftar video berakhir.");
-                    }
+                    // Swipe ke atas (video selanjutnya)
+                    playNextVideo();
                 } else if (touchendY > touchstartY + swipeThreshold) {
-                    console.log("Fitur video sebelumnya belum diimplementasikan dengan baik untuk array yang di shift.");
+                    // Swipe ke bawah (video sebelumnya)
+                    playPreviousVideo();
                 }
-
-                if (isScrolling) {
-                     setTimeout(() => {
-                        isScrolling = false;
-                    }, 500);
-                }
+                
+                setTimeout(() => {
+                    isScrolling = false;
+                }, 500);
             }
 
+            // Fungsi untuk memutar video selanjutnya
+            function playNextVideo() {
+                currentVideoIndex++;
+                if (currentVideoIndex >= currentPlaylist.length) {
+                    // Jika video terakhir selesai, acak ulang daftar dan mulai dari awal
+                    currentPlaylist = shuffleArray([...allVideoFiles]);
+                    currentVideoIndex = 0;
+                }
+                playVideo(currentPlaylist[currentVideoIndex]);
+            }
+
+            // Fungsi untuk memutar video sebelumnya
+            function playPreviousVideo() {
+                currentVideoIndex--;
+                if (currentVideoIndex < 0) {
+                    // Jika video pertama, kembali ke video terakhir
+                    currentVideoIndex = currentPlaylist.length - 1;
+                }
+                playVideo(currentPlaylist[currentVideoIndex]);
+            }
+
+            // Listener saat video selesai
+            videoPlayer.addEventListener('ended', () => {
+                playNextVideo();
+            });
+
+            // Fungsi utama untuk memutar video dengan transisi
             function playVideo(file) {
                 if (!file) return;
+
                 videoPlayer.style.opacity = 0;
                 setTimeout(() => {
                     if (videoPlayer.src) {
@@ -349,11 +383,13 @@
                     }
                     const videoURL = URL.createObjectURL(file);
                     videoPlayer.src = videoURL;
+                    videoPlayer.load(); // Memuat video baru
                     videoPlayer.play();
                     videoPlayer.style.opacity = 1;
-                }, 500); // Tunggu sedikit lebih lama dari durasi transisi CSS
+                }, 500);
             }
-
+            
+            // Logika untuk tombol play/pause di tengah
             fullscreenVideoContainer.addEventListener('click', () => {
                 if (videoPlayer.paused) {
                     videoPlayer.play();
