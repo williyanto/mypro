@@ -291,77 +291,6 @@
         body.show-profile-page #profile-page {
             display: flex;
         }
-        
-        /* [BARU] Gaya untuk wadah komentar */
-        #comments-container {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 80%; /* Atur tinggi sesuai kebutuhan */
-            background-color: #fff;
-            color: #000;
-            z-index: 20;
-            display: flex;
-            flex-direction: column;
-            padding: 15px;
-            border-top-left-radius: 20px;
-            border-top-right-radius: 20px;
-            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.2);
-            transform: translateY(100%);
-            transition: transform 0.3s ease-in-out;
-        }
-
-        body.show-comments-page #comments-container {
-            transform: translateY(0);
-        }
-        
-        body.show-comments-page #fullscreen-video-container,
-        body.show-comments-page .fixed-bottom-container,
-        body.show-comments-page .right-nav {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .comments-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 10px;
-            margin-bottom: 10px;
-        }
-
-        .comments-header h5 {
-            margin: 0;
-            font-weight: bold;
-        }
-
-        .comments-list {
-            flex-grow: 1;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .comment-item {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 10px;
-            padding: 5px 0;
-        }
-
-        .comment-user {
-            font-weight: bold;
-            font-size: 0.9rem;
-            color: #000;
-        }
-
-        .comment-text {
-            font-size: 0.9rem;
-            color: #555;
-            line-height: 1.2;
-        }
-
     </style>
 </head>
 <body>
@@ -432,15 +361,6 @@
         </a>
     </nav>
 
-    <div id="comments-container">
-        <div class="comments-header">
-            <h5>Comments</h5>
-            <button id="close-comments-btn" type="button" class="btn-close" aria-label="Close"></button>
-        </div>
-        <div class="comments-list" id="comments-list">
-            </div>
-    </div>
-
     <nav class="navbar fixed-bottom bottom-nav" id="bottom-navbar">
         <div class="container-fluid d-flex justify-content-around">
             <a class="nav-link active refresh-trigger" href="#">
@@ -467,6 +387,21 @@
 
     <input type="file" id="video-file-input" webkitdirectory directory multiple style="display: none;">
 
+    <div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="commentModalLabel">Komentar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="comment-display">
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <script>
@@ -498,12 +433,18 @@
 
             const profilePage = document.getElementById('profile-page');
             const profileButton = document.getElementById('profile-button');
-            
-            // [BARU] Elemen komentar
+
+            // [PERUBAHAN] Variabel dan elemen baru untuk komentar
             const commentButton = document.getElementById('comment-button');
-            const commentsContainer = document.getElementById('comments-container');
-            const closeCommentsBtn = document.getElementById('close-comments-btn');
-            const commentsList = document.getElementById('comments-list');
+            const commentModal = document.getElementById('commentModal');
+            const commentDisplay = document.getElementById('comment-display');
+
+            const comments = [
+                { user: "Bude Anung", text: "aqsa lucu banget" },
+                { user: "Bude Wati", text: "aqsa lagi apa itu" },
+                { user: "Mbah Uti", text: "aqsa 😍😍" }
+            ];
+            const commentMap = {}; // Objek untuk menyimpan komentar per video
 
             const captions = [
                 'chots hati ini',
@@ -525,14 +466,6 @@
                 { username: '@music_lover', icon: 'bi-music-note-beamed' },
                 { username: '@explore_id', icon: 'bi-geo-alt' }
             ];
-            
-            // [BARU] Data komentar yang telah ditentukan
-            const commentsData = [
-                { user: 'Bude Anung', text: 'aqsa lucu banget' },
-                { user: 'Bude Wati', text: 'aqsa lagi apa itu' },
-                { user: 'Mbah Uti', text: 'aqsa 😍😍' },
-            ];
-
 
             let allVideoFiles = [];
             let currentPlaylist = [];
@@ -570,7 +503,7 @@
             }
             
             function showVideoPage() {
-                body.classList.remove('show-profile-page', 'show-comments-page');
+                body.classList.remove('show-profile-page');
                 if (videoPlayer.paused) {
                     videoPlayer.play();
                 }
@@ -738,40 +671,22 @@
                     subscribeText.textContent = 'Subscribe';
                 }
             });
-            
-            // [BARU] Fungsi untuk menampilkan komentar
-            function displayComments() {
-                commentsList.innerHTML = ''; // Hapus komentar lama
-                commentsData.forEach(comment => {
-                    const commentItem = document.createElement('div');
-                    commentItem.className = 'comment-item';
-                    
-                    const userElement = document.createElement('span');
-                    userElement.className = 'comment-user';
-                    userElement.textContent = comment.user;
-                    
-                    const textElement = document.createElement('span');
-                    textElement.className = 'comment-text';
-                    textElement.textContent = comment.text;
 
-                    commentItem.appendChild(userElement);
-                    commentItem.appendChild(textElement);
-                    commentsList.appendChild(commentItem);
-                });
-            }
-
-            // [BARU] Event Listener untuk tombol komentar
+            // [PERUBAHAN] Menambahkan event listener untuk tombol komentar
             commentButton.addEventListener('click', (e) => {
                 e.preventDefault();
-                body.classList.add('show-comments-page');
-                videoPlayer.pause();
-                displayComments();
-            });
+                // Ambil atau tetapkan komentar untuk video saat ini
+                if (!commentMap[currentVideoIndex]) {
+                    const randomIndex = Math.floor(Math.random() * comments.length);
+                    commentMap[currentVideoIndex] = comments[randomIndex];
+                }
 
-            // [BARU] Event Listener untuk tombol tutup komentar
-            closeCommentsBtn.addEventListener('click', () => {
-                body.classList.remove('show-comments-page');
-                videoPlayer.play();
+                const comment = commentMap[currentVideoIndex];
+                commentDisplay.innerHTML = `<p><b>${comment.user}</b><br>${comment.text}</p>`;
+
+                // Tampilkan modal
+                const myModal = new bootstrap.Modal(commentModal);
+                myModal.show();
             });
 
             window.addEventListener('wheel', (e) => {
