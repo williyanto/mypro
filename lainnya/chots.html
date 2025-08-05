@@ -307,9 +307,8 @@
             const urlErrorAlert = document.getElementById('urlErrorAlert');
             const onlineVideoModal = new bootstrap.Modal(document.getElementById('onlineVideoModal'));
             const youtubePlayerContainer = document.getElementById('youtube-player-container');
-            const videoCaptionElement = document.getElementById('video-caption'); // [PERUBAHAN] Elemen caption
+            const videoCaptionElement = document.getElementById('video-caption');
 
-            // [PERUBAHAN] Daftar caption acak
             const captions = [
                 'chots hati ini',
                 'video ini bikin nagih',
@@ -319,11 +318,6 @@
                 'ketemu jodoh di sini',
                 'lagu ini enak banget!',
                 'pengen balik ke masa ini',
-                'aqsa banget',
-                'kegiatan seru bareng teman',
-                'aqsa hari ini',
-                'aqsa nih gaes',
-                'halo teman-teman',
                 'vibesnya dapet banget',
                 'pemandangan di akhir pekan'
             ];
@@ -346,7 +340,6 @@
                 console.log('YouTube API is ready.');
             };
 
-            // [PERUBAHAN] Fungsi untuk mengganti caption secara acak
             function updateCaption() {
                 const randomIndex = Math.floor(Math.random() * captions.length);
                 videoCaptionElement.textContent = captions[randomIndex];
@@ -428,10 +421,6 @@
                 currentVideoIndex = (currentVideoIndex - 1 + currentPlaylist.length) % currentPlaylist.length;
                 playVideo(currentPlaylist[currentVideoIndex]);
             }
-            
-            videoPlayer.addEventListener('ended', () => {
-                playNextVideo();
-            });
 
             function playVideo(file) {
                 isOnlineVideoPlaying = false;
@@ -449,10 +438,11 @@
                     }
                     const videoURL = URL.createObjectURL(file);
                     videoPlayer.src = videoURL;
+                    videoPlayer.loop = true; // [PERUBAHAN] Menambahkan loop untuk video lokal
                     videoPlayer.load();
                     videoPlayer.play();
                     videoPlayer.style.opacity = 1;
-                    updateCaption(); // [PERUBAHAN] Memanggil fungsi updateCaption() saat video lokal baru diputar
+                    updateCaption();
                 }, 200);
             }
             
@@ -464,11 +454,11 @@
                 if (videoId) {
                     playYouTubeVideo(videoId);
                     onlineVideoModal.hide();
-                    updateCaption(); // [PERUBAHAN] Memanggil fungsi updateCaption() saat video online baru diputar
+                    updateCaption();
                 } else if (url.match(/\.(mp4|webm|ogg)$/i)) {
                     playDirectUrlVideo(url);
                     onlineVideoModal.hide();
-                    updateCaption(); // [PERUBAHAN] Memanggil fungsi updateCaption() saat video online baru diputar
+                    updateCaption();
                 } else {
                     urlErrorAlert.classList.remove('d-none');
                 }
@@ -530,10 +520,10 @@
                 
                 videoPlayer.style.opacity = 0;
                 videoPlayer.src = url;
+                videoPlayer.loop = true; // [PERUBAHAN] Menambahkan loop untuk video tautan langsung
                 videoPlayer.load();
                 videoPlayer.play();
                 videoPlayer.style.opacity = 1;
-                videoPlayer.loop = true;
 
                 videoPlayer.onerror = () => {
                     console.error("Gagal memutar tautan online, kemungkinan karena kebijakan CORS.");
@@ -594,12 +584,11 @@
             });
 
             videoPlayer.addEventListener('pause', () => {
-                playPauseIcon.classList.remove('bi-pause-fill');
+                playPauseIcon.classList.remove('bi-play-fill');
                 playPauseIcon.classList.add('bi-play-fill');
                 playPauseBtnContainer.classList.add('show');
             });
 
-            // Memanggil fungsi updateCaption saat halaman dimuat pertama kali
             updateCaption();
 
             loadYouTubeAPI();
