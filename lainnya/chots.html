@@ -46,27 +46,33 @@
         }
 
         /* CSS untuk konten di kiri bawah, di atas navbar */
-        .fixed-bottom-content {
+        .fixed-bottom-container {
             position: fixed;
-            bottom: 70px;
+            bottom: 90px;
             left: 0;
             right: 0;
             padding: 10px 15px;
             color: #333;
             z-index: 10;
             display: flex;
-            align-items: center;
-            gap: 15px;
+            flex-direction: column;
+            gap: 5px;
         }
         
-        .profile-section {
+        .main-content-row {
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         .profile-icon {
-            font-size: 2.5rem;
+            font-size: 1.5rem;
         }
 
         .text-content {
@@ -77,17 +83,20 @@
 
         .username {
             font-weight: bold;
-            font-size: 1.1rem;
+            font-size: 1rem;
             line-height: 1;
         }
 
-        .caption {
+        .caption-row {
+            padding-left: 5px;
             font-size: 0.9rem;
         }
         
         .subscribe-btn {
             display: flex;
             align-items: center;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.8rem;
             gap: 5px;
             background-color: #ff0000;
             border-color: #ff0000;
@@ -98,18 +107,17 @@
             border-color: #cc0000;
         }
 
-        /* [BARU] CSS untuk navbar vertikal di kanan */
+        /* CSS untuk navbar vertikal di kanan */
         .right-nav {
             position: fixed;
-            top: 50%;
+            bottom: 90px;
             right: 10px;
-            transform: translateY(-50%); /* Menempatkan navbar di tengah vertikal */
             z-index: 10;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px; /* Jarak antar ikon */
-            background-color: transparent; /* Membuat latar belakang transparan */
+            gap: 10px; /* Jarak antar ikon telah dikurangi */
+            background-color: transparent;
         }
 
         .right-nav .nav-link {
@@ -118,7 +126,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 5px;
+            gap: 2px;
         }
 
         .right-nav .nav-link i {
@@ -131,18 +139,20 @@
     <main class="container mt-3">
         </main>
 
-    <div class="fixed-bottom-content">
-        <div class="profile-section">
-            <i class="bi bi-person-circle profile-icon"></i>
-            <div class="text-content">
+    <div class="fixed-bottom-container">
+        <div class="main-content-row">
+            <div class="profile-section">
+                <i class="bi bi-person-circle profile-icon"></i>
                 <div class="username">@aqsa1610</div>
-                <div class="caption">chots hati ini</div>
             </div>
+            <button class="btn btn-danger btn-sm subscribe-btn">
+                <i class="bi bi-play-circle-fill"></i>
+                <span>Subscribe</span>
+            </button>
         </div>
-        <button class="btn btn-danger btn-sm subscribe-btn">
-            <i class="bi bi-play-circle-fill"></i>
-            <span>Subscribe</span>
-        </button>
+        <div class="caption-row">
+            chots hati ini
+        </div>
     </div>
 
     <nav class="right-nav">
@@ -165,10 +175,6 @@
         <a class="nav-link" href="#">
             <i class="bi bi-repeat"></i>
             <span>Repeat</span>
-        </a>
-        <a class="nav-link" href="#">
-            <i class="bi bi-person-circle"></i>
-            <span>User</span>
         </a>
     </nav>
 
