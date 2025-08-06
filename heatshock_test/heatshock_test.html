@@ -19,46 +19,64 @@
     }
   </style>
 </head>
-<body class="p-4">
+<body class="p-3">
 
-  <h2 class="text-center mb-4">Pengujian Heatshock</h2>
+  <div class="card p-4 border border-secondary shadow-sm">
 
-  <!-- Baris input diameter dan manrel -->
-  <div class="d-flex flex-nowrap mb-2" style="gap: 10px;">
-    <div class="flex-fill">
-      <label for="diameterKabel" class="form-label fw-bold">Diameter Kabel</label>
-      <input type="number" class="form-control" id="diameterKabel" oninput="updatePerkalian()" placeholder="mm">
-    </div>
-    <div class="flex-fill">
-      <label for="manrel" class="form-label fw-bold" style="color: black;">Manrel yang Dipakai</label>
-      <input type="text" class="form-control" id="manrel" readonly>
-    </div>
-  </div>
+    <!-- Judul -->
+    <h2 class="text-center mb-2">Pengujian Heatshock</h2>
+    <hr class="mt-0 mb-4">
 
-  <!-- Teks penjelasan -->
-  <div class="text-center mb-4">
-    <span id="catatanPerkalian" class="fst-italic d-block">
-      <em>Untuk diameter (user input) kalikan dengan 3, 8, 12</em>
-    </span>
-  </div>
+    <!-- Input Diameter dan Manrel -->
+    <div class="d-flex flex-nowrap mb-2" style="gap: 10px;">
+      <div class="flex-fill">
+        <label for="diameterKabel" class="form-label fw-bold">Diameter Kabel</label>
+        <input type="number" class="form-control" id="diameterKabel" oninput="updatePerkalian()" placeholder="mm">
+      </div>
+      <div class="flex-fill">
+        <label for="manrel" class="form-label fw-bold">Manrel yang Dipakai</label>
+        <input type="text" class="form-control" id="manrel" readonly>
+      </div>
+    </div>
 
-  <!-- Garis pembatas -->
-  <hr>
+    <!-- Teks Penjelasan -->
+    <div class="text-center mb-4">
+      <span id="catatanPerkalian" class="fst-italic d-block">
+        <em>Untuk diameter (user input) kalikan dengan 3, 8, 12</em>
+      </span>
+    </div>
 
-  <!-- Baris 3 kolom -->
-  <div class="row mb-3">
-    <div class="col-md-4 mb-3">
-      <label class="form-label fw-bold">Suhu Pengujian</label>
-      <div><strong class="text-success">121°C ± 1°C</strong></div>
+    <hr>
+
+    <!-- Baris 3 Kolom -->
+    <div class="row mb-3">
+      <div class="col-md-4 mb-3">
+        <label class="form-label fw-bold">Suhu Pengujian</label>
+        <div><strong class="text-success">121°C ± 1°C</strong></div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <label class="form-label fw-bold">Durasi Pengujian</label>
+        <div><strong class="text-success">60 Menit</strong></div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <label class="form-label fw-bold">Spesifikasi</label>
+        <div><strong class="text-success">No Crack after bending</strong></div>
+      </div>
     </div>
-    <div class="col-md-4 mb-3">
-      <label class="form-label fw-bold">Durasi Pengujian</label>
-      <div><strong class="text-success">60 Menit</strong></div>
+
+    <!-- Tombol Navigasi -->
+    <div class="d-flex justify-content-center gap-3 mt-4">
+      <button onclick="history.back()" class="btn btn-outline-secondary">🔙 Kembali</button>
+      <a href="index.html" class="btn btn-outline-primary">🏠 Beranda</a>
+      <a href="cold_bending.html" class="btn btn-outline-info">❄️ Cold Bending</a>
     </div>
-    <div class="col-md-4 mb-3">
-      <label class="form-label fw-bold">Spesifikasi</label>
-      <div><strong class="text-success">No Crack after bending</strong></div>
-    </div>
+
+    <!-- Footer -->
+    <hr class="mt-4">
+    <footer class="text-center text-muted">
+      <small>Williyanto Adi 2025</small>
+    </footer>
+
   </div>
 
   <script>
