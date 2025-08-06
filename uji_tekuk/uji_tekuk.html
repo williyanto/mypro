@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kalkulator Uji Tekuk</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .green-text { color: green; }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 575.98px) {
+      /* paksa dua kolom tetap berdampingan di mobile */
+      .form-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-4">
+    <h4 class="mb-4">Kalkulator Uji Tekuk (Bending Test)</h4>
+
+    <!-- Deskripsi -->
+    <div class="mb-3">
+      <label for="deskripsi" class="form-label">Deskripsi Kabel</label>
+      <input type="text" class="form-control" id="deskripsi">
+    </div>
+
+    <!-- Tipe Kabel & Jumlah Inti -->
+    <div class="form-grid mb-3">
+      <div>
+        <label for="tipe" class="form-label">Tipe Kabel</label>
+        <select class="form-select" id="tipe" onchange="calculate()">
+          <option value="">Pilih</option>
+          <option value="Lead">Kabel dengan Lead Sheath/Lapisan Logam</option>
+          <option value="Lain">Kabel Lain</option>
+        </select>
+      </div>
+      <div>
+        <label for="inti" class="form-label">Jumlah Inti</label>
+        <select class="form-select" id="inti" onchange="calculate()">
+          <option value="">Pilih</option>
+          <option value="1">Inti Tunggal</option>
+          <option value="3">Tiga Inti</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Diameter Konduktor & Diameter Kabel -->
+    <div class="form-grid mb-3">
+      <div>
+        <label for="konduktor" class="form-label">Diameter Konduktor (mm)</label>
+        <input type="number" class="form-control" id="konduktor" oninput="calculate()">
+      </div>
+      <div>
+        <label for="kabel" class="form-label">Diameter Kabel (O/S) (mm)</label>
+        <input type="number" class="form-control" id="kabel" oninput="calculate()">
+      </div>
+    </div>
+
+    <!-- Diameter Drum -->
+    <div class="mb-3">
+      <label for="drum" class="form-label">Diameter Drum (mm)</label>
+      <div class="input-group">
+        <input type="number" class="form-control w-50" id="drum" placeholder="Masukkan nilai" oninput="syncMinimal()">
+        <span class="input-group-text"><strong id="rumus">25 (d+D)+5%</strong></span>
+      </div>
+    </div>
+
+    <!-- Radius Minimal & Maksimal -->
+    <div class="form-grid mb-3">
+      <div>
+        <label for="minimal" class="form-label">Minimal Radius Tekukan (mm)</label>
+        <input type="text" class="form-control green-text" id="minimal" readonly>
+      </div>
+      <div>
+        <label for="maksimal" class="form-label">Max. Radius Tekukan (mm)</label>
+        <input type="text" class="form-control green-text" id="maksimal" readonly>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function syncMinimal() {
+      const drum = document.getElementById("drum").value;
+      document.getElementById("minimal").value = drum;
+    }
+
+    function calculate() {
+      const d = parseFloat(document.getElementById("konduktor").value) || 0;
+      const D = parseFloat(document.getElementById("kabel").value) || 0;
+      const tipe = document.getElementById("tipe").value;
+      const inti = document.getElementById("inti").value;
+
+      let multiplier = 0;
+
+      if (tipe === "Lead" && inti === "1") {
+        multiplier = 25;
+        document.getElementById("rumus").innerHTML = "<strong>25 (d+D)+5%</strong>";
+      } else if (tipe === "Lead" && inti === "3") {
+        multiplier = 20;
+        document.getElementById("rumus").innerHTML = "<strong>20 (d+D)+5%</strong>";
+      } else if (tipe === "Lain" && inti === "1") {
+        multiplier = 20;
+        document.getElementById("rumus").innerHTML = "<strong>20 (d+D)+5%</strong>";
+      } else if (tipe === "Lain" && inti === "3") {
+        multiplier = 15;
+        document.getElementById("rumus").innerHTML = "<strong>15 (d+D)+5%</strong>";
+      } else {
+        document.getElementById("rumus").innerHTML = "<strong>25 (d+D)+5%</strong>";
+      }
+
+      if (multiplier > 0) {
+        let hasil = multiplier * (d + D);
+        hasil += hasil * 0.05;
+        document.getElementById("maksimal").value = Math.round(hasil);
+      } else {
+        document.getElementById("maksimal").value = "";
+      }
+    }
+  </script>
+</body>
+</html>
