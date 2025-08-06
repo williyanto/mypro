@@ -1,147 +1,186 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Radius Tekukan Kabel</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <style>
-    .green-text {
-      color: green;
-    }
-
-    /* Grid layout 2 kolom untuk semua ukuran */
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-    }
-
-    /* Untuk hasil perhitungan */
-    input[readonly] {
-      background-color: #eafbe7;
-      font-weight: bold;
-    }
-
-    @media (max-width: 576px) {
-      .grid-2 input,
-      .grid-2 select {
-        font-size: 14px;
-        padding: 8px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kalkulator Radius Tekukan Kabel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #f0f2f5;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 800px;
+        }
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #333;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        .form-control, .form-select {
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            padding: 10px 15px;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+        }
+        .result-group .form-control {
+            background-color: #e9ecef;
+            font-weight: bold;
+            color: #000;
+        }
+        .result-group .form-control.min-radius {
+            background-color: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+        .formula-text {
+            font-weight: bold;
+            color: #007bff;
+            margin-left: 1rem;
+            align-self: center;
+        }
+        
+        /* Adjustments for smaller screens (e.g., mobile phones) */
+        @media (max-width: 768px) {
+            .grid-2 {
+                gap: 1rem;
+            }
+            .card {
+                padding: 1rem;
+            }
+            .form-label {
+                font-size: 0.9rem;
+            }
+            .form-control, .form-select {
+                padding: 8px 10px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
 </head>
-<body>
-  <div class="container my-4">
-    <h2 class="mb-4 text-center">Form Perhitungan Radius Tekukan</h2>
+<body onload="update()">
+    <div class="container my-5">
+        <div class="card">
+            <h2 class="mb-4 text-center">Kalkulator Radius Tekukan Kabel</h2>
 
-    <!-- Deskripsi -->
-    <div class="mb-3">
-      <label class="form-label fw-bold">Deskripsi Kabel</label>
-      <input type="text" class="form-control" id="deskripsi" />
+            <div class="mb-4">
+                <label for="deskripsi" class="form-label">Deskripsi Kabel</label>
+                <input type="text" class="form-control" id="deskripsi" placeholder="Masukkan deskripsi kabel" />
+            </div>
+
+            <div class="mb-4 grid-2">
+                <div>
+                    <label for="tipe" class="form-label">Tipe Kabel</label>
+                    <select class="form-select" id="tipe">
+                        <option value="lead" selected>Kabel dengan Lead Sheath/Lapisan Logam</option>
+                        <option value="lain">Kabel Lain</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="inti" class="form-label">Jumlah Inti</label>
+                    <select class="form-select" id="inti">
+                        <option value="1" selected>Inti Tunggal</option>
+                        <option value="3">Tiga Inti</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-4 grid-2">
+                <div>
+                    <label for="d" class="form-label">Diameter Konduktor (mm)</label>
+                    <input type="number" class="form-control" id="d" placeholder="Contoh: 10" />
+                </div>
+                <div>
+                    <label for="D" class="form-label">Diameter Kabel (O/S) (mm)</label>
+                    <input type="number" class="form-control" id="D" placeholder="Contoh: 25" />
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label for="drum" class="form-label">Diameter Drum (mm)</label>
+                <div class="d-flex align-items-center">
+                    <input type="number" class="form-control me-3" id="drum" placeholder="Contoh: 800" style="max-width: 250px" />
+                    <span id="rumus" class="formula-text"></span>
+                </div>
+            </div>
+
+            <div class="mb-0 grid-2 result-group">
+                <div>
+                    <label for="min" class="form-label">Minimal Radius Tekukan (mm)</label>
+                    <input type="text" class="form-control min-radius" id="min" readonly />
+                </div>
+                <div>
+                    <label for="max" class="form-label">Max. Radius Tekukan (mm)</label>
+                    <input type="text" class="form-control min-radius" id="max" readonly />
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Tipe kabel & Jumlah inti -->
-    <div class="mb-3 grid-2">
-      <div>
-        <label class="form-label fw-bold">Tipe Kabel</label>
-        <select class="form-select" id="tipe">
-          <option value="lead">Kabel dengan Lead Sheath/Lapisan Logam</option>
-          <option value="lain">Kabel Lain</option>
-        </select>
-      </div>
-      <div>
-        <label class="form-label fw-bold">Jumlah Inti</label>
-        <select class="form-select" id="inti">
-          <option value="1">Inti Tunggal</option>
-          <option value="3">Tiga Inti</option>
-        </select>
-      </div>
-    </div>
+    <script>
+        const d = document.getElementById("d");
+        const D = document.getElementById("D");
+        const tipe = document.getElementById("tipe");
+        const inti = document.getElementById("inti");
+        const drum = document.getElementById("drum");
+        const min = document.getElementById("min");
+        const max = document.getElementById("max");
+        const rumus = document.getElementById("rumus");
 
-    <!-- Diameter konduktor & kabel -->
-    <div class="mb-3 grid-2">
-      <div>
-        <label class="form-label fw-bold">Diameter Konduktor (mm)</label>
-        <input type="number" class="form-control" id="d" />
-      </div>
-      <div>
-        <label class="form-label fw-bold">Diameter Kabel (O/S) (mm)</label>
-        <input type="number" class="form-control" id="D" />
-      </div>
-    </div>
+        function update() {
+            const vd = parseFloat(d.value) || 0;
+            const vD = parseFloat(D.value) || 0;
+            const t = tipe.value;
+            const i = inti.value;
+            const vdrum = parseFloat(drum.value);
 
-    <!-- Diameter Drum dan rumus -->
-    <div class="mb-3">
-      <label class="form-label fw-bold">Diameter Drum (mm)</label>
-      <div class="d-flex align-items-center">
-        <input type="number" class="form-control me-3" id="drum" style="max-width: 200px" />
-        <span id="rumus" class="fw-bold"></span>
-      </div>
-    </div>
+            let faktor = 0;
+            let formulaText = "";
 
-    <!-- Hasil radius -->
-    <div class="mb-3 grid-2">
-      <div>
-        <label class="form-label fw-bold">Minimal Radius Tekukan (mm)</label>
-        <input type="text" class="form-control green-text" id="min" readonly />
-      </div>
-      <div>
-        <label class="form-label fw-bold">Max. Radius Tekukan (mm)</label>
-        <input type="text" class="form-control green-text" id="max" readonly />
-      </div>
-    </div>
-  </div>
+            if (t === "lead" && i === "1") {
+                faktor = 25;
+                formulaText = "(25 x (d + D)) + 5%";
+            } else if (t === "lead" && i === "3") {
+                faktor = 20;
+                formulaText = "(20 x (d + D)) + 5%";
+            } else if (t === "lain" && i === "1") {
+                faktor = 20;
+                formulaText = "(20 x (d + D)) + 5%";
+            } else if (t === "lain" && i === "3") {
+                faktor = 15;
+                formulaText = "(15 x (d + D)) + 5%";
+            }
 
-  <script>
-    const d = document.getElementById("d");
-    const D = document.getElementById("D");
-    const tipe = document.getElementById("tipe");
-    const inti = document.getElementById("inti");
-    const drum = document.getElementById("drum");
-    const min = document.getElementById("min");
-    const max = document.getElementById("max");
-    const rumus = document.getElementById("rumus");
+            const minBendingRadius = faktor * (vd + vD);
+            const finalMinBendingRadius = minBendingRadius + (minBendingRadius * 0.05);
 
-    function update() {
-      const vd = parseFloat(d.value) || 0;
-      const vD = parseFloat(D.value) || 0;
-      const t = tipe.value;
-      const i = inti.value;
+            if (!isNaN(finalMinBendingRadius) && finalMinBendingRadius > 0) {
+                min.value = vdrum || "";
+                max.value = Math.round(finalMinBendingRadius); 
+                rumus.innerText = formulaText;
+            } else {
+                min.value = "";
+                max.value = "";
+                rumus.innerText = "";
+            }
+        }
 
-      let faktor = 0;
-      let formulaText = "";
-
-      if (t === "lead" && i === "1") {
-        faktor = 25;
-        formulaText = "25(d+D)+5%";
-      } else if (t === "lead" && i === "3") {
-        faktor = 20;
-        formulaText = "20(d+D)+5%";
-      } else if (t === "lain" && i === "1") {
-        faktor = 20;
-        formulaText = "20(d+D)+5%";
-      } else if (t === "lain" && i === "3") {
-        faktor = 15;
-        formulaText = "15(d+D)+5%";
-      }
-
-      const nilai = faktor * (vd + vD);
-      const hasil = nilai + (nilai * 0.05);
-
-      if (!isNaN(hasil)) {
-        max.value = Math.round(hasil);
-        rumus.innerText = formulaText;
-      } else {
-        max.value = "";
-        rumus.innerText = "";
-      }
-
-      min.value = drum.value;
-    }
-
-    [d, D, tipe, inti, drum].forEach(el => el.addEventListener("input", update));
-  </script>
+        window.addEventListener('load', update);
+        [d, D, tipe, inti, drum].forEach(el => el.addEventListener("input", update));
+    </script>
 </body>
 </html>
