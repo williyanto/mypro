@@ -1,398 +1,185 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>My Project</title>
-  <link rel="icon" type="image/png" href="./icon/icon.png" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <style>
-    :root {
-      --primary-color: #007bff;
-      --secondary-color: #6c757d;
-      --body-bg-light: #f8f9fa;
-      --body-bg-dark: #343a40;
-      --text-color-light: #212529;
-      --text-color-dark: #f8f9fa;
-    }
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <title>My Projects</title>
 
-    * {
-      box-sizing: border-box;
-      padding: 0;
-      margin: 0;
-    }
-
-    html, body {
-      height: 100%;
-      max-width: 100vw;
-      overflow-x: hidden;
-      scroll-behavior: smooth;
-      font-family: 'Inter', sans-serif;
-      background-color: var(--body-bg-light);
-      color: var(--text-color-light);
-      transition: background-color 0.3s ease, color 0.3s ease;
-      display: flex;
-      flex-direction: column;
-    }
-
-    body.dark-mode {
-      background-color: var(--body-bg-dark);
-      color: var(--text-color-dark);
-    }
-
-    .container-fluid {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      padding: 10px 10px 0;
-      width: 100%;
-    }
-
-    h1 {
-      font-size: 1.75rem;
-      font-weight: 700;
-      margin: 10px 0 32px;
-      text-align: center;
-      transition: color 0.3s ease;
-    }
-
-    .custom-hr {
-      width: 100%;
-      max-width: 600px;
-      margin: 0 auto 24px auto;
-      border: none;
-      border-top: 2px solid #000;
-      background: none;
-      height: 2px;
-      border-radius: 2px;
-      transition: border-color 0.3s;
-    }
-    body.dark-mode .custom-hr {
-      border-top: 2px solid #fff;
-    }
-
-    body.dark-mode h1 {
-      color: var(--text-color-dark);
-    }
-
-    /* Tombol Proyek */
-    .row {
-      width: 100%;
-      max-width: 600px;
-    }
-
-    .project-button {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 15px 10px;
-      min-height: 100px;
-      text-align: center;
-      text-decoration: none;
-      color: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      font-weight: 600;
-      font-size: 1.05em;
-      width: 100%;
-      transition: all 0.3s ease;
-    }
-
-    .project-button i {
-      font-size: 2em;
-      margin-bottom: 8px;
-      color: rgba(255, 255, 255, 0.9);
-    }
-
-    .project-button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-      opacity: 0.95;
-    }
-
-    .btn-custom-1 { background: linear-gradient(135deg, #1abc9c, #16a085); }
-    .btn-custom-2 { background: linear-gradient(135deg, #3498db, #2980b9); }
-    .btn-custom-3 { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
-    .btn-custom-4 { background: linear-gradient(135deg, #e67e22, #d35400); }
-    .btn-custom-5 { background: linear-gradient(135deg, #f1c40f, #f39c12); }
-    .btn-custom-6 { background: linear-gradient(135deg, #e74c3c, #c0392b); }
-    .btn-custom-7 { background: linear-gradient(135deg, #34495e, #2c3e50); }
-    .btn-custom-8 { background: linear-gradient(135deg, #27ae60, #229954); }
-
-    /* Hidden projects row style - agar jarak antar baris sama seperti grid utama */
-    .hidden-projects-row {
-      width: 100%;
-      max-width: 600px;
-      margin-top: 0 !important;
-      margin-bottom: 0 !important;
-      /* Bootstrap g-3 tetap berlaku */
-    }
-
-    .hidden-projects {
-      display: none;
-    }
-
-    .show-more-btn-wrapper {
-      width: 100%;
-      max-width: 600px;
-      margin: 15px auto 0 auto;
-      text-align: center;
-    }
-
-    .show-more-btn {
-      display: inline-block;
-      background: var(--primary-color);
-      color: #fff;
-      border: none;
-      border-radius: 30px;
-      padding: 8px 28px;
-      font-size: 1em;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.10);
-      transition: background 0.2s, box-shadow 0.2s;
-    }
-    .show-more-btn:hover {
-      background: #0056b3;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    }
-    body.dark-mode .show-more-btn {
-      background: #9b59b6;
-    }
-    body.dark-mode .show-more-btn:hover {
-      background: #6c3483;
-    }
-
-    .mode-toggle-wrapper {
-      margin-top: 20px;
-      margin-bottom: 10px;
-      text-align: center;
-    }
-
-    .mode-toggle {
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 8px 16px;
-      font-size: 1em;
-      border-radius: 50px;
-      color: var(--primary-color);
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .mode-toggle:hover {
-      background-color: rgba(0, 123, 255, 0.1);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    }
-
-    body.dark-mode .mode-toggle {
-      color: #9b59b6;
-    }
-
-    body.dark-mode .mode-toggle:hover {
-      background-color: rgba(155, 89, 182, 0.2);
-    }
-
-    .footer-hr {
-      width: 100%;
-      max-width: 600px;
-      margin: 6px auto 0 auto;
-      border: none;
-      border-top: 2px solid #000;
-      background: none;
-      height: 2px;
-      border-radius: 2px;
-      transition: border-color 0.3s;
-    }
-    body.dark-mode .footer-hr {
-      border-top: 2px solid #fff;
-    }
-
-    .footer-text {
-      font-size: 0.95em;
-      color: var(--secondary-color);
-      text-align: center;
-      padding: 14px 0 18px 0;
-      letter-spacing: 1px;
-      font-weight: 600;
-    }
-
-    body.dark-mode .footer-text {
-      color: #bdc3c7;
-    }
-
-    @media (max-width: 576px) {
-      h1 {
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #ffffff;
+        color: #333;
+      }
+      .header {
+        background-color: #ffffff;
+        color: #333;
+        padding: 2rem 0;
+        text-align: center;
+        border-bottom: 1px solid #dee2e6;
+        margin-bottom: 2rem;
+      }
+      .btn-project {
+        font-weight: bold;
+        font-size: 1.25rem;
+        padding: 1rem;
+        width: 100%;
+        margin-bottom: 1rem;
+        /* Menggunakan flexbox untuk penataan ikon dan teks */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        
+        /* Animasi Tombol */
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+      }
+      .btn-project:hover {
+        transform: scale(1.05); /* Membesar saat di-hover */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+      .btn-project i {
+        margin-right: 10px;
         font-size: 1.5rem;
-        margin: 5px 0 18px;
+        transition: transform 0.3s ease-in-out;
       }
+      .btn-project:hover i {
+        transform: rotate(5deg); /* Ikon berputar sedikit saat di-hover */
+      }
+      .footer {
+        background-color: #ffffff;
+        color: #333;
+        padding: 1.5rem 0;
+        text-align: center;
+        border-top: 1px solid #dee2e6;
+        margin-top: 2rem;
+      }
+      
+      /* Kelas Warna Tombol */
+      .btn-primary { background-color: #3498db; border-color: #3498db; }
+      .btn-success { background-color: #2ecc71; border-color: #2ecc71; }
+      .btn-info { background-color: #3498db; border-color: #3498db; }
+      .btn-warning { background-color: #f1c40f; border-color: #f1c40f; }
+      .btn-danger { background-color: #e74c3c; border-color: #e74c3c; }
+      .btn-secondary { background-color: #95a5a6; border-color: #95a5a6; }
+      .btn-dark { background-color: #34495e; border-color: #34495e; }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <h1>My Projects</h1>
+    </header>
 
-      .custom-hr, .footer-hr {
-        margin-bottom: 16px;
-        max-width: 100%;
-      }
+    <div class="container my-5">
+      <div class="row">
 
-      .footer-hr {
-        margin-top: 4px;
-      }
+        <div class="col-6 col-md-6 col-lg-3">
+          <a href="./1.kalkulator_hambatan_konduktor/hk_index.html" class="btn btn-primary btn-project">
+            <i class="fas fa-code"></i> Hambatan Konduktor
+          </a>
+        </div>
 
-      .show-more-btn-wrapper {
-        margin-top: 8px;
-      }
+        <div class="col-6 col-md-6 col-lg-3">
+          <a href="./2.kalkulator_hambatan_trial_withTCU/Kalkulator_hambatan_trial_withTCU.html" class="btn btn-success btn-project">
+            <i class="fas fa-cogs"></i> Hambatan Konduktor2
+          </a>
+        </div>
 
-      .hidden-projects-row {
-        max-width: 100%;
-      }
+        <div class="col-6 col-md-6 col-lg-3">
+          <a href="./3.konverter_hambatan_IR/konverter_hambatan_ir.html" class="btn btn-info btn-project">
+            <i class="fas fa-database"></i> Konversi hambatan
+          </a>
+        </div>
 
-      .project-button {
-        font-size: 1em;
-        min-height: 90px;
-        margin-bottom: 10px;
-      }
+        <div class="col-6 col-md-6 col-lg-3">
+          <a href="./4.konverter_panjang/konverter_panjang.html" class="btn btn-warning btn-project">
+            <i class="fas fa-pencil-ruler"></i> Konversi panjang
+          </a>
+        </div>
 
-      .project-button i {
-        font-size: 1.8em;
-        margin-bottom: 5px;
-      }
+        <div class="col-6 col-md-6 col-lg-3">
+          <a href="./5.kalkulator_dimensi/kalkulator_dimensi.html" class="btn btn-danger btn-project">
+            <i class="fas fa-mobile-alt"></i> Kalkulator Dimensi
+          </a>
+        </div>
 
-      .mode-toggle-wrapper {
-        margin-top: 15px;
-        margin-bottom: 5px;
-      }
-    }
-  </style>
-</head>
-<body>
-  <div class="container-fluid">
-    <h1>My Project</h1>
-    <br>
-    <hr class="custom-hr" />
-    <div class="row row-cols-2 g-3">
-      <div class="col">
-        <a href="kalkulator_hambatan_konduktor/hk_index.html" class="project-button btn-custom-1">
-          <i class="fas fa-calculator"></i><span>Hambatan Konduktor</span>
-        </a>
-      </div>
-      <div class="col">
-        <a href="./lainnya/Kalkulator_hambatan_trial_withTCU.html" class="project-button btn-custom-2">
-          <i class="fas fa-bolt"></i><span>Kalkulator hambatan trial</span>
-        </a>
-      </div>
-      <div class="col">
-        <a href=".//lainnya/chots.html" class="project-button btn-custom-3">
-          <i class="fas fa-thermometer-half"></i><span>YouSup Chots Kids</span>
-        </a>
-      </div>
-      <div class="col">
-        <a href="./heatshock_test/heatshock_test.html" class="project-button btn-custom-5">
-          <i class="fas fa-ruler"></i><span>Pengujian Heatshock</span>
-        </a>
-      </div>
-      <div class="col">
-        <a href="./lainnya/konverter_hambatan.html" class="project-button btn-custom-5">
-          <i class="fas fa-code"></i><span>Koversi Hambatan</span>
-        </a>
-      </div>
-      <div class="col">
-        <a href="./lainnya/konverter_panjang.html" class="project-button btn-custom-6">
-          <i class="fas fa-flask"></i><span>Konversi Panjang</span>
-        </a>
+        <div class="col-6 col-md-6 col-lg-3">
+          <a href="./6.yusup/chots_fix_banget.html" class="btn btn-primary btn-project">
+            <i class="fas fa-cloud"></i> YuSup Chots
+          </a>
+        </div>
+
+        <div class="col-6 col-md-6 col-lg-3">
+          <a href="./7.hitungpanjangkabel_didrum/hitungpanjangkabel_didrum.html" class="btn btn-success btn-project">
+            <i class="fas fa-server"></i> Hitung Panjang
+          </a>
+        </div>
+
+        <div class="col-6 col-md-6 col-lg-3">
+          <a href="./8.uji_tekuk_bending_fix/8.uji_tekuk_bending_fix.html" class="btn btn-info btn-project">
+            <i class="fas fa-robot"></i> Pengujian Bending
+          </a>
+        </div>
+
+        <div class="col-6 col-md-6 col-lg-3">
+          <a href="./9.coldbending_test/coldbending_test.html" class="btn btn-warning btn-project">
+            <i class="fas fa-chart-line"></i> Pengujian Coldbending
+          </a>
+        </div>
+        
+        <div class="col-6 col-md-6 col-lg-3">
+          <a href="./10.heatshock_test/heatshock_test.html" class="btn btn-danger btn-project">
+            <i class="fas fa-lock"></i> Pengujian Heatshock
+          </a>
+        </div>
+        
+        <div class="col-6 col-md-6 col-lg-3">
+          <a href="#" class="btn btn-primary btn-project">
+            <i class="fas fa-cube"></i> Proyek 11
+          </a>
+        </div>
+
+        <div class="col-6 col-md-6 col-lg-3">
+          <a href="#" class="btn btn-success btn-project">
+            <i class="fas fa-laptop-code"></i> Proyek 12
+          </a>
+        </div>
+
+        <div class="col-6 col-md-6 col-lg-3">
+          <a href="#" class="btn btn-info btn-project">
+            <i class="fas fa-paper-plane"></i> Proyek 13
+          </a>
+        </div>
+
+        <div class="col-6 col-md-6 col-lg-3">
+          <a href="#" class="btn btn-warning btn-project">
+            <i class="fas fa-lightbulb"></i> Proyek 14
+          </a>
+        </div>
+
+        <div class="col-6 col-md-6 col-lg-3">
+          <a href="#" class="btn btn-danger btn-project">
+            <i class="fas fa-graduation-cap"></i> Proyek 15
+          </a>
+        </div>
+        
+        <div class="col-6 col-md-6 col-lg-3">
+          <a href="#" class="btn btn-primary btn-project">
+            <i class="fas fa-terminal"></i> Proyek 16
+          </a>
+        </div>
       </div>
     </div>
 
-    <!-- Hidden projects: always in 2 columns, with the same gutter as main grid -->
-    <div class="row row-cols-2 g-3 hidden-projects-row hidden-projects" id="hiddenProjects">
-      <div class="col">
-        <a href="./uji_tekuk/uji_tekuk.html" class="project-button btn-custom-7">
-          <i class="fas fa-robot"></i><span>Uji Tekuk</span>
-        </a>
-      </div>
-      <div class="col">
-        <a href="./lainnya/yusup_fix.html" class="project-button btn-custom-7">
-          <i class="fa-solid fa-flask"></i></i><span>Yusup</span>
-        </a>
-      </div>
-    </div>
+    <footer class="footer">
+      <p>&copy; Williyanto Adi 2025</p>
+    </footer>
 
-    <div class="show-more-btn-wrapper">
-      <button id="showMoreBtn" class="show-more-btn">
-        <i class="fas fa-chevron-down"></i> Tampilkan Proyek Lainnya
-      </button>
-    </div>
-
-    <div class="mode-toggle-wrapper">
-      <button id="modeToggle" class="mode-toggle" aria-label="Toggle dark and light mode">
-        <i class="fas fa-moon"></i> <span id="modeText">Mode Terang</span>
-      </button>
-    </div>
-  </div>
-
-  <hr class="footer-hr" />
-  <div class="footer-text">
-    Made by Williyanto Adi 2025
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Dark mode toggle
-      const modeToggleBtn = document.getElementById('modeToggle');
-      const body = document.body;
-      const modeIcon = modeToggleBtn.querySelector('i');
-      const modeText = document.getElementById('modeText');
-
-      function updateModeToggleUI(isDarkMode) {
-        if (isDarkMode) {
-          modeText.textContent = 'Mode Gelap';
-          modeIcon.classList.replace('fa-moon', 'fa-sun');
-        } else {
-          modeText.textContent = 'Mode Terang';
-          modeIcon.classList.replace('fa-sun', 'fa-moon');
-        }
-      }
-
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme === 'dark') {
-        body.classList.add('dark-mode');
-        updateModeToggleUI(true);
-      } else {
-        body.classList.remove('dark-mode');
-        updateModeToggleUI(false);
-      }
-
-      modeToggleBtn.addEventListener('click', () => {
-        const isDarkMode = body.classList.toggle('dark-mode');
-        localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
-        updateModeToggleUI(isDarkMode);
-      });
-
-      // Show more projects logic
-      const hiddenProjects = document.getElementById('hiddenProjects');
-      const showMoreBtn = document.getElementById('showMoreBtn');
-      let shown = false;
-      showMoreBtn.addEventListener('click', () => {
-        shown = !shown;
-        if (shown) {
-          hiddenProjects.style.display = "flex";
-          showMoreBtn.innerHTML = '<i class="fas fa-chevron-up"></i> Sembunyikan Proyek Lainnya';
-        } else {
-          hiddenProjects.style.display = "none";
-          showMoreBtn.innerHTML = '<i class="fas fa-chevron-down"></i> Tampilkan Proyek Lainnya';
-        }
-      });
-    });
-  </script>
-</body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
 </html>
-
