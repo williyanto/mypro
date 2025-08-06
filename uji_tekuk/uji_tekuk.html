@@ -84,7 +84,9 @@
     <div class="container my-5">
         <div class="card">
             <h2 class="mb-2 text-center">Kalkulator Radius Tekukan Kabel</h2>
-            <hr class="mb-4" /> <div class="mb-4">
+            <hr class="mb-4" />
+
+            <div class="mb-4">
                 <label for="deskripsi" class="form-label">Deskripsi Kabel</label>
                 <input type="text" class="form-control" id="deskripsi" placeholder="Masukkan deskripsi kabel" />
             </div>
@@ -118,11 +120,8 @@
             </div>
 
             <div class="mb-4">
-                <label for="drum" class="form-label">Diameter Drum (mm)</label>
-                <div class="d-flex align-items-center">
-                    <input type="number" class="form-control me-3" id="drum" placeholder="Contoh: 800" style="max-width: 250px" />
-                    <span id="rumus" class="formula-text"></span>
-                </div>
+                <label for="drum" class="form-label">Diameter Drum (mm) <span id="rumus" class="formula-text"></span></label>
+                <input type="number" class="form-control" id="drum" placeholder="Contoh: 800" />
             </div>
 
             <div class="mb-0 grid-2 result-group">
