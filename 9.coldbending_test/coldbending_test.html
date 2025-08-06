@@ -27,15 +27,15 @@
     <h2 class="text-center mb-2">Pengujian Cold Bending</h2>
     <hr class="mt-0 mb-4">
 
-    <!-- Input Diameter dan Manrel -->
+    <!-- Input Diameter dan mandrel -->
     <div class="d-flex flex-nowrap mb-2" style="gap: 10px;">
       <div class="flex-fill">
         <label for="diameterKabel" class="form-label fw-bold">Diameter Kabel</label>
         <input type="number" class="form-control" id="diameterKabel" oninput="updatePerkalian()" placeholder="mm">
       </div>
       <div class="flex-fill">
-        <label for="manrel" class="form-label fw-bold">Manrel yang Dipakai</label>
-        <input type="text" class="form-control" id="manrel" readonly>
+        <label for="mandrel" class="form-label fw-bold">Mandrel yang Dipakai</label>
+        <input type="text" class="form-control" id="mandrel" readonly>
       </div>
     </div>
 
@@ -67,7 +67,7 @@
     <!-- Tombol Navigasi -->
     <div class="d-flex justify-content-center gap-3 mt-4">
       <button onclick="history.back()" class="btn btn-outline-secondary">🔙 Kembali</button>
-      <a href="index.html" class="btn btn-outline-primary">🏠 Beranda</a>
+      <a href="/index.html" class="btn btn-outline-primary">🏠 Beranda</a>
       <a href="..//10.heatshock_test/heatshock_test.html" class="btn btn-outline-info">🔥 Heatshock</a>
     </div>
 
@@ -82,7 +82,7 @@
   <script>
     function updatePerkalian() {
       const diameter = parseFloat(document.getElementById("diameterKabel").value);
-      const manrel = document.getElementById("manrel");
+      const mandrel = document.getElementById("mandrel");
       const catatan = document.getElementById("catatanPerkalian");
 
       let faktor = null;
@@ -95,18 +95,18 @@
 
         if (faktor) {
           const hasil = (diameter * faktor).toFixed(2);
-          manrel.value = hasil + " mm";
-          manrel.classList.add("fw-bold", "text-success");
+          mandrel.value = hasil + " mm";
+          mandrel.classList.add("fw-bold", "text-success");
 
           catatan.innerHTML = `<em>Untuk diameter <strong class="text-success">${diameter}</strong> mm kalikan dengan <strong class="text-success">${faktor}</strong></em>`;
         } else {
-          manrel.value = "";
-          manrel.classList.remove("fw-bold", "text-success");
+          mandrel.value = "";
+          mandrel.classList.remove("fw-bold", "text-success");
           catatan.innerHTML = `<em>Untuk diameter (user input) kalikan dengan 8 atau 10</em>`;
         }
       } else {
-        manrel.value = "";
-        manrel.classList.remove("fw-bold", "text-success");
+        mandrel.value = "";
+        mandrel.classList.remove("fw-bold", "text-success");
         catatan.innerHTML = `<em>Untuk diameter (user input) kalikan dengan 8 atau 10</em>`;
       }
     }
