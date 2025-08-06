@@ -54,6 +54,14 @@
             align-self: center;
         }
         
+        /* Gaya untuk footer */
+        .footer {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
         /* Adjustments for smaller screens (e.g., mobile phones) */
         @media (max-width: 768px) {
             .grid-2 {
@@ -75,9 +83,8 @@
 <body onload="update()">
     <div class="container my-5">
         <div class="card">
-            <h2 class="mb-4 text-center">Kalkulator Radius Tekukan Kabel</h2>
-
-            <div class="mb-4">
+            <h2 class="mb-2 text-center">Kalkulator Radius Tekukan Kabel</h2>
+            <hr class="mb-4" /> <div class="mb-4">
                 <label for="deskripsi" class="form-label">Deskripsi Kabel</label>
                 <input type="text" class="form-control" id="deskripsi" placeholder="Masukkan deskripsi kabel" />
             </div>
@@ -127,6 +134,10 @@
                     <label for="max" class="form-label">Max. Radius Tekukan (mm)</label>
                     <input type="text" class="form-control min-radius" id="max" readonly />
                 </div>
+            </div>
+
+            <div class="footer">
+                Williyanto Adi 2025
             </div>
         </div>
     </div>
