@@ -1,185 +1,118 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="id">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <title>My Projects</title>
-
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        background-color: #ffffff;
-        color: #333;
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pengujian Heatshock</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    #catatanPerkalian em {
+      font-style: italic;
+    }
+    @media (max-width: 576px) {
+      .flex-nowrap {
+        flex-wrap: nowrap !important;
       }
-      .header {
-        background-color: #ffffff;
-        color: #333;
-        padding: 2rem 0;
-        text-align: center;
-        border-bottom: 1px solid #dee2e6;
-        margin-bottom: 2rem;
-      }
-      .btn-project {
+      .form-label {
         font-weight: bold;
-        font-size: 1.25rem;
-        padding: 1rem;
-        width: 100%;
-        margin-bottom: 1rem;
-        /* Menggunakan flexbox untuk penataan ikon dan teks */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        
-        /* Animasi Tombol */
-        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
       }
-      .btn-project:hover {
-        transform: scale(1.05); /* Membesar saat di-hover */
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      }
-      .btn-project i {
-        margin-right: 10px;
-        font-size: 1.5rem;
-        transition: transform 0.3s ease-in-out;
-      }
-      .btn-project:hover i {
-        transform: rotate(5deg); /* Ikon berputar sedikit saat di-hover */
-      }
-      .footer {
-        background-color: #ffffff;
-        color: #333;
-        padding: 1.5rem 0;
-        text-align: center;
-        border-top: 1px solid #dee2e6;
-        margin-top: 2rem;
-      }
-      
-      /* Kelas Warna Tombol */
-      .btn-primary { background-color: #3498db; border-color: #3498db; }
-      .btn-success { background-color: #2ecc71; border-color: #2ecc71; }
-      .btn-info { background-color: #3498db; border-color: #3498db; }
-      .btn-warning { background-color: #f1c40f; border-color: #f1c40f; }
-      .btn-danger { background-color: #e74c3c; border-color: #e74c3c; }
-      .btn-secondary { background-color: #95a5a6; border-color: #95a5a6; }
-      .btn-dark { background-color: #34495e; border-color: #34495e; }
-    </style>
-  </head>
-  <body>
-    <header class="header">
-      <h1>My Projects</h1>
-    </header>
+    }
+  </style>
+</head>
+<body class="p-3">
 
-    <div class="container my-5">
-      <div class="row">
+  <div class="card p-4 border border-secondary shadow-sm">
 
-        <div class="col-6 col-md-6 col-lg-3">
-          <a href="#" class="btn btn-primary btn-project">
-            <i class="fas fa-code"></i> Proyek 1
-          </a>
-        </div>
+    <!-- Judul -->
+    <h2 class="text-center mb-2">Pengujian Heatshock</h2>
+    <hr class="mt-0 mb-4">
 
-        <div class="col-6 col-md-6 col-lg-3">
-          <a href="#" class="btn btn-success btn-project">
-            <i class="fas fa-cogs"></i> Proyek 2
-          </a>
-        </div>
-
-        <div class="col-6 col-md-6 col-lg-3">
-          <a href="#" class="btn btn-info btn-project">
-            <i class="fas fa-database"></i> Proyek 3
-          </a>
-        </div>
-
-        <div class="col-6 col-md-6 col-lg-3">
-          <a href="#" class="btn btn-warning btn-project">
-            <i class="fas fa-pencil-ruler"></i> Proyek 4
-          </a>
-        </div>
-
-        <div class="col-6 col-md-6 col-lg-3">
-          <a href="#" class="btn btn-danger btn-project">
-            <i class="fas fa-mobile-alt"></i> Proyek 5
-          </a>
-        </div>
-
-        <div class="col-6 col-md-6 col-lg-3">
-          <a href="#" class="btn btn-primary btn-project">
-            <i class="fas fa-cloud"></i> Proyek 6
-          </a>
-        </div>
-
-        <div class="col-6 col-md-6 col-lg-3">
-          <a href="#" class="btn btn-success btn-project">
-            <i class="fas fa-server"></i> Proyek 7
-          </a>
-        </div>
-
-        <div class="col-6 col-md-6 col-lg-3">
-          <a href="#" class="btn btn-info btn-project">
-            <i class="fas fa-robot"></i> Proyek 8
-          </a>
-        </div>
-
-        <div class="col-6 col-md-6 col-lg-3">
-          <a href="#" class="btn btn-warning btn-project">
-            <i class="fas fa-chart-line"></i> Proyek 9
-          </a>
-        </div>
-        
-        <div class="col-6 col-md-6 col-lg-3">
-          <a href="#" class="btn btn-danger btn-project">
-            <i class="fas fa-lock"></i> Proyek 10
-          </a>
-        </div>
-        
-        <div class="col-6 col-md-6 col-lg-3">
-          <a href="#" class="btn btn-primary btn-project">
-            <i class="fas fa-cube"></i> Proyek 11
-          </a>
-        </div>
-
-        <div class="col-6 col-md-6 col-lg-3">
-          <a href="#" class="btn btn-success btn-project">
-            <i class="fas fa-laptop-code"></i> Proyek 12
-          </a>
-        </div>
-
-        <div class="col-6 col-md-6 col-lg-3">
-          <a href="#" class="btn btn-info btn-project">
-            <i class="fas fa-paper-plane"></i> Proyek 13
-          </a>
-        </div>
-
-        <div class="col-6 col-md-6 col-lg-3">
-          <a href="#" class="btn btn-warning btn-project">
-            <i class="fas fa-lightbulb"></i> Proyek 14
-          </a>
-        </div>
-
-        <div class="col-6 col-md-6 col-lg-3">
-          <a href="#" class="btn btn-danger btn-project">
-            <i class="fas fa-graduation-cap"></i> Proyek 15
-          </a>
-        </div>
-        
-        <div class="col-6 col-md-6 col-lg-3">
-          <a href="#" class="btn btn-primary btn-project">
-            <i class="fas fa-terminal"></i> Proyek 16
-          </a>
-        </div>
+    <!-- Input Diameter dan Manrel -->
+    <div class="d-flex flex-nowrap mb-2" style="gap: 10px;">
+      <div class="flex-fill">
+        <label for="diameterKabel" class="form-label fw-bold">Diameter Kabel</label>
+        <input type="number" class="form-control" id="diameterKabel" oninput="updatePerkalian()" placeholder="mm">
+      </div>
+      <div class="flex-fill">
+        <label for="manrel" class="form-label fw-bold">Manrel yang Dipakai</label>
+        <input type="text" class="form-control" id="manrel" readonly>
       </div>
     </div>
 
-    <footer class="footer">
-      <p>&copy; Williyanto Adi 2025</p>
+    <!-- Teks Penjelasan -->
+    <div class="text-center mb-4">
+      <span id="catatanPerkalian" class="fst-italic d-block">
+        <em>Untuk diameter (user input) kalikan dengan 3, 8, 12</em>
+      </span>
+    </div>
+
+    <hr>
+
+    <!-- Baris 3 Kolom -->
+    <div class="row mb-3">
+      <div class="col-md-4 mb-3">
+        <label class="form-label fw-bold">Suhu Pengujian</label>
+        <div><strong class="text-success">121°C ± 1°C</strong></div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <label class="form-label fw-bold">Durasi Pengujian</label>
+        <div><strong class="text-success">60 Menit</strong></div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <label class="form-label fw-bold">Spesifikasi</label>
+        <div><strong class="text-success">No Crack after bending</strong></div>
+      </div>
+    </div>
+
+    <!-- Tombol Navigasi -->
+    <div class="d-flex justify-content-center gap-3 mt-4">
+      <button onclick="history.back()" class="btn btn-outline-secondary">🔙 Kembali</button>
+      <a href="index.html" class="btn btn-outline-primary">🏠 Beranda</a>
+      <a href="cold_bending.html" class="btn btn-outline-info">❄️ Cold Bending</a>
+    </div>
+
+    <!-- Footer -->
+    <hr class="mt-4">
+    <footer class="text-center text-muted">
+      <small>Williyanto Adi 2025</small>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  </body>
+  </div>
+
+  <script>
+    function updatePerkalian() {
+      const diameter = parseFloat(document.getElementById("diameterKabel").value);
+      const manrel = document.getElementById("manrel");
+      const catatan = document.getElementById("catatanPerkalian");
+
+      let faktor = null;
+      if (!isNaN(diameter)) {
+        if (diameter >= 0 && diameter <= 19.05) {
+          faktor = 3;
+        } else if (diameter >= 19.08 && diameter <= 38.10) {
+          faktor = 8;
+        } else if (diameter >= 38.13) {
+          faktor = 12;
+        }
+
+        if (faktor) {
+          const hasil = (diameter * faktor).toFixed(2);
+          manrel.value = hasil + " mm";
+          manrel.classList.add("fw-bold", "text-success");
+
+          catatan.innerHTML = `<em>Untuk diameter <strong class="text-success">${diameter}</strong> mm kalikan dengan <strong class="text-success">${faktor}</strong></em>`;
+        } else {
+          manrel.value = "";
+          manrel.classList.remove("fw-bold", "text-success");
+          catatan.innerHTML = `<em>Untuk diameter (user input) kalikan dengan 3, 8, 12</em>`;
+        }
+      } else {
+        manrel.value = "";
+        manrel.classList.remove("fw-bold", "text-success");
+        catatan.innerHTML = `<em>Untuk diameter (user input) kalikan dengan 3, 8, 12</em>`;
+      }
+    }
+  </script>
+
+</body>
 </html>
