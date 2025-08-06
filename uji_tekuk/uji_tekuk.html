@@ -1,127 +1,147 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Kalkulator Uji Tekuk</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Radius Tekukan Kabel</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <style>
-    .green-text { color: green; }
-    .form-grid {
+    .green-text {
+      color: green;
+    }
+
+    /* Grid layout 2 kolom untuk semua ukuran */
+    .grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1rem;
     }
-    @media (max-width: 575.98px) {
-      /* paksa dua kolom tetap berdampingan di mobile */
-      .form-grid {
-        grid-template-columns: 1fr 1fr;
+
+    /* Untuk hasil perhitungan */
+    input[readonly] {
+      background-color: #eafbe7;
+      font-weight: bold;
+    }
+
+    @media (max-width: 576px) {
+      .grid-2 input,
+      .grid-2 select {
+        font-size: 14px;
+        padding: 8px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container mt-4">
-    <h4 class="mb-4">Kalkulator Uji Tekuk (Bending Test)</h4>
+  <div class="container my-4">
+    <h2 class="mb-4 text-center">Form Perhitungan Radius Tekukan</h2>
 
     <!-- Deskripsi -->
     <div class="mb-3">
-      <label for="deskripsi" class="form-label">Deskripsi Kabel</label>
-      <input type="text" class="form-control" id="deskripsi">
+      <label class="form-label fw-bold">Deskripsi Kabel</label>
+      <input type="text" class="form-control" id="deskripsi" />
     </div>
 
-    <!-- Tipe Kabel & Jumlah Inti -->
-    <div class="form-grid mb-3">
+    <!-- Tipe kabel & Jumlah inti -->
+    <div class="mb-3 grid-2">
       <div>
-        <label for="tipe" class="form-label">Tipe Kabel</label>
-        <select class="form-select" id="tipe" onchange="calculate()">
-          <option value="">Pilih</option>
-          <option value="Lead">Kabel dengan Lead Sheath/Lapisan Logam</option>
-          <option value="Lain">Kabel Lain</option>
+        <label class="form-label fw-bold">Tipe Kabel</label>
+        <select class="form-select" id="tipe">
+          <option value="lead">Kabel dengan Lead Sheath/Lapisan Logam</option>
+          <option value="lain">Kabel Lain</option>
         </select>
       </div>
       <div>
-        <label for="inti" class="form-label">Jumlah Inti</label>
-        <select class="form-select" id="inti" onchange="calculate()">
-          <option value="">Pilih</option>
+        <label class="form-label fw-bold">Jumlah Inti</label>
+        <select class="form-select" id="inti">
           <option value="1">Inti Tunggal</option>
           <option value="3">Tiga Inti</option>
         </select>
       </div>
     </div>
 
-    <!-- Diameter Konduktor & Diameter Kabel -->
-    <div class="form-grid mb-3">
+    <!-- Diameter konduktor & kabel -->
+    <div class="mb-3 grid-2">
       <div>
-        <label for="konduktor" class="form-label">Diameter Konduktor (mm)</label>
-        <input type="number" class="form-control" id="konduktor" oninput="calculate()">
+        <label class="form-label fw-bold">Diameter Konduktor (mm)</label>
+        <input type="number" class="form-control" id="d" />
       </div>
       <div>
-        <label for="kabel" class="form-label">Diameter Kabel (O/S) (mm)</label>
-        <input type="number" class="form-control" id="kabel" oninput="calculate()">
+        <label class="form-label fw-bold">Diameter Kabel (O/S) (mm)</label>
+        <input type="number" class="form-control" id="D" />
       </div>
     </div>
 
-    <!-- Diameter Drum -->
+    <!-- Diameter Drum dan rumus -->
     <div class="mb-3">
-      <label for="drum" class="form-label">Diameter Drum (mm)</label>
-      <div class="input-group">
-        <input type="number" class="form-control w-50" id="drum" placeholder="Masukkan nilai" oninput="syncMinimal()">
-        <span class="input-group-text"><strong id="rumus">25 (d+D)+5%</strong></span>
+      <label class="form-label fw-bold">Diameter Drum (mm)</label>
+      <div class="d-flex align-items-center">
+        <input type="number" class="form-control me-3" id="drum" style="max-width: 200px" />
+        <span id="rumus" class="fw-bold"></span>
       </div>
     </div>
 
-    <!-- Radius Minimal & Maksimal -->
-    <div class="form-grid mb-3">
+    <!-- Hasil radius -->
+    <div class="mb-3 grid-2">
       <div>
-        <label for="minimal" class="form-label">Minimal Radius Tekukan (mm)</label>
-        <input type="text" class="form-control green-text" id="minimal" readonly>
+        <label class="form-label fw-bold">Minimal Radius Tekukan (mm)</label>
+        <input type="text" class="form-control green-text" id="min" readonly />
       </div>
       <div>
-        <label for="maksimal" class="form-label">Max. Radius Tekukan (mm)</label>
-        <input type="text" class="form-control green-text" id="maksimal" readonly>
+        <label class="form-label fw-bold">Max. Radius Tekukan (mm)</label>
+        <input type="text" class="form-control green-text" id="max" readonly />
       </div>
     </div>
   </div>
 
   <script>
-    function syncMinimal() {
-      const drum = document.getElementById("drum").value;
-      document.getElementById("minimal").value = drum;
-    }
+    const d = document.getElementById("d");
+    const D = document.getElementById("D");
+    const tipe = document.getElementById("tipe");
+    const inti = document.getElementById("inti");
+    const drum = document.getElementById("drum");
+    const min = document.getElementById("min");
+    const max = document.getElementById("max");
+    const rumus = document.getElementById("rumus");
 
-    function calculate() {
-      const d = parseFloat(document.getElementById("konduktor").value) || 0;
-      const D = parseFloat(document.getElementById("kabel").value) || 0;
-      const tipe = document.getElementById("tipe").value;
-      const inti = document.getElementById("inti").value;
+    function update() {
+      const vd = parseFloat(d.value) || 0;
+      const vD = parseFloat(D.value) || 0;
+      const t = tipe.value;
+      const i = inti.value;
 
-      let multiplier = 0;
+      let faktor = 0;
+      let formulaText = "";
 
-      if (tipe === "Lead" && inti === "1") {
-        multiplier = 25;
-        document.getElementById("rumus").innerHTML = "<strong>25 (d+D)+5%</strong>";
-      } else if (tipe === "Lead" && inti === "3") {
-        multiplier = 20;
-        document.getElementById("rumus").innerHTML = "<strong>20 (d+D)+5%</strong>";
-      } else if (tipe === "Lain" && inti === "1") {
-        multiplier = 20;
-        document.getElementById("rumus").innerHTML = "<strong>20 (d+D)+5%</strong>";
-      } else if (tipe === "Lain" && inti === "3") {
-        multiplier = 15;
-        document.getElementById("rumus").innerHTML = "<strong>15 (d+D)+5%</strong>";
-      } else {
-        document.getElementById("rumus").innerHTML = "<strong>25 (d+D)+5%</strong>";
+      if (t === "lead" && i === "1") {
+        faktor = 25;
+        formulaText = "25(d+D)+5%";
+      } else if (t === "lead" && i === "3") {
+        faktor = 20;
+        formulaText = "20(d+D)+5%";
+      } else if (t === "lain" && i === "1") {
+        faktor = 20;
+        formulaText = "20(d+D)+5%";
+      } else if (t === "lain" && i === "3") {
+        faktor = 15;
+        formulaText = "15(d+D)+5%";
       }
 
-      if (multiplier > 0) {
-        let hasil = multiplier * (d + D);
-        hasil += hasil * 0.05;
-        document.getElementById("maksimal").value = Math.round(hasil);
+      const nilai = faktor * (vd + vD);
+      const hasil = nilai + (nilai * 0.05);
+
+      if (!isNaN(hasil)) {
+        max.value = Math.round(hasil);
+        rumus.innerText = formulaText;
       } else {
-        document.getElementById("maksimal").value = "";
+        max.value = "";
+        rumus.innerText = "";
       }
+
+      min.value = drum.value;
     }
+
+    [d, D, tipe, inti, drum].forEach(el => el.addEventListener("input", update));
   </script>
 </body>
 </html>
