@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Website Kalkulator Resistor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      /* CSS kustom untuk kalkulator */
+      .card {
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      }
+      .resistor-band {
+        width: 25px;
+        height: 100%;
+        border: 1px solid black;
+        margin: 0 2px;
+        display: none; /* Default hidden */
+      }
+      .resistor-band.active {
+        display: block; /* Show when active */
+      }
+      .color-black { background-color: #000000; }
+      .color-brown { background-color: #8B4513; }
+      .color-red { background-color: #FF0000; }
+      .color-orange { background-color: #FFA500; }
+      .color-yellow { background-color: #FFFF00; }
+      .color-green { background-color: #008000; }
+      .color-blue { background-color: #0000FF; }
+      .color-violet { background-color: #8A2BE2; }
+      .color-grey { background-color: #808080; }
+      .color-white { background-color: #FFFFFF; }
+      .color-gold { background-color: #FFD700; }
+      .color-silver { background-color: #C0C0C0; }
+
+      #resistor-display {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 120px;
+        background-color: #f0f0f0;
+        border-radius: 10px;
+        border: 2px solid #ccc;
+        margin-top: 20px;
+      }
+      #resistor-body {
+        background-color: #D3D3D3;
+        width: 300px;
+        height: 50px;
+        border-radius: 25px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0 5px;
+      }
+
+      /* Gaya untuk SMD Resistor */
+      #smd-resistor-display {
+        display: none;
+        justify-content: center;
+        align-items: center;
+        height: 120px;
+        background-color: #f0f0f0;
+        border-radius: 10px;
+        border: 2px solid #ccc;
+        margin-top: 20px;
+      }
+      #smd-resistor-body {
+        background-color: #999;
+        width: 150px;
+        height: 35px;
+        border-radius: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      #smd-value {
+        font-family: monospace;
+        font-size: 24px;
+        font-weight: bold;
+        color: #000;
+        letter-spacing: 2px;
+      }
+    </style>
+  </head>
+  <body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Kalkulator Resistor</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Beranda</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mt-4">
+      <div class="row justify-content-center">
+        <div class="col-lg-10">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title text-center">Kalkulator Warna Resistor</h5>
+              <p class="text-center text-muted">Pilih mode kalkulator dan warna pita untuk melihat nilai resistor.</p>
+              
+              <div class="text-center mb-3">
+                <div class="btn-group me-2" role="group" aria-label="Resistor Type Options">
+                  <input type="radio" class="btn-check" name="resistor-type" id="axial" autocomplete="off" checked>
+                  <label class="btn btn-outline-secondary" for="axial">Aksial (Pita Warna)</label>
+                  <input type="radio" class="btn-check" name="resistor-type" id="smd" autocomplete="off">
+                  <label class="btn btn-outline-secondary" for="smd">SMD (Kode Angka)</label>
+                </div>
+                <div class="btn-group" role="group" aria-label="Resistor Band Options" id="band-options-group">
+                  <input type="radio" class="btn-check" name="band-options" id="bands4" autocomplete="off" checked>
+                  <label class="btn btn-outline-primary" for="bands4">4 Pita</label>
+                  <input type="radio" class="btn-check" name="band-options" id="bands5" autocomplete="off">
+                  <label class="btn btn-outline-primary" for="bands5">5 Pita</label>
+                </div>
+              </div>
+              
+              <div id="resistor-display" class="axial-display">
+                <div style="width: 20px; height: 3px; background-color: #000;"></div>
+                <div id="resistor-body">
+                  <div class="resistor-band active" id="display-band1"></div>
+                  <div class="resistor-band active" id="display-band2"></div>
+                  <div class="resistor-band" id="display-band3"></div>
+                  <div class="resistor-band active" id="display-multiplier"></div>
+                  <div class="resistor-band active" id="display-tolerance"></div>
+                </div>
+                <div style="width: 20px; height: 3px; background-color: #000;"></div>
+              </div>
+
+              <div id="smd-resistor-display" class="smd-display">
+                <div id="smd-resistor-body">
+                  <span id="smd-value">103</span>
+                </div>
+              </div>
+
+              <div id="axial-inputs">
+                <div class="row g-3 mt-4">
+                  <div class="col-md-3">
+                    <label for="band1" class="form-label">Pita 1</label>
+                    <select class="form-select" id="band1"></select>
+                  </div>
+                  <div class="col-md-3">
+                    <label for="band2" class="form-label">Pita 2</label>
+                    <select class="form-select" id="band2"></select>
+                  </div>
+                  <div class="col-md-3">
+                    <label for="band3" class="form-label">Pita 3</label>
+                    <select class="form-select" id="band3"></select>
+                  </div>
+                  <div class="col-md-3">
+                    <label for="multiplier" class="form-label">Pita Pengali</label>
+                    <select class="form-select" id="multiplier"></select>
+                  </div>
+                  <div class="col-md-3 mt-md-3">
+                    <label for="tolerance" class="form-label">Pita Toleransi</label>
+                    <select class="form-select" id="tolerance"></select>
+                  </div>
+                </div>
+              </div>
+
+              <div id="smd-inputs" style="display: none;">
+                <div class="row g-3 mt-4">
+                  <div class="col-md-4">
+                    <label for="smd-input" class="form-label">Kode SMD (3 atau 4 Digit)</label>
+                    <input type="text" class="form-control" id="smd-input" placeholder="e.g., 103, 47R, 1002">
+                  </div>
+                </div>
+              </div>
+
+              <h4 class="mt-4 text-center">Nilai Resistor: <span id="result">0 Ω</span></h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-3 mt-4">
+      <p>&copy; 2025 Website Kalkulator Resistor. All Rights Reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+      const colors = {
+        'black': { digit: 0, multiplier: 1, tolerance: null },
+        'brown': { digit: 1, multiplier: 10, tolerance: 1 },
+        'red': { digit: 2, multiplier: 100, tolerance: 2 },
+        'orange': { digit: 3, multiplier: 1000, tolerance: null },
+        'yellow': { digit: 4, multiplier: 10000, tolerance: null },
+        'green': { digit: 5, multiplier: 100000, tolerance: 0.5 },
+        'blue': { digit: 6, multiplier: 1000000, tolerance: 0.25 },
+        'violet': { digit: 7, multiplier: 10000000, tolerance: 0.1 },
+        'grey': { digit: 8, multiplier: 100000000, tolerance: 0.05 },
+        'white': { digit: 9, multiplier: 1000000000, tolerance: null },
+        'gold': { digit: null, multiplier: 0.1, tolerance: 5 },
+        'silver': { digit: null, multiplier: 0.01, tolerance: 10 }
+      };
+
+      const band1 = document.getElementById('band1');
+      const band2 = document.getElementById('band2');
+      const band3 = document.getElementById('band3');
+      const multiplier = document.getElementById('multiplier');
+      const tolerance = document.getElementById('tolerance');
+      const result = document.getElementById('result');
+      
+      const displayBand1 = document.getElementById('display-band1');
+      const displayBand2 = document.getElementById('display-band2');
+      const displayBand3 = document.getElementById('display-band3');
+      const displayMultiplier = document.getElementById('display-multiplier');
+      const displayTolerance = document.getElementById('display-tolerance');
+      
+      const resistorTypeAxial = document.getElementById('axial');
+      const resistorTypeSmd = document.getElementById('smd');
+      const axialDisplay = document.getElementById('resistor-display');
+      const smdDisplay = document.getElementById('smd-resistor-display');
+      const axialInputs = document.getElementById('axial-inputs');
+      const smdInputs = document.getElementById('smd-inputs');
+      const smdInput = document.getElementById('smd-input');
+      const smdValueDisplay = document.getElementById('smd-value');
+      const bandOptionsGroup = document.getElementById('band-options-group');
+
+      const radio4Bands = document.getElementById('bands4');
+      const radio5Bands = document.getElementById('bands5');
+
+      function populateSelects() {
+        for (const color in colors) {
+          const option = (value, text) => `<option value="${value}">${text}</option>`;
+
+          if (colors[color].digit !== null) {
+            band1.innerHTML += option(color, color.charAt(0).toUpperCase() + color.slice(1));
+            band2.innerHTML += option(color, color.charAt(0).toUpperCase() + color.slice(1));
+            band3.innerHTML += option(color, color.charAt(0).toUpperCase() + color.slice(1));
+          }
+          if (colors[color].multiplier !== null) {
+            multiplier.innerHTML += option(color, color.charAt(0).toUpperCase() + color.slice(1));
+          }
+          if (colors[color].tolerance !== null) {
+            tolerance.innerHTML += option(color, color.charAt(0).toUpperCase() + color.slice(1));
+          }
+        }
+      }
+
+      function updateUI() {
+        if (resistorTypeAxial.checked) {
+          axialDisplay.style.display = 'flex';
+          smdDisplay.style.display = 'none';
+          axialInputs.style.display = 'block';
+          smdInputs.style.display = 'none';
+          bandOptionsGroup.style.display = 'block';
+
+          const is4Bands = radio4Bands.checked;
+          band3.parentElement.style.display = is4Bands ? 'none' : 'block';
+          displayBand3.classList.toggle('active', !is4Bands);
+          calculateAxialResistorValue();
+        } else { // SMD
+          axialDisplay.style.display = 'none';
+          smdDisplay.style.display = 'flex';
+          axialInputs.style.display = 'none';
+          smdInputs.style.display = 'block';
+          bandOptionsGroup.style.display = 'none';
+          calculateSmdResistorValue();
+        }
+      }
+
+      function updateResistorDisplay() {
+        displayBand1.className = `resistor-band active color-${band1.value}`;
+        displayBand2.className = `resistor-band active color-${band2.value}`;
+        displayMultiplier.className = `resistor-band active color-${multiplier.value}`;
+        displayTolerance.className = `resistor-band active color-${tolerance.value}`;
+
+        if (radio5Bands.checked) {
+          displayBand3.className = `resistor-band active color-${band3.value}`;
+        }
+      }
+
+      function calculateAxialResistorValue() {
+        const is4Bands = radio4Bands.checked;
+        let digit1 = colors[band1.value].digit;
+        let digit2 = colors[band2.value].digit;
+        let multi = colors[multiplier.value].multiplier;
+        let tol = colors[tolerance.value].tolerance;
+        let resistance;
+
+        updateResistorDisplay();
+
+        if (is4Bands) {
+          if (digit1 !== null && digit2 !== null && multi !== null && tol !== null) {
+            resistance = ((digit1 * 10) + digit2) * multi;
+          }
+        } else { // 5 bands
+          let digit3 = colors[band3.value].digit;
+          if (digit1 !== null && digit2 !== null && digit3 !== null && multi !== null && tol !== null) {
+            resistance = ((digit1 * 100) + (digit2 * 10) + digit3) * multi;
+          }
+        }
+        
+        if (resistance !== undefined) {
+          let formattedResistance = formatResistance(resistance);
+          result.textContent = `${formattedResistance} ± ${tol}%`;
+        } else {
+          result.textContent = '0 Ω';
+        }
+      }
+
+      function calculateSmdResistorValue() {
+        const smdCode = smdInput.value.toUpperCase().trim();
+        smdValueDisplay.textContent = smdCode || '---';
+
+        let resistance = 0;
+        let isCodeValid = false;
+
+        if (smdCode.length === 3) {
+          const digit1 = parseInt(smdCode[0]);
+          const digit2 = parseInt(smdCode[1]);
+          const multiplier = parseInt(smdCode[2]);
+          if (!isNaN(digit1) && !isNaN(digit2) && !isNaN(multiplier)) {
+            resistance = (digit1 * 10 + digit2) * Math.pow(10, multiplier);
+            isCodeValid = true;
+          }
+        } else if (smdCode.length === 4) {
+          const digit1 = parseInt(smdCode[0]);
+          const digit2 = parseInt(smdCode[1]);
+          const digit3 = parseInt(smdCode[2]);
+          const multiplier = parseInt(smdCode[3]);
+          if (!isNaN(digit1) && !isNaN(digit2) && !isNaN(digit3) && !isNaN(multiplier)) {
+            resistance = (digit1 * 100 + digit2 * 10 + digit3) * Math.pow(10, multiplier);
+            isCodeValid = true;
+          }
+        } else if (smdCode.includes('R')) {
+            const parts = smdCode.split('R');
+            const integerPart = parts[0] === '' ? 0 : parseFloat(parts[0]);
+            const decimalPart = parts[1] === '' ? 0 : parseFloat(parts[1]);
+            resistance = integerPart + decimalPart * 0.1;
+            isCodeValid = true;
+        }
+
+        if (isCodeValid) {
+          result.textContent = formatResistance(resistance);
+        } else {
+          result.textContent = 'Kode tidak valid';
+        }
+      }
+
+      function formatResistance(resistance) {
+        if (resistance >= 1000000) {
+          return `${(resistance / 1000000).toFixed(2)} MΩ`;
+        } else if (resistance >= 1000) {
+          return `${(resistance / 1000).toFixed(2)} KΩ`;
+        } else {
+          return `${resistance} Ω`;
+        }
+      }
+
+      populateSelects();
+      updateUI(); // Set initial UI state
+
+      resistorTypeAxial.addEventListener('change', updateUI);
+      resistorTypeSmd.addEventListener('change', updateUI);
+      
+      radio4Bands.addEventListener('change', updateUI);
+      radio5Bands.addEventListener('change', updateUI);
+
+      band1.addEventListener('change', calculateAxialResistorValue);
+      band2.addEventListener('change', calculateAxialResistorValue);
+      band3.addEventListener('change', calculateAxialResistorValue);
+      multiplier.addEventListener('change', calculateAxialResistorValue);
+      tolerance.addEventListener('change', calculateAxialResistorValue);
+      
+      smdInput.addEventListener('input', calculateSmdResistorValue);
+    </script>
+  </body>
+</html>
