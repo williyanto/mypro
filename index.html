@@ -68,12 +68,19 @@
       .btn-danger { background-color: #e74c3c; border-color: #e74c3c; }
       .btn-secondary { background-color: #95a5a6; border-color: #95a5a6; }
       .btn-dark { background-color: #34495e; border-color: #34495e; }
+
+      /* Style for date and time */
+      #current-time {
+          font-size: 0.9em;
+          color: #666;
+          margin-top: 5px;
+      }
     </style>
   </head>
   <body>
     <header class="header">
       <h1>My Projects</h1>
-    </header>
+      <p id="current-time"></p> </header>
 
     <div class="container my-5">
       <div class="row">
@@ -181,5 +188,34 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      function updateTime() {
+        const now = new Date();
+        
+        // Options for formatting the date and time in WIB
+        const options = {
+          weekday: 'long', // e.g., "Senin"
+          year: 'numeric',
+          month: 'long',   // e.g., "Agustus"
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false,   // 24-hour format
+          timeZone: 'Asia/Jakarta' // Explicitly set to WIB
+        };
+
+        const formatter = new Intl.DateTimeFormat('id-ID', options);
+        const formattedDateTime = formatter.format(now);
+
+        document.getElementById('current-time').textContent = formattedDateTime + ' WIB';
+      }
+
+      // Update time immediately on page load
+      updateTime();
+
+      // Update time every second
+      setInterval(updateTime, 1000);
+    </script>
   </body>
 </html>
