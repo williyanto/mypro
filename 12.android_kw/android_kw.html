@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu Android KW (4 Kolom Mobile)</title>
+    <title>Menu Android KW (Full Fitur)</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
@@ -12,11 +12,49 @@
 
         body {
             background-color: #f0f2f5; /* Warna latar belakang abu-abu muda */
+            transition: background-color 0.3s ease; /* Transisi untuk mode gelap */
+        }
+
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background-color: #121212; /* Warna latar belakang gelap */
+            color: #e0e0e0; /* Warna teks terang */
+        }
+
+        body.dark-mode .navbar {
+            background-color: #1f1f1f !important; /* Warna navbar gelap */
+            box-shadow: 0 2px 4px rgba(255,255,255,0.05);
+        }
+
+        body.dark-mode .offcanvas {
+            background-color: #1f1f1f !important; /* Warna offcanvas gelap */
+        }
+
+        body.dark-mode .offcanvas-header {
+            background-color: #333333 !important; /* Warna header offcanvas gelap */
+        }
+
+        body.dark-mode .offcanvas-body .nav-link {
+            color: #e0e0e0 !important;
+        }
+
+        body.dark-mode .offcanvas-body .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        body.dark-mode .menu-card {
+            box-shadow: none; /* Tetap tanpa bayangan di dark mode */
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .menu-card:hover {
+            box-shadow: 0 4px 8px rgba(255,255,255,0.05); /* Bayangan sedikit di dark mode hover */
         }
 
         /* Navbar */
         .navbar {
             box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Sedikit bayangan untuk elevasi */
+            transition: background-color 0.3s ease; /* Transisi untuk mode gelap */
         }
 
         /* Tombol Navbar Toggler (Hamburger Icon) */
@@ -37,6 +75,7 @@
         .offcanvas-header {
             background-color: #0d6efd; /* Warna primary Bootstrap */
             color: white;
+            transition: background-color 0.3s ease; /* Transisi untuk mode gelap */
         }
 
         .offcanvas-body .nav-link {
@@ -53,7 +92,7 @@
             border-radius: 10px; /* Sudut melengkung */
             box-shadow: none; /* Menghilangkan bayangan sepenuhnya */
             background-color: transparent; /* Membuat latar belakang kartu transparan */
-            transition: transform 0.2s ease-in-out;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Tambah transisi box-shadow */
             height: 150px; /* Tinggi kartu yang konsisten */
             display: flex;
             flex-direction: column;
@@ -80,8 +119,38 @@
             font-weight: bold;
         }
 
+        /* Main Content Styling */
+        #main-content-area {
+            background-color: #ffffff; /* Latar belakang area konten */
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 400px; /* Tinggi minimum untuk melihat konten */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: background-color 0.3s ease; /* Transisi untuk mode gelap */
+        }
+
+        body.dark-mode #main-content-area {
+            background-color: #2c2c2c;
+            box-shadow: 0 2px 4px rgba(255,255,255,0.03);
+        }
+
+        /* Bootstrap Toast Styling for Android-like notifications */
+        .toast {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            border: none;
+            border-radius: 8px;
+        }
+        .toast-header {
+            background-color: transparent;
+            color: white;
+            border-bottom: none;
+        }
+        .toast-header .btn-close {
+            filter: invert(100%);
+        }
+
         /* Penyesuaian responsif untuk ukuran layar kecil */
-        /* Pastikan 4 kolom di semua ukuran layar, bahkan yang terkecil */
         .row.row-cols-4 > .col {
             flex: 0 0 auto;
             width: 25%; /* Memastikan setiap kolom mengambil 25% lebar */
@@ -128,7 +197,7 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a class="navbar-brand ms-3" href="#">Home</a>
+            <a class="navbar-brand ms-3" id="navbar-title" href="#">Home</a>
         </div>
     </nav>
 
@@ -140,87 +209,215 @@
         <div class="offcanvas-body">
             <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                 <li class="nav-item">
-                    <a class="nav-link active text-white" aria-current="page" href="#"><i class="bi bi-house-door-fill me-2"></i>Beranda</a>
+                    <a class="nav-link active text-white" aria-current="page" data-menu="home" href="#"><i class="bi bi-house-door-fill me-2"></i>Beranda</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="#"><i class="bi bi-person-fill me-2"></i>Profil</a>
+                    <a class="nav-link text-white" data-menu="profile" href="#"><i class="bi bi-person-fill me-2"></i>Profil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="#"><i class="bi bi-gear-fill me-2"></i>Pengaturan</a>
+                    <a class="nav-link text-white" data-menu="settings" href="#"><i class="bi bi-gear-fill me-2"></i>Pengaturan</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="#"><i class="bi bi-info-circle-fill me-2"></i>Tentang</a>
+                    <a class="nav-link text-white" data-menu="about" href="#"><i class="bi bi-info-circle-fill me-2"></i>Tentang</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="#"><i class="bi bi-box-arrow-right me-2"></i>Keluar</a>
+                    <a class="nav-link text-white" data-menu="logout" href="#"><i class="bi bi-box-arrow-right me-2"></i>Keluar</a>
                 </li>
             </ul>
+            <hr class="mt-3 mb-3 border-secondary">
+            <div class="form-check form-switch ms-3">
+                <input class="form-check-input" type="checkbox" id="darkModeToggle">
+                <label class="form-check-label" for="darkModeToggle">Mode Gelap</label>
+            </div>
         </div>
     </div>
 
     <div class="container mt-4">
-        <div class="row row-cols-4 g-4" id="menu-grid">
-            </div>
+        <div id="main-content-area">
+            <div class="row row-cols-4 g-4" id="menu-grid">
+                </div>
+        </div>
     </div>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">Notifikasi</strong>
+                <small>Baru Saja</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toast-message">
+                </div>
+        </div>
+    </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const menuItems = [
-                { title: 'Telepon', icon: 'bi-telephone-fill', link: '#' },
-                { title: 'Pesan', icon: 'bi-chat-dots-fill', link: '#' },
-                { title: 'Kamera', icon: 'bi-camera-fill', link: '#' },
-                { title: 'Galeri', icon: 'bi-image-fill', link: '#' },
-                { title: 'Musik', icon: 'bi-music-note-beamed', link: '#' },
-                { title: 'Browser', icon: 'bi-globe', link: '#' },
-                { title: 'Kalender', icon: 'bi-calendar-fill', link: '#' },
-                { title: 'Maps', icon: 'bi-map-fill', link: '#' },
-                { title: 'Jam', icon: 'bi-clock-fill', link: '#' },
-                { title: 'Catatan', icon: 'bi-journal-text', link: '#' },
-                { title: 'Email', icon: 'bi-envelope-fill', link: '#' },
-                { title: 'File', icon: 'bi-folder-fill', link: '#' },
-                { title: 'Settings', icon: 'bi-gear-fill', link: '#' },
-                { title: 'Calculator', icon: 'bi-calculator-fill', link: '#' },
-                { title: 'Downloads', icon: 'bi-download', link: '#' },
-                { title: 'Notes', icon: 'bi-stickies-fill', link: '#' },
-                { title: 'Weather', icon: 'bi-cloud-sun-fill', link: '#' },
-                { title: 'Photos', icon: 'bi-image', link: '#' },
-                { title: 'Contacts', icon: 'bi-person-lines-fill', link: '#' },
-                // Tambahkan lebih banyak menu sesuai kebutuhan
+            const navbarTitle = document.getElementById('navbar-title');
+            const offcanvasNavbar = new bootstrap.Offcanvas(document.getElementById('offcanvasNavbar'));
+            const mainContentArea = document.getElementById('main-content-area');
+            const menuGrid = document.getElementById('menu-grid');
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const liveToast = document.getElementById('liveToast');
+            const toastMessage = document.getElementById('toast-message');
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(liveToast);
+
+
+            const appMenuItems = [
+                { id: 'telepon', title: 'Telepon', icon: 'bi-telephone-fill', link: '#', content: '<h3>Halaman Telepon</h3><p>Ini adalah dialer telepon.</p><p>Nomor: +62 812-3456-7890</p>' },
+                { id: 'pesan', title: 'Pesan', icon: 'bi-chat-dots-fill', link: '#', content: '<h3>Halaman Pesan</h3><p>Daftar percakapan Anda.</p><ul><li>John Doe: Hai!</li><li>Jane Smith: Apa kabar?</li></ul>' },
+                { id: 'kamera', title: 'Kamera', icon: 'bi-camera-fill', link: '#', content: '<h3>Halaman Kamera</h3><p>Akses kamera Anda.</p><img src="https://via.placeholder.com/200x150?text=Camera+Preview" class="img-fluid mt-3" alt="Kamera">' },
+                { id: 'galeri', title: 'Galeri', icon: 'bi-image-fill', link: '#', content: '<h3>Halaman Galeri</h3><p>Koleksi foto Anda.</p><div class="row row-cols-2 g-2 mt-2"><img src="https://via.placeholder.com/100x100?text=Foto+1" class="img-fluid col" alt="Foto 1"><img src="https://via.placeholder.com/100x100?text=Foto+2" class="img-fluid col" alt="Foto 2"><img src="https://via.placeholder.com/100x100?text=Foto+3" class="img-fluid col" alt="Foto 3"></div>' },
+                { id: 'musik', title: 'Musik', icon: 'bi-music-note-beamed', link: '#', content: '<h3>Halaman Musik</h3><p>Mainkan lagu favorit Anda.</p><p>Sedang diputar: Lagu Contoh - Artis X</p>' },
+                { id: 'browser', title: 'Browser', icon: 'bi-globe', link: '#', content: '<h3>Halaman Browser</h3><p>Berselancar di internet.</p><p>Kunjungi <a href="https://www.google.com" target="_blank">Google.com</a></p>' },
+                { id: 'kalender', title: 'Kalender', icon: 'bi-calendar-fill', link: '#', content: '<h3>Halaman Kalender</h3><p>Jadwal Anda hari ini.</p><ul><li>10:00 - Rapat Proyek</li><li>14:00 - Janji Dokter</li></ul>' },
+                { id: 'maps', title: 'Maps', icon: 'bi-map-fill', link: '#', content: '<h3>Halaman Maps</h3><p>Temukan lokasi.</p><p>Anda berada di Jakarta.</p>' },
+                { id: 'jam', title: 'Jam', icon: 'bi-clock-fill', link: '#', content: '<h3>Halaman Jam</h3><p>Waktu saat ini: <span id="current-time"></span></p>' },
+                { id: 'catatan', title: 'Catatan', icon: 'bi-journal-text', link: '#', content: '<h3>Halaman Catatan</h3><p>Buat catatan penting Anda.</p><textarea class="form-control" rows="3">Tulis catatan di sini...</textarea>' },
+                { id: 'email', title: 'Email', icon: 'bi-envelope-fill', link: '#', content: '<h3>Halaman Email</h3><p>Kotak masuk Anda.</p><p>Anda memiliki 3 email baru.</p>' },
+                { id: 'file', title: 'File', icon: 'bi-folder-fill', link: '#', content: '<h3>Halaman File</h3><p>Kelola file dan dokumen Anda.</p><ul><li>Dokumen Penting.pdf</li><li>Foto Liburan.jpg</li></ul>' },
+                { id: 'settings', title: 'Pengaturan', icon: 'bi-gear-fill', link: '#', content: '<h3>Halaman Pengaturan</h3><p>Sesuaikan preferensi aplikasi.</p><div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="notifToggle"><label class="form-check-label" for="notifToggle">Notifikasi</label></div>' },
+                { id: 'calculator', title: 'Kalkulator', icon: 'bi-calculator-fill', link: '#', content: '<h3>Halaman Kalkulator</h3><p>Lakukan perhitungan sederhana.</p><input type="text" class="form-control" value="0" readonly>' },
+                { id: 'downloads', title: 'Unduhan', icon: 'bi-download', link: '#', content: '<h3>Halaman Unduhan</h3><p>Daftar file yang Anda unduh.</p><ul><li>Laporan_2024.docx</li><li>Gambar_Kucing.png</li></ul>' },
             ];
 
             // Palet warna Bootstrap yang akan digunakan
             const colors = ['text-primary', 'text-success', 'text-info', 'text-warning', 'text-danger', 'text-dark'];
 
-            const menuGrid = document.getElementById('menu-grid');
+            // Fungsi untuk menampilkan Toast
+            function showToast(message) {
+                toastMessage.textContent = message;
+                toastBootstrap.show();
+            }
 
-            menuItems.forEach(item => {
-                const colDiv = document.createElement('div');
-                colDiv.className = 'col';
+            // Fungsi untuk memuat grid aplikasi
+            function loadAppGrid() {
+                navbarTitle.textContent = "Home";
+                mainContentArea.innerHTML = ''; // Hapus konten sebelumnya
+                mainContentArea.appendChild(menuGrid); // Tambahkan kembali grid
+                renderAppIcons();
+            }
 
-                const cardLink = document.createElement('a');
-                cardLink.href = item.link;
-                cardLink.className = 'card menu-card h-100';
+            // Fungsi untuk merender ikon aplikasi
+            function renderAppIcons() {
+                menuGrid.innerHTML = ''; // Pastikan grid kosong sebelum diisi ulang
+                appMenuItems.forEach(item => {
+                    const colDiv = document.createElement('div');
+                    colDiv.className = 'col';
 
-                const cardBody = document.createElement('div');
-                cardBody.className = 'card-body';
+                    const cardLink = document.createElement('a');
+                    cardLink.href = item.link;
+                    cardLink.className = 'card menu-card h-100';
+                    cardLink.setAttribute('data-app-id', item.id); // Tambahkan ID untuk identifikasi
 
-                const icon = document.createElement('i');
-                // Pilih warna acak dari palet
-                const randomColorClass = colors[Math.floor(Math.random() * colors.length)];
-                icon.className = `bi ${item.icon} card-icon ${randomColorClass}`; // Tambahkan kelas warna
+                    const cardBody = document.createElement('div');
+                    cardBody.className = 'card-body';
 
-                const title = document.createElement('h5');
-                title.className = 'card-title';
-                title.textContent = item.title;
+                    const icon = document.createElement('i');
+                    const randomColorClass = colors[Math.floor(Math.random() * colors.length)];
+                    icon.className = `bi ${item.icon} card-icon ${randomColorClass}`;
 
-                cardBody.appendChild(icon);
-                cardBody.appendChild(title);
-                cardLink.appendChild(cardBody);
-                colDiv.appendChild(cardLink);
-                menuGrid.appendChild(colDiv);
+                    const title = document.createElement('h5');
+                    title.className = 'card-title';
+                    title.textContent = item.title;
+
+                    cardBody.appendChild(icon);
+                    cardBody.appendChild(title);
+                    cardLink.appendChild(cardBody);
+                    colDiv.appendChild(cardLink);
+                    menuGrid.appendChild(colDiv);
+
+                    // Tambahkan event listener untuk setiap kartu menu
+                    cardLink.addEventListener('click', function(event) {
+                        event.preventDefault(); // Mencegah navigasi default
+                        offcanvasNavbar.hide(); // Sembunyikan offcanvas jika terbuka
+                        loadContent(item.id); // Muat konten yang relevan
+                        showToast(`Membuka: ${item.title}`); // Tampilkan notifikasi
+                    });
+                });
+            }
+
+            // Fungsi untuk memuat konten berdasarkan ID menu
+            function loadContent(id) {
+                const selectedItem = appMenuItems.find(item => item.id === id);
+                if (selectedItem) {
+                    navbarTitle.textContent = selectedItem.title; // Update judul navbar
+                    mainContentArea.innerHTML = selectedItem.content; // Tampilkan konten
+
+                    // Perbarui waktu jika halaman jam yang dimuat
+                    if (id === 'jam') {
+                        updateTime();
+                        setInterval(updateTime, 1000); // Perbarui setiap detik
+                    }
+                } else {
+                    navbarTitle.textContent = "Halaman Tidak Ditemukan";
+                    mainContentArea.innerHTML = "<h3>Halaman tidak ditemukan.</h3><p>Silakan pilih menu lain.</p>";
+                }
+            }
+
+            // Fungsi untuk memperbarui waktu (untuk halaman Jam)
+            function updateTime() {
+                const currentTimeElement = document.getElementById('current-time');
+                if (currentTimeElement) {
+                    const now = new Date();
+                    currentTimeElement.textContent = now.toLocaleTimeString();
+                }
+            }
+
+
+            // --- Event Listeners ---
+
+            // Event listener untuk link di Offcanvas
+            document.querySelectorAll('#offcanvasNavbar .nav-link').forEach(link => {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault(); // Mencegah navigasi default
+                    offcanvasNavbar.hide(); // Sembunyikan offcanvas
+
+                    // Hapus kelas 'active' dari semua link dan tambahkan ke yang diklik
+                    document.querySelectorAll('#offcanvasNavbar .nav-link').forEach(navLink => navLink.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const menuId = this.getAttribute('data-menu');
+                    if (menuId === 'home') {
+                        loadAppGrid(); // Kembali ke grid aplikasi
+                    } else if (menuId === 'logout') {
+                        showToast("Anda telah keluar.");
+                        navbarTitle.textContent = "Keluar";
+                        mainContentArea.innerHTML = "<h3>Anda telah berhasil keluar.</h3><p>Terima kasih telah menggunakan aplikasi kami.</p>";
+                    } else {
+                        // Untuk menu lain di offcanvas, muat konten placeholder
+                        navbarTitle.textContent = this.textContent.trim(); // Gunakan teks link sebagai judul
+                        mainContentArea.innerHTML = `<h3>Halaman ${this.textContent.trim()}</h3><p>Ini adalah konten untuk ${this.textContent.trim()}.</p>`;
+                    }
+                });
             });
+
+            // Event listener untuk Dark Mode Toggle
+            darkModeToggle.addEventListener('change', function() {
+                if (this.checked) {
+                    document.body.classList.add('dark-mode');
+                    localStorage.setItem('theme', 'dark'); // Simpan preferensi
+                } else {
+                    document.body.classList.remove('dark-mode');
+                    localStorage.setItem('theme', 'light'); // Simpan preferensi
+                }
+            });
+
+            // Cek preferensi tema dari Local Storage saat memuat halaman
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                darkModeToggle.checked = true;
+            } else {
+                document.body.classList.remove('dark-mode');
+                darkModeToggle.checked = false;
+            }
+
+            // Render ikon aplikasi saat halaman pertama kali dimuat
+            renderAppIcons();
         });
     </script>
 </body>
