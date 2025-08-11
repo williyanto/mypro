@@ -15,6 +15,8 @@
         font-family: Arial, sans-serif;
         background-color: #ffffff;
         color: #333;
+        /* Penting untuk overlay agar berfungsi penuh */
+        overflow: hidden; /* Sembunyikan scrollbar saat loading */
       }
       .header {
         background-color: #ffffff;
@@ -75,9 +77,46 @@
           color: #666;
           margin-top: 5px;
       }
+
+      /* --- Loading Screen Styles --- */
+      #loading-overlay {
+        position: fixed; /* Menempel pada viewport */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.9); /* Latar belakang putih semi-transparan */
+        display: flex; /* Menggunakan flexbox untuk centering */
+        justify-content: center; /* Horizontally center */
+        align-items: center; /* Vertically center */
+        z-index: 9999; /* Pastikan di atas semua elemen lain */
+        transition: opacity 0.5s ease-out; /* Animasi saat menghilang */
+      }
+
+      .spinner-border {
+        width: 3rem; /* Ukuran spinner */
+        height: 3rem;
+        color: #3498db; /* Warna spinner */
+      }
+
+      /* Kelas untuk menyembunyikan overlay */
+      .loaded #loading-overlay {
+        opacity: 0;
+        visibility: hidden;
+      }
+      /* Mengembalikan scrollbar setelah loading selesai */
+      .loaded body {
+        overflow: auto !important;
+      }
     </style>
   </head>
   <body>
+    <div id="loading-overlay">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
     <header class="header">
       <h1>My Projects</h1>
       <p id="current-time"></p> </header>
@@ -189,33 +228,47 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+      // JavaScript untuk Tanggal dan Jam (sudah ada)
       function updateTime() {
         const now = new Date();
-        
-        // Options for formatting the date and time in WIB
         const options = {
-          weekday: 'long', // e.g., "Senin"
+          weekday: 'long',
           year: 'numeric',
-          month: 'long',   // e.g., "Agustus"
+          month: 'long',
           day: 'numeric',
           hour: '2-digit',
           minute: '2-digit',
           second: '2-digit',
-          hour12: false,   // 24-hour format
-          timeZone: 'Asia/Jakarta' // Explicitly set to WIB
+          hour12: false,
+          timeZone: 'Asia/Jakarta'
         };
-
         const formatter = new Intl.DateTimeFormat('id-ID', options);
         const formattedDateTime = formatter.format(now);
-
         document.getElementById('current-time').textContent = formattedDateTime + ' WIB';
       }
-
-      // Update time immediately on page load
       updateTime();
-
-      // Update time every second
       setInterval(updateTime, 1000);
+
+      // --- JavaScript untuk Loading Screen ---
+      window.addEventListener('load', function() {
+        // Hapus kelas 'overflow: hidden' dari body setelah loading
+        document.body.style.overflow = 'auto';
+
+        // Tambahkan kelas 'loaded' ke body untuk memicu transisi opacity
+        document.body.classList.add('loaded');
+
+        // Opsional: Hapus overlay dari DOM setelah transisi selesai
+        // Ini memastikan overlay tidak lagi memakan ruang atau memblokir interaksi
+        const loadingOverlay = document.getElementById('loading-overlay');
+        loadingOverlay.addEventListener('transitionend', function() {
+          loadingOverlay.remove();
+        });
+      });
+
+      // Pastikan body memiliki overflow: hidden saat loading dimulai
+      document.addEventListener('DOMContentLoaded', function() {
+        document.body.style.overflow = 'hidden';
+      });
     </script>
   </body>
 </html>
