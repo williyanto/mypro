@@ -348,6 +348,7 @@
                 navbarTitle.textContent = "Home";
                 mainContentArea.innerHTML = ''; // Hapus konten sebelumnya
                 mainContentArea.appendChild(menuGrid); // Tambahkan kembali grid
+                mainContentArea.appendChild(backButton); // Pastikan tombol kembali juga ada di area konten
                 backButton.classList.add('d-none'); // Sembunyikan tombol kembali
                 currentViewIsGrid = true;
                 renderAppIcons();
@@ -398,19 +399,33 @@
                 if (selectedItem) {
                     navbarTitle.textContent = selectedItem.title; // Update judul navbar
                     mainContentArea.innerHTML = selectedItem.content; // Tampilkan konten
+                    mainContentArea.appendChild(backButton); // Tambahkan kembali tombol kembali ke area konten
                     backButton.classList.remove('d-none'); // Tampilkan tombol kembali
                     currentViewIsGrid = false;
 
                     // Perbarui waktu jika halaman jam yang dimuat
                     if (id === 'jam') {
                         updateTime();
-                        setInterval(updateTime, 1000); // Perbarui setiap detik
+                        // Hentikan interval sebelumnya jika ada, mulai yang baru
+                        if (window.jamInterval) clearInterval(window.jamInterval);
+                        window.jamInterval = setInterval(updateTime, 1000); // Perbarui setiap detik
+                    } else {
+                        // Hentikan interval jika bukan halaman jam
+                        if (window.jamInterval) {
+                            clearInterval(window.jamInterval);
+                            window.jamInterval = null;
+                        }
                     }
                 } else {
                     navbarTitle.textContent = "Halaman Tidak Ditemukan";
                     mainContentArea.innerHTML = "<h3>Halaman tidak ditemukan.</h3><p>Silakan pilih menu lain.</p>";
+                    mainContentArea.appendChild(backButton); // Tambahkan kembali tombol kembali ke area konten
                     backButton.classList.remove('d-none'); // Tampilkan tombol kembali meskipun error
                     currentViewIsGrid = false;
+                    if (window.jamInterval) { // Pastikan interval jam dihentikan jika pindah ke halaman error
+                        clearInterval(window.jamInterval);
+                        window.jamInterval = null;
+                    }
                 }
             }
 
@@ -443,14 +458,22 @@
                         showToast("Anda telah keluar.");
                         navbarTitle.textContent = "Keluar";
                         mainContentArea.innerHTML = "<h3>Anda telah berhasil keluar.</h3><p>Terima kasih telah menggunakan aplikasi kami.</p>";
+                        mainContentArea.appendChild(backButton); // Pastikan tombol kembali ada
                         backButton.classList.remove('d-none'); // Tampilkan tombol kembali
                         currentViewIsGrid = false;
                     } else {
                         // Untuk menu lain di offcanvas, muat konten placeholder
-                        navbarTitle.textContent = this.textContent.trim(); // Gunakan teks link sebagai judul
-                        mainContentArea.innerHTML = `<h3>Halaman ${this.textContent.trim()}</h3><p>Ini adalah konten untuk ${this.textContent.trim()}.</p>`;
-                        backButton.classList.remove('d-none'); // Tampilkan tombol kembali
-                        currentViewIsGrid = false;
+                        // Temukan item yang sesuai untuk mendapatkan kontennya
+                        const selectedItem = appMenuItems.find(item => item.id === menuId);
+                        if (selectedItem) {
+                            loadContent(selectedItem.id); // Muat konten dari appMenuItems
+                        } else {
+                            navbarTitle.textContent = this.textContent.trim(); // Gunakan teks link sebagai judul
+                            mainContentArea.innerHTML = `<h3>Halaman ${this.textContent.trim()}</h3><p>Ini adalah konten untuk ${this.textContent.trim()}.</p>`;
+                            mainContentArea.appendChild(backButton); // Pastikan tombol kembali ada
+                            backButton.classList.remove('d-none'); // Tampilkan tombol kembali
+                            currentViewIsGrid = false;
+                        }
                     }
                 });
             });
