@@ -3,164 +3,402 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>Aplikasi Mobile Saya</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <style>
-        /* CSS Reset & Basic Setup */
-        body { 
-            background-color: #000; 
-            padding-bottom: 0; 
-            overflow: hidden; 
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        body {
+            background-color: #000;
+            padding-bottom: 0;
+            overflow: hidden;
+            transition: background-color 0.3s ease-in-out;
         }
 
-        /* Video & Effects Container */
-        #fullscreen-video-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; display: flex; justify-content: center; align-items: center; }
-        #video-player { width: 100%; height: 100%; object-fit: cover; display: none; }
-        #preload-video-player { display: none; }
-        
-        #play-pause-btn-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0; pointer-events: none; transition: opacity 0.3s ease-in-out; z-index: 20; }
-        #play-pause-btn-container.show { opacity: 0.8; pointer-events: auto; }
-        
-        #like-effect-container, #dislike-effect-container { position: absolute; top: 50%; left: 50%; display: flex; flex-direction: column; align-items: center; gap: 10px; z-index: 30; opacity: 0; transform: translate(-50%, -50%) scale(0.5); pointer-events: none; transition: opacity 0.3s, transform 0.3s; }
-        #like-effect-container.active, #dislike-effect-container.active { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-        #like-effect-container .like-emoji, #dislike-effect-container .dislike-emoji { font-size: 5rem; }
-        #like-effect-container .like-text, #dislike-effect-container .dislike-text { color: #fff; font-size: 1.2rem; font-weight: bold; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); }
+        #fullscreen-video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.3s;
+        }
 
-        /* UI Overlays (Info & Buttons) */
-        .bottom-nav, .fixed-bottom-container, .right-nav { z-index: 10; }
+        #video-player {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
         
-        .fixed-bottom-container { position: fixed; bottom: 70px; left: 0; right: 0; padding: 10px 15px; color: #fff; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); }
-        .main-content-row { display: flex; align-items: center; justify-content: space-between; }
-        .profile-section { display: flex; align-items: center; gap: 8px; }
-        .username { font-weight: bold; font-size: 1rem; }
-        .caption-row { padding-left: 2px; font-size: 0.9rem; margin-top: 8px; }
-        .subscribe-btn { display: flex; align-items: center; padding: 0.3rem 0.6rem; font-size: 0.8rem; gap: 5px; background-color: #ff0000; border-color: #ff0000; border-radius: 8px; }
-        .subscribe-btn.subscribed { background-color: #6c757d !important; border-color: #6c757d !important; }
+        #youtube-player-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            z-index: -1;
+        }
 
-        .right-nav { position: fixed; bottom: 120px; right: 10px; display: flex; flex-direction: column; align-items: center; gap: 18px; }
-        .right-nav .nav-link { color: #fff; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); font-size: 0.8rem; display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; }
+        .bottom-nav,
+        .fixed-bottom-container,
+        .right-nav {
+            z-index: 10;
+        }
+
+        .bottom-nav {
+            background-color: #f8f9fa !important;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .bottom-nav .nav-link {
+            color: #6c757d;
+            font-size: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            text-shadow: none;
+        }
+
+        .bottom-nav .nav-link.active {
+            color: #0d6efd;
+        }
+
+        .bottom-nav .plus-icon i {
+            font-size: 2.5rem;
+            color: #0d6efd;
+        }
+
+        .fixed-bottom-container {
+            position: fixed;
+            bottom: 70px;
+            left: 0;
+            right: 0;
+            padding: 10px 15px;
+            color: #fff;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+            transition: opacity 0.3s;
+        }
+
+        .main-content-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .profile-icon {
+            font-size: 1.5rem;
+        }
+
+        .text-content {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .username {
+            font-weight: bold;
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        .caption-row {
+            padding-left: 5px;
+            font-size: 0.9rem;
+        }
+
+        .subscribe-btn {
+            display: flex;
+            align-items: center;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.8rem;
+            gap: 5px;
+            background-color: #ff0000;
+            border-color: #ff0000;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
         
-        /* Bottom Navigation Bar */
-        .bottom-nav { background-color: #f8f9fa !important; box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); }
-        .bottom-nav .nav-link { color: #6c757d; font-size: 0.7rem; display: flex; flex-direction: column; align-items: center; gap: 2px; text-decoration: none; }
-        .bottom-nav .nav-link.active { color: #0d6efd; }
+        .subscribe-btn.subscribed {
+            background-color: #6c757d !important;
+            border-color: #6c757d !important;
+        }
 
-        /* Custom PNG Icon Styling */
-        .icon-png { width: 26px; height: 26px; object-fit: contain; }
-        .profile-section .icon-png { width: 36px; height: 36px; border: 1px solid white; }
-        .subscribe-btn .icon-png { width: 16px; height: 16px; }
-        .right-nav .icon-png { width: 30px; height: 30px; }
-        .bottom-nav .icon-png { width: 24px; height: 24px; }
-        .bottom-nav .plus-icon .icon-png { width: 40px; height: 40px; }
-        #play-pause-icon { width: 48px; height: 48px; filter: drop-shadow(0 0 5px rgba(0,0,0,0.5)); }
+        .subscribe-btn:hover {
+            background-color: #cc0000;
+            border-color: #cc0000;
+        }
 
-        /* Profile Page */
-        #profile-page { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: white; color: #000; z-index: 9; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-        #profile-page .welcome-text { font-size: 1.5rem; max-width: 80%; }
-        body.show-profile-page #fullscreen-video-container, body.show-profile-page .fixed-bottom-container, body.show-profile-page .right-nav { opacity: 0; pointer-events: none; }
-        body.show-profile-page #profile-page { display: flex; }
+        .right-nav {
+            position: fixed;
+            bottom: 120px;
+            right: 10px;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            background-color: transparent;
+            transition: opacity 0.3s;
+        }
+
+        .right-nav .nav-link {
+            color: #fff;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+            font-size: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+        
+        .right-nav .nav-link i {
+            font-size: 1.5rem;
+            color: #fff;
+            transition: color 0.3s;
+        }
+        
+        .right-nav .nav-link i.active-red {
+            color: #ff0000;
+        }
+        
+        #like-button .like-icon.active-red,
+        #dislike-button .dislike-icon.active-blue {
+            color: #ff0000;
+        }
+        
+        #dislike-button .dislike-icon.active-blue {
+            color: #0d6efd;
+        }
+
+
+        #play-pause-btn-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 3rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out;
+            z-index: 20;
+        }
+
+        #play-pause-btn-container.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #like-effect-container,
+        #dislike-effect-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            z-index: 30;
+            
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.5);
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+        
+        #like-effect-container.active,
+        #dislike-effect-container.active {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+            pointer-events: auto;
+        }
+
+        #like-effect-container .like-emoji,
+        #dislike-effect-container .dislike-emoji {
+            font-size: 5rem;
+        }
+
+        #like-effect-container .like-text,
+        #dislike-effect-container .dislike-text {
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        #profile-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            color: #000;
+            z-index: 9;
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+            padding-bottom: 0;
+        }
+        #profile-page .welcome-text {
+            font-size: 1.5rem;
+            max-width: 80%;
+            margin-bottom: 20px;
+            margin-top: 20px;
+        }
+
+        #profile-page .footer {
+            position: absolute;
+            bottom: 70px; 
+            width: 100%;
+            padding: 10px;
+            background-color: #f8f9fa;
+            font-size: 0.8rem;
+            border-top: 1px solid #dee2e6;
+        }
+
+        body.show-profile-page #fullscreen-video-container,
+        body.show-profile-page .fixed-bottom-container,
+        body.show-profile-page .right-nav {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        body.show-profile-page #profile-page {
+            display: flex;
+        }
     </style>
 </head>
 <body>
 
     <div id="fullscreen-video-container">
-        <video id="video-player" crossorigin="anonymous" playsinline></video>
-        <video id="preload-video-player" crossorigin="anonymous" playsinline style="display: none;"></video>
-        <div id="play-pause-btn-container">
-            <img src="icons/play.png" id="play-pause-icon" class="icon-png">
-        </div>
+        <video id="video-player" autoplay crossorigin="anonymous"></video>
+        <video id="preload-video-player" style="display: none;" crossorigin="anonymous"></video>
+        <div id="youtube-player-container">
+            </div>
+        
         <div id="like-effect-container">
             <span class="like-emoji">🥰</span>
             <span class="like-text">Kamu menyukai video ini</span>
         </div>
+        
         <div id="dislike-effect-container">
             <span class="dislike-emoji">☹️</span>
-            <span class="dislike-text">Kamu tidak suka video ini</span>
+            <span class="dislike-text">Kamu ga suka video ini</span>
+        </div>
+
+        <div id="play-pause-btn-container">
+            <i id="play-pause-icon" class="bi bi-pause-fill"></i>
         </div>
     </div>
     
     <div id="profile-page">
-        <p class="welcome-text">👋🏻 Selamat datang di YuSup Chots!</p>
+        <p class="welcome-text" id="welcome-text-profile">👋🏻 Selamat datang di aplikasi YuSup Chots, video dalam aplikasi ini diambil dari Repositori GitHub.</p>
+        <footer class="footer">Project by Williyanto Adi 2025</footer>
     </div>
+    
 
     <div class="fixed-bottom-container">
         <div class="main-content-row">
             <div class="profile-section">
-                <img src="..//6.yusup/icon_black/user.png" id="profile-icon-element" class="icon-png rounded-circle">
-                <div id="username-element" class="username">@username</div>
+                <i id="profile-icon-element" class="bi profile-icon"></i>
+                <div id="username-element" class="username">@willyanto_adi</div>
             </div>
             <button class="btn btn-danger btn-sm subscribe-btn" id="subscribe-button">
-                <img src="..//6.yusup/icon_black/new video.png" id="subscribe-icon" class="icon-png">
+                <i class="bi bi-bell-fill" id="subscribe-icon"></i>
                 <span id="subscribe-text">Subscribe</span>
             </button>
         </div>
-        <div class="caption-row" id="video-caption">Memuat video...</div>
+        <div class="caption-row" id="video-caption">
+            Memuat video dari GitHub...
+        </div>
     </div>
 
     <nav class="right-nav">
         <a class="nav-link" href="#" id="like-button">
-            <img src="..//6.yusup/icon_white/like.png" id="like-icon" class="icon-png">
+            <i class="bi bi-heart-fill" id="like-icon"></i>
             <span>Like</span>
         </a>
         <a class="nav-link" href="#" id="dislike-button">
-            <img src="..//6.yusup/icon_white/dislike.png" id="dislike-icon" class="icon-png">
+            <i class="bi bi-hand-thumbs-down-fill" id="dislike-icon"></i>
             <span>Dislike</span>
         </a>
         <a class="nav-link" href="#" id="comment-button">
-            <img src="..//6.yusup/icon_white/comment.png" class="icon-png">
+            <i class="bi bi-chat-dots-fill"></i>
             <span>Comment</span>
         </a>
         <a class="nav-link" href="#">
-            <img src="..//6.yusup/icon_white/share.png" class="icon-png">
+            <i class="bi bi-share-fill"></i>
             <span>Share</span>
         </a>
         <a class="nav-link" href="#">
-            <img src="..//6.yusup/icon_white/repeat.png" class="icon-png">
+            <i class="bi bi-repeat"></i>
             <span>Repeat</span>
         </a>
     </nav>
 
-    <nav class="navbar fixed-bottom bottom-nav">
+    <nav class="navbar fixed-bottom bottom-nav" id="bottom-navbar">
         <div class="container-fluid d-flex justify-content-around">
             <a class="nav-link active refresh-trigger" href="#">
-                <img src="..//6.yusup/icon_black/beranda.png" class="icon-png">
+                <i class="bi bi-house-door-fill"></i>
                 <span>Beranda</span>
             </a>
             <a class="nav-link refresh-trigger" href="#">
-                <img src="..//6.yusup/icon_black/shorts.png" class="icon-png">
+                <i class="bi bi-chat-dots-fill"></i>
                 <span>Chots</span>
             </a>
             <a class="nav-link plus-icon" href="#" id="reload-button">
-                <img src="..//6.yusup/icon_black/plus.png" class="icon-png">
+                <i class="bi bi-arrow-clockwise"></i>
             </a>
             <a class="nav-link refresh-trigger" href="#">
-                <img src="..//6.yusup/icon_black/new video.png" class="icon-png">
+                <i class="bi bi-collection-play-fill"></i>
                 <span>Subrek</span>
             </a>
             <a class="nav-link" href="#" id="profile-button">
-                <img src="..//6.yusup/icon_black/user.png" class="icon-png">
+                <i class="bi bi-person-circle"></i>
                 <span>Kamu</span>
             </a>
         </div>
     </nav>
 
-    <div class="modal fade" id="commentModal" tabindex="-1">
+    <div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Komentar</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <h5 class="modal-title" id="commentModalLabel">Komentar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div id="comment-display"></div>
+                    <div id="comment-display">
+                        </div>
                 </div>
             </div>
         </div>
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // =================================================================
@@ -171,7 +409,8 @@
             const GITHUB_BRANCH = 'main';
             const GITHUB_VIDEO_PATH = 'video'; // Folder di dalam repo yang berisi video
             // =================================================================
-            // --- ELEMEN DOM ---
+
+            // Elemen DOM
             const videoPlayer = document.getElementById('video-player');
             const preloadVideoPlayer = document.getElementById('preload-video-player');
             const fullscreenVideoContainer = document.getElementById('fullscreen-video-container');
@@ -180,86 +419,68 @@
             const videoCaptionElement = document.getElementById('video-caption');
             const usernameElement = document.getElementById('username-element');
             const profileIconElement = document.getElementById('profile-icon-element');
+            const refreshButtons = document.querySelectorAll('.refresh-trigger');
+            const reloadButton = document.getElementById('reload-button');
+            const body = document.body;
+            const likeButton = document.getElementById('like-button');
             const likeIcon = document.getElementById('like-icon');
+            const likeEffectContainer = document.getElementById('like-effect-container');
+            const dislikeButton = document.getElementById('dislike-button');
             const dislikeIcon = document.getElementById('dislike-icon');
+            const dislikeEffectContainer = document.getElementById('dislike-effect-container');
+            const subscribeButton = document.getElementById('subscribe-button');
             const subscribeIcon = document.getElementById('subscribe-icon');
             const subscribeText = document.getElementById('subscribe-text');
-            const subscribeButton = document.getElementById('subscribe-button');
-            const likeEffectContainer = document.getElementById('like-effect-container');
-            const dislikeEffectContainer = document.getElementById('dislike-effect-container');
+            const profilePage = document.getElementById('profile-page');
+            const profileButton = document.getElementById('profile-button');
+            const commentButton = document.getElementById('comment-button');
+            const commentModal = document.getElementById('commentModal');
             const commentDisplay = document.getElementById('comment-display');
 
-            // --- DATA & STATE ---
-            const comments = [ { user: "Bude Anung", text: "aqsa lucu banget" }, { user: "Bude Wati", text: "aqsa lagi apa itu" }, { user: "Mbah Akung", text: "aqsa mau es krim ngga" } ];
-            const captions = [ 'chots hati ini', 'video ini bikin nagih', 'malam minggu sendirian', 'kenangan masa lalu', 'senyum-senyum sendiri' ];
-            const profiles = [ 
-                { username: '@aqsa1610', icon: 'icons/profile.png' }, { username: '@video_addict', icon: 'icons/profile1.png' }, 
-                { username: '@tung_tung', icon: 'icons/profile2.png' }, { username: '@keren_guy', icon: 'icons/profile3.png' }
-            ];
+            // Data & State
+            const comments = [ { user: "Bude Anung", text: "aqsa lucu banget" }, { user: "Bude Wati", text: "aqsa lagi apa itu" }, { user: "Mbah Akung", text: "aqsa mau es krim ngga" }, { user: "Pakde Iron", text: "aqsa mancing yukk" }, { user: "Mbah Uti", text: "aqsa 😍😍" } ];
+            const captions = [ 'chots hati ini', 'video ini bikin nagih', 'malam minggu sendirian', 'kenangan masa lalu', 'senyum-senyum sendiri', 'ketemu jodoh di sini', 'lagu ini enak banget!', 'pengen balik ke masa ini', 'video ini bikin baper', 'ngakak sampe sakit perut', 'kangen masa-masa ini', 'video ini bikin semangat', 'ngeliat ini bikin senyum', 'video ini bikin nostalgia', 'baper parah nontonnya', 'video ini bikin kangen', 'ngakak sampe lupa waktu', 'vibesnya dapet banget', 'pemandangan di akhir pekan' ];
+            const profiles = [ { username: '@aqsa1610', icon: 'bi-person-circle' }, { username: '@video_addict', icon: 'bi-camera-video' }, { username: '@tung_tung', icon: 'bi-camera-video' }, { username: '@keren_guy', icon: 'bi-person-fill' }, { username: '@gamer_pro', icon: 'bi-controller' }, { username: '@tech_enthusiast', icon: 'bi-laptop' }, { username: '@nature_lover', icon: 'bi-tree' }, { username: '@foodie', icon: 'bi-cup-straw' }, { username: '@fashionista', icon: 'bi-bag-fill' }, { username: '@travel_junkie', icon: 'bi-airplane-engines-fill' }, { username: '@art_lover', icon: 'bi-palette-fill' }, { username: '@fitness_fanatic', icon: 'bi-heart-pulse-fill' }, { username: '@gadget_guru', icon: 'bi-phone-fill' }, { username: '@movie_buff', icon: 'bi-film' }, { username: '@book_worm', icon: 'bi-book-fill' }, { username: '@pet_lover', icon: 'bi-paw' }, { username: '@user_keren', icon: 'bi-emoji-sunglasses' }, { username: '@music_lover', icon: 'bi-music-note-beamed' }, { username: '@explore_id', icon: 'bi-geo-alt' } ];
             const commentMap = {}, captionMap = {}, profileMap = {}, likeStateMap = {}, dislikeStateMap = {}, subscribeStateMap = {};
             let allVideoUrls = [], currentPlaylist = [], currentVideoIndex = 0, isScrolling = false;
             let touchstartY = 0, touchendY = 0;
             const swipeThreshold = 50;
-            
-            // --- FUNGSI-FUNGSI UTAMA ---
+
+            // Functions
             function setCaptionForVideo(index) { if (!captionMap[index]) { captionMap[index] = captions[Math.floor(Math.random() * captions.length)]; } videoCaptionElement.textContent = captionMap[index]; }
-            function setProfileForVideo(index) { if (!profileMap[index]) { profileMap[index] = profiles[Math.floor(Math.random() * profiles.length)]; } const p = profileMap[index]; usernameElement.textContent = p.username; profileIconElement.src = p.icon; }
-            function updateInteractionStates(index) {
-                likeIcon.src = likeStateMap[index] ? 'icons/like-active.png' : 'icons/like.png';
-                dislikeIcon.src = dislikeStateMap[index] ? 'icons/dislike-active.png' : 'icons/dislike.png';
-                if (subscribeStateMap[index]) { subscribeButton.classList.add('subscribed'); subscribeIcon.src = 'icons/subscribed.png'; subscribeText.textContent = 'Subscribed'; } 
-                else { subscribeButton.classList.remove('subscribed'); subscribeIcon.src = 'icons/subscribe.png'; subscribeText.textContent = 'Subscribe'; }
-            }
+            function setProfileForVideo(index) { if (!profileMap[index]) { profileMap[index] = profiles[Math.floor(Math.random() * profiles.length)]; } const p = profileMap[index]; usernameElement.textContent = p.username; const c = profileIconElement.className.split(' ').find(cls => cls.startsWith('bi-')); if (c) { profileIconElement.classList.remove(c); } profileIconElement.classList.add(p.icon); }
+            function updateInteractionStates(index) { if (likeStateMap[index]) { likeIcon.classList.add('active-red'); } else { likeIcon.classList.remove('active-red'); } if (dislikeStateMap[index]) { dislikeIcon.classList.add('active-blue'); } else { dislikeIcon.classList.remove('active-blue'); } if (subscribeStateMap[index]) { subscribeButton.classList.add('subscribed'); subscribeIcon.className = 'bi bi-check-circle-fill'; subscribeText.textContent = 'Subscribed'; } else { subscribeButton.classList.remove('subscribed'); subscribeIcon.className = 'bi bi-bell-fill'; subscribeText.textContent = 'Subscribe'; } }
             function shuffleArray(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } return array; }
-            function playVideo(index) {
-                if (!currentPlaylist || currentPlaylist.length === 0) return;
-                const prevIndex = currentVideoIndex;
-                currentVideoIndex = index;
-                setCaptionForVideo(currentVideoIndex);
-                setProfileForVideo(currentVideoIndex);
-                updateInteractionStates(currentVideoIndex);
-                if (preloadVideoPlayer.src && index === (prevIndex + 1) % currentPlaylist.length) { videoPlayer.src = preloadVideoPlayer.src; } 
-                else { videoPlayer.src = currentPlaylist[currentVideoIndex]; }
-                videoPlayer.play().catch(e => console.error("Error playing video:", e));
-                preloadNextVideo(currentVideoIndex);
-            }
+            function showVideoPage() { body.classList.remove('show-profile-page'); if (videoPlayer.paused && currentPlaylist.length > 0) { videoPlayer.play(); } }
+            function loadAndPlayVideo(index) { if (currentPlaylist.length === 0) return; currentVideoIndex = index; videoPlayer.src = currentPlaylist[currentVideoIndex]; videoPlayer.loop = true; videoPlayer.load(); videoPlayer.play().catch(e => console.error("Error playing video:", e)); videoPlayer.style.display = 'block'; }
             function preloadNextVideo(index) { if (currentPlaylist.length <= 1) return; const nextIndex = (index + 1) % currentPlaylist.length; preloadVideoPlayer.src = currentPlaylist[nextIndex]; preloadVideoPlayer.load(); }
-            async function fetchAndPlayVideos() {
-                videoCaptionElement.textContent = "Mencari video di GitHub...";
-                const apiUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${GITHUB_VIDEO_PATH}?ref=${GITHUB_BRANCH}`;
-                try {
-                    const response = await fetch(apiUrl);
-                    if (!response.ok) throw new Error(`Gagal: ${response.statusText}`);
-                    const data = await response.json();
-                    const videoUrls = data.filter(item => item.type === 'file' && ['.mp4', '.webm', '.mov', '.mkv'].some(ext => item.name.toLowerCase().endsWith(ext))).map(item => item.download_url);
-                    if (videoUrls.length > 0) { allVideoUrls = videoUrls; currentPlaylist = shuffleArray([...allVideoUrls]); playVideo(0); } 
-                    else { videoCaptionElement.textContent = "Tidak ada video ditemukan."; alert('Tidak ada file video di repositori GitHub.'); }
-                } catch (error) { console.error("Error fetching from GitHub:", error); videoCaptionElement.textContent = "Gagal memuat video."; alert(`Terjadi kesalahan: ${error.message}`); }
-            }
+            function playVideo(index) { if (!currentPlaylist || currentPlaylist.length === 0) return; const prevIndex = currentVideoIndex; currentVideoIndex = index; setCaptionForVideo(currentVideoIndex); setProfileForVideo(currentVideoIndex); updateInteractionStates(currentVideoIndex); if (preloadVideoPlayer.src && index === (prevIndex + 1) % currentPlaylist.length) { videoPlayer.src = preloadVideoPlayer.src; videoPlayer.play().catch(e => console.error("Error playing preloaded video:", e)); } else { loadAndPlayVideo(currentVideoIndex); } preloadNextVideo(currentVideoIndex); }
+            async function fetchAndPlayVideos() { videoCaptionElement.textContent = "Mencari video di GitHub..."; const apiUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${GITHUB_VIDEO_PATH}?ref=${GITHUB_BRANCH}`; try { const response = await fetch(apiUrl); if (!response.ok) throw new Error(`Gagal: ${response.statusText}`); const data = await response.json(); const videoUrls = data.filter(item => item.type === 'file' && ['.mp4', '.webm', '.mov'].some(ext => item.name.toLowerCase().endsWith(ext))).map(item => item.download_url); if (videoUrls.length > 0) { allVideoUrls = videoUrls; currentPlaylist = shuffleArray([...allVideoUrls]); playVideo(0); } else { videoCaptionElement.textContent = "Tidak ada video yang ditemukan."; alert('Tidak ada file video yang valid ditemukan di repositori GitHub.'); } } catch (error) { console.error("Error fetching from GitHub:", error); videoCaptionElement.textContent = "Gagal memuat video."; alert(`Terjadi kesalahan: ${error.message}`); } }
             function playNextVideo() { if (currentPlaylist.length === 0) return; playVideo((currentVideoIndex + 1) % currentPlaylist.length); }
             function playPreviousVideo() { if (currentPlaylist.length === 0) return; playVideo((currentVideoIndex - 1 + currentPlaylist.length) % currentPlaylist.length); }
-            function handleSwipe() { if (currentPlaylist.length <= 1 || isScrolling) return; isScrolling = true; if (touchendY < touchstartY - swipeThreshold) playNextVideo(); else if (touchendY > touchstartY + swipeThreshold) playPreviousVideo(); setTimeout(() => { isScrolling = false; }, 500); }
-            function showEffect(effectContainer) { effectContainer.classList.add('active'); setTimeout(() => effectContainer.classList.remove('active'), 1500); }
+            function handleSwipe() { if (currentPlaylist.length <= 1 || isScrolling) return; isScrolling = true; if (touchendY < touchstartY - swipeThreshold) { playNextVideo(); } else if (touchendY > touchstartY + swipeThreshold) { playPreviousVideo(); } setTimeout(() => { isScrolling = false; }, 500); }
 
-            // --- EVENT LISTENERS ---
-            document.querySelectorAll('.refresh-trigger').forEach(b => b.addEventListener('click', e => { e.preventDefault(); document.body.classList.remove('show-profile-page'); if (currentPlaylist.length > 0) playVideo(0); }));
-            document.getElementById('reload-button').addEventListener('click', e => { e.preventDefault(); fetchAndPlayVideos(); });
-            document.getElementById('profile-button').addEventListener('click', e => { e.preventDefault(); document.body.classList.add('show-profile-page'); videoPlayer.pause(); });
-            document.getElementById('like-button').addEventListener('click', e => { e.preventDefault(); likeStateMap[currentVideoIndex] = !likeStateMap[currentVideoIndex]; if (likeStateMap[currentVideoIndex]) { dislikeStateMap[currentVideoIndex] = false; showEffect(likeEffectContainer); } updateInteractionStates(currentVideoIndex); });
-            document.getElementById('dislike-button').addEventListener('click', e => { e.preventDefault(); dislikeStateMap[currentVideoIndex] = !dislikeStateMap[currentVideoIndex]; if (dislikeStateMap[currentVideoIndex]) { likeStateMap[currentVideoIndex] = false; showEffect(dislikeEffectContainer); } updateInteractionStates(currentVideoIndex); });
-            subscribeButton.addEventListener('click', e => { e.preventDefault(); subscribeStateMap[currentVideoIndex] = !subscribeStateMap[currentVideoIndex]; updateInteractionStates(currentVideoIndex); });
-            document.getElementById('comment-button').addEventListener('click', e => { e.preventDefault(); if (currentPlaylist.length === 0) return; if (!commentMap[currentVideoIndex]) { commentMap[currentVideoIndex] = comments[Math.floor(Math.random() * comments.length)]; } const comment = commentMap[currentVideoIndex]; commentDisplay.innerHTML = `<p><b>${comment.user}</b><br>${comment.text}</p>`; new bootstrap.Modal(document.getElementById('commentModal')).show(); });
-            window.addEventListener('wheel', e => { if (currentPlaylist.length <= 1 || isScrolling || document.body.classList.contains('show-profile-page')) return; isScrolling = true; if (e.deltaY > 0) playNextVideo(); else if (e.deltaY < 0) playPreviousVideo(); setTimeout(() => { isScrolling = false; }, 500); });
-            window.addEventListener('touchstart', e => { touchstartY = e.changedTouches[0].screenY; });
-            window.addEventListener('touchend', e => { if (currentPlaylist.length <= 1 || isScrolling || document.body.classList.contains('show-profile-page')) return; touchendY = e.changedTouches[0].screenY; handleSwipe(); });
-            fullscreenVideoContainer.addEventListener('click', () => { if (videoPlayer.paused) videoPlayer.play(); else videoPlayer.pause(); });
-            fullscreenVideoContainer.addEventListener('mouseover', () => playPauseBtnContainer.classList.add('show'));
-            fullscreenVideoContainer.addEventListener('mouseout', () => { if (!videoPlayer.paused) playPauseBtnContainer.classList.remove('show'); });
-            videoPlayer.addEventListener('play', () => { playPauseIcon.src = 'icons/pause.png'; playPauseBtnContainer.classList.remove('show'); });
-            videoPlayer.addEventListener('pause', () => { playPauseIcon.src = 'icons/play.png'; playPauseBtnContainer.classList.add('show'); });
-            videoPlayer.addEventListener('ended', playNextVideo);
+            // Event Listeners
+            reloadButton.addEventListener('click', (e) => { e.preventDefault(); fetchAndPlayVideos(); });
+            refreshButtons.forEach(button => { button.addEventListener('click', (e) => { e.preventDefault(); showVideoPage(); if (currentPlaylist.length > 0 && currentVideoIndex !== 0) { playVideo(0); } }); });
+            profileButton.addEventListener('click', (e) => { e.preventDefault(); body.classList.add('show-profile-page'); videoPlayer.pause(); });
+            likeButton.addEventListener('click', (e) => { e.preventDefault(); likeStateMap[currentVideoIndex] = !likeStateMap[currentVideoIndex]; if (likeStateMap[currentVideoIndex]) { dislikeStateMap[currentVideoIndex] = false; likeEffectContainer.classList.add('active'); setTimeout(() => { likeEffectContainer.classList.remove('active'); }, 1500); } updateInteractionStates(currentVideoIndex); });
+            dislikeButton.addEventListener('click', (e) => { e.preventDefault(); dislikeStateMap[currentVideoIndex] = !dislikeStateMap[currentVideoIndex]; if (dislikeStateMap[currentVideoIndex]) { likeStateMap[currentVideoIndex] = false; dislikeEffectContainer.classList.add('active'); setTimeout(() => { dislikeEffectContainer.classList.remove('active'); }, 1500); } updateInteractionStates(currentVideoIndex); });
+            subscribeButton.addEventListener('click', (e) => { e.preventDefault(); subscribeStateMap[currentVideoIndex] = !subscribeStateMap[currentVideoIndex]; updateInteractionStates(currentVideoIndex); });
+            commentButton.addEventListener('click', (e) => { e.preventDefault(); if (currentPlaylist.length === 0) return; if (!commentMap[currentVideoIndex]) { commentMap[currentVideoIndex] = comments[Math.floor(Math.random() * comments.length)]; } const comment = commentMap[currentVideoIndex]; commentDisplay.innerHTML = `<p><b>${comment.user}</b><br>${comment.text}</p>`; new bootstrap.Modal(commentModal).show(); });
+            window.addEventListener('wheel', (e) => { if (currentPlaylist.length <= 1 || isScrolling || body.classList.contains('show-profile-page')) return; isScrolling = true; if (e.deltaY > 0) { playNextVideo(); } else if (e.deltaY < 0) { playPreviousVideo(); } setTimeout(() => { isScrolling = false; }, 500); });
+            window.addEventListener('touchstart', (e) => { touchstartY = e.changedTouches[0].screenY; });
+            window.addEventListener('touchend', (e) => { if (currentPlaylist.length <= 1 || isScrolling || body.classList.contains('show-profile-page')) return; touchendY = e.changedTouches[0].screenY; handleSwipe(); });
+            
+            // --- BLOK YANG DIPERBAIKI ---
+            fullscreenVideoContainer.addEventListener('click', () => { if (videoPlayer.paused) { videoPlayer.play(); } else { videoPlayer.pause(); } });
+            fullscreenVideoContainer.addEventListener('mouseover', () => { playPauseBtnContainer.classList.add('show'); });
+            fullscreenVideoContainer.addEventListener('mouseout', () => { if (!videoPlayer.paused) { playPauseBtnContainer.classList.remove('show'); } });
+            videoPlayer.addEventListener('play', () => { playPauseIcon.className = 'bi bi-pause-fill'; playPauseBtnContainer.classList.remove('show'); });
+            videoPlayer.addEventListener('pause', () => { playPauseIcon.className = 'bi bi-play-fill'; playPauseBtnContainer.classList.add('show'); });
+            videoPlayer.addEventListener('ended', () => { playNextVideo(); });
 
-            // --- INISIALISASI ---
+            // Inisialisasi
             fetchAndPlayVideos();
         });
     </script>
