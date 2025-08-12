@@ -410,7 +410,7 @@
             const GITHUB_VIDEO_PATH = 'video'; // Folder di dalam repo yang berisi video
             // =================================================================
 
-
+            // Elemen DOM
             const videoPlayer = document.getElementById('video-player');
             const preloadVideoPlayer = document.getElementById('preload-video-player');
             const fullscreenVideoContainer = document.getElementById('fullscreen-video-container');
@@ -422,284 +422,65 @@
             const refreshButtons = document.querySelectorAll('.refresh-trigger');
             const reloadButton = document.getElementById('reload-button');
             const body = document.body;
-            
             const likeButton = document.getElementById('like-button');
             const likeIcon = document.getElementById('like-icon');
             const likeEffectContainer = document.getElementById('like-effect-container');
-            
             const dislikeButton = document.getElementById('dislike-button');
             const dislikeIcon = document.getElementById('dislike-icon');
             const dislikeEffectContainer = document.getElementById('dislike-effect-container');
-            
             const subscribeButton = document.getElementById('subscribe-button');
             const subscribeIcon = document.getElementById('subscribe-icon');
             const subscribeText = document.getElementById('subscribe-text');
-
             const profilePage = document.getElementById('profile-page');
             const profileButton = document.getElementById('profile-button');
-
             const commentButton = document.getElementById('comment-button');
             const commentModal = document.getElementById('commentModal');
             const commentDisplay = document.getElementById('comment-display');
 
+            // Data & State
             const comments = [ { user: "Bude Anung", text: "aqsa lucu banget" }, { user: "Bude Wati", text: "aqsa lagi apa itu" }, { user: "Mbah Akung", text: "aqsa mau es krim ngga" }, { user: "Pakde Iron", text: "aqsa mancing yukk" }, { user: "Mbah Uti", text: "aqsa 😍😍" } ];
-            const commentMap = {};
             const captions = [ 'chots hati ini', 'video ini bikin nagih', 'malam minggu sendirian', 'kenangan masa lalu', 'senyum-senyum sendiri', 'ketemu jodoh di sini', 'lagu ini enak banget!', 'pengen balik ke masa ini', 'video ini bikin baper', 'ngakak sampe sakit perut', 'kangen masa-masa ini', 'video ini bikin semangat', 'ngeliat ini bikin senyum', 'video ini bikin nostalgia', 'baper parah nontonnya', 'video ini bikin kangen', 'ngakak sampe lupa waktu', 'vibesnya dapet banget', 'pemandangan di akhir pekan' ];
-            const captionMap = {};
             const profiles = [ { username: '@aqsa1610', icon: 'bi-person-circle' }, { username: '@video_addict', icon: 'bi-camera-video' }, { username: '@tung_tung', icon: 'bi-camera-video' }, { username: '@keren_guy', icon: 'bi-person-fill' }, { username: '@gamer_pro', icon: 'bi-controller' }, { username: '@tech_enthusiast', icon: 'bi-laptop' }, { username: '@nature_lover', icon: 'bi-tree' }, { username: '@foodie', icon: 'bi-cup-straw' }, { username: '@fashionista', icon: 'bi-bag-fill' }, { username: '@travel_junkie', icon: 'bi-airplane-engines-fill' }, { username: '@art_lover', icon: 'bi-palette-fill' }, { username: '@fitness_fanatic', icon: 'bi-heart-pulse-fill' }, { username: '@gadget_guru', icon: 'bi-phone-fill' }, { username: '@movie_buff', icon: 'bi-film' }, { username: '@book_worm', icon: 'bi-book-fill' }, { username: '@pet_lover', icon: 'bi-paw' }, { username: '@user_keren', icon: 'bi-emoji-sunglasses' }, { username: '@music_lover', icon: 'bi-music-note-beamed' }, { username: '@explore_id', icon: 'bi-geo-alt' } ];
-            const profileMap = {};
-            const likeStateMap = {};
-            const dislikeStateMap = {};
-            const subscribeStateMap = {};
-
-            let allVideoUrls = [];
-            let currentPlaylist = [];
-            let currentVideoIndex = 0;
-            let isScrolling = false;
-
-            function setCaptionForVideo(index) {
-                if (!captionMap[index]) {
-                    const randomIndex = Math.floor(Math.random() * captions.length);
-                    captionMap[index] = captions[randomIndex];
-                }
-                videoCaptionElement.textContent = captionMap[index];
-            }
-            
-            function setProfileForVideo(index) {
-                if (!profileMap[index]) {
-                    const randomIndex = Math.floor(Math.random() * profiles.length);
-                    profileMap[index] = profiles[randomIndex];
-                }
-                const selectedProfile = profileMap[index];
-                
-                usernameElement.textContent = selectedProfile.username;
-                
-                const currentIconClass = profileIconElement.className.split(' ').find(cls => cls.startsWith('bi-'));
-                if (currentIconClass) {
-                    profileIconElement.classList.remove(currentIconClass);
-                }
-                profileIconElement.classList.add(selectedProfile.icon);
-            }
-
-            function updateInteractionStates(index) {
-                if (likeStateMap[index]) { likeIcon.classList.add('active-red'); } else { likeIcon.classList.remove('active-red'); }
-                if (dislikeStateMap[index]) { dislikeIcon.classList.add('active-blue'); } else { dislikeIcon.classList.remove('active-blue'); }
-                if (subscribeStateMap[index]) {
-                    subscribeButton.classList.add('subscribed');
-                    subscribeIcon.classList.remove('bi-bell-fill');
-                    subscribeIcon.classList.add('bi-check-circle-fill');
-                    subscribeText.textContent = 'Subscribed';
-                } else {
-                    subscribeButton.classList.remove('subscribed');
-                    subscribeIcon.classList.remove('bi-check-circle-fill');
-                    subscribeIcon.classList.add('bi-bell-fill');
-                    subscribeText.textContent = 'Subscribe';
-                }
-            }
-
-            function shuffleArray(array) {
-                for (let i = array.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [array[i], array[j]] = [array[j], array[i]];
-                }
-                return array;
-            }
-            
-            function showVideoPage() {
-                body.classList.remove('show-profile-page');
-                if (videoPlayer.paused && currentPlaylist.length > 0) {
-                    videoPlayer.play();
-                }
-            }
-            
-            function loadAndPlayVideo(index) {
-                if (currentPlaylist.length === 0) {
-                    videoPlayer.style.display = 'none';
-                    return;
-                }
-                currentVideoIndex = index;
-                const videoUrl = currentPlaylist[currentVideoIndex];
-                
-                videoPlayer.src = videoUrl;
-                videoPlayer.loop = true;
-                videoPlayer.load();
-                videoPlayer.play().catch(e => console.error("Error playing video:", e));
-                videoPlayer.style.display = 'block';
-            }
-
-            function preloadNextVideo(index) {
-                if (currentPlaylist.length <= 1) return;
-                const nextIndex = (index + 1) % currentPlaylist.length;
-                const nextVideoUrl = currentPlaylist[nextIndex];
-                preloadVideoPlayer.src = nextVideoUrl;
-                preloadVideoPlayer.load();
-            }
-            
-            function playVideo(index) {
-                if (!currentPlaylist || currentPlaylist.length === 0) return;
-                
-                const prevIndex = currentVideoIndex;
-                currentVideoIndex = index;
-                
-                setCaptionForVideo(currentVideoIndex);
-                setProfileForVideo(currentVideoIndex);
-                updateInteractionStates(currentVideoIndex);
-                
-                if (preloadVideoPlayer.src && index === (prevIndex + 1) % currentPlaylist.length) {
-                    videoPlayer.src = preloadVideoPlayer.src;
-                    videoPlayer.play().catch(e => console.error("Error playing preloaded video:", e));
-                    preloadNextVideo(currentVideoIndex);
-                } else {
-                    loadAndPlayVideo(currentVideoIndex);
-                    preloadNextVideo(currentVideoIndex);
-                }
-            }
-            
-            function startPlayback(videoUrls) {
-                allVideoUrls = videoUrls;
-                if (allVideoUrls.length > 0) {
-                    currentPlaylist = shuffleArray([...allVideoUrls]);
-                    currentVideoIndex = 0;
-                    playVideo(0);
-                } else {
-                    videoCaptionElement.textContent = "Tidak ada video yang ditemukan di repositori.";
-                    alert('Tidak ada file video yang valid ditemukan di repositori GitHub.');
-                }
-            }
-
-            async function fetchAndPlayVideos() {
-                videoCaptionElement.textContent = "Mencari video di GitHub...";
-                const apiUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${GITHUB_VIDEO_PATH}?ref=${GITHUB_BRANCH}`;
-
-                try {
-                    const response = await fetch(apiUrl);
-                    if (!response.ok) {
-                        throw new Error(`Gagal mengambil data dari GitHub: ${response.statusText}`);
-                    }
-                    const data = await response.json();
-                    
-                    const videoExtensions = ['.mp4', '.webm', '.mov'];
-                    const videoUrls = data
-                        .filter(item => item.type === 'file' && videoExtensions.some(ext => item.name.toLowerCase().endsWith(ext)))
-                        .map(item => item.download_url);
-                    
-                    startPlayback(videoUrls);
-
-                } catch (error) {
-                    console.error("Error fetching from GitHub:", error);
-                    videoCaptionElement.textContent = "Gagal memuat video.";
-                    alert(`Terjadi kesalahan saat mengambil video dari GitHub: ${error.message}`);
-                }
-            }
-
-            function playNextVideo() {
-                if (currentPlaylist.length === 0) return;
-                let nextIndex = (currentVideoIndex + 1) % currentPlaylist.length;
-                playVideo(nextIndex);
-            }
-
-            function playPreviousVideo() {
-                if (currentPlaylist.length === 0) return;
-                let prevIndex = (currentVideoIndex - 1 + currentPlaylist.length) % currentPlaylist.length;
-                playVideo(prevIndex);
-            }
-            
-            // Event Listeners
-            reloadButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                fetchAndPlayVideos();
-            });
-
-            refreshButtons.forEach(button => {
-                button.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    showVideoPage();
-                    if (currentPlaylist.length > 0 && currentVideoIndex !== 0) {
-                        playVideo(0);
-                    }
-                });
-            });
-            
-            profileButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                body.classList.add('show-profile-page');
-                videoPlayer.pause();
-            });
-
-            likeButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                likeStateMap[currentVideoIndex] = !likeStateMap[currentVideoIndex];
-                if (likeStateMap[currentVideoIndex]) {
-                    dislikeStateMap[currentVideoIndex] = false;
-                    likeEffectContainer.classList.add('active');
-                    setTimeout(() => { likeEffectContainer.classList.remove('active'); }, 1500);
-                }
-                updateInteractionStates(currentVideoIndex);
-            });
-            
-            dislikeButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                dislikeStateMap[currentVideoIndex] = !dislikeStateMap[currentVideoIndex];
-                if (dislikeStateMap[currentVideoIndex]) {
-                    likeStateMap[currentVideoIndex] = false;
-                    dislikeEffectContainer.classList.add('active');
-                    setTimeout(() => { dislikeEffectContainer.classList.remove('active'); }, 1500);
-                }
-                updateInteractionStates(currentVideoIndex);
-            });
-            
-            subscribeButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                subscribeStateMap[currentVideoIndex] = !subscribeStateMap[currentVideoIndex];
-                updateInteractionStates(currentVideoIndex);
-            });
-
-            commentButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                if (currentPlaylist.length === 0) return;
-                if (!commentMap[currentVideoIndex]) {
-                    const randomIndex = Math.floor(Math.random() * comments.length);
-                    commentMap[currentVideoIndex] = comments[randomIndex];
-                }
-                const comment = commentMap[currentVideoIndex];
-                commentDisplay.innerHTML = `<p><b>${comment.user}</b><br>${comment.text}</p>`;
-                const myModal = new bootstrap.Modal(commentModal);
-                myModal.show();
-            });
-
-            window.addEventListener('wheel', (e) => {
-                if (currentPlaylist.length <= 1 || isScrolling || body.classList.contains('show-profile-page')) return;
-                isScrolling = true;
-                if (e.deltaY > 0) { playNextVideo(); } else if (e.deltaY < 0) { playPreviousVideo(); }
-                setTimeout(() => { isScrolling = false; }, 500);
-            });
-
-            let touchstartY = 0;
-            let touchendY = 0;
+            const commentMap = {}, captionMap = {}, profileMap = {}, likeStateMap = {}, dislikeStateMap = {}, subscribeStateMap = {};
+            let allVideoUrls = [], currentPlaylist = [], currentVideoIndex = 0, isScrolling = false;
+            let touchstartY = 0, touchendY = 0;
             const swipeThreshold = 50;
+
+            // Functions
+            function setCaptionForVideo(index) { if (!captionMap[index]) { captionMap[index] = captions[Math.floor(Math.random() * captions.length)]; } videoCaptionElement.textContent = captionMap[index]; }
+            function setProfileForVideo(index) { if (!profileMap[index]) { profileMap[index] = profiles[Math.floor(Math.random() * profiles.length)]; } const p = profileMap[index]; usernameElement.textContent = p.username; const c = profileIconElement.className.split(' ').find(cls => cls.startsWith('bi-')); if (c) { profileIconElement.classList.remove(c); } profileIconElement.classList.add(p.icon); }
+            function updateInteractionStates(index) { if (likeStateMap[index]) { likeIcon.classList.add('active-red'); } else { likeIcon.classList.remove('active-red'); } if (dislikeStateMap[index]) { dislikeIcon.classList.add('active-blue'); } else { dislikeIcon.classList.remove('active-blue'); } if (subscribeStateMap[index]) { subscribeButton.classList.add('subscribed'); subscribeIcon.className = 'bi bi-check-circle-fill'; subscribeText.textContent = 'Subscribed'; } else { subscribeButton.classList.remove('subscribed'); subscribeIcon.className = 'bi bi-bell-fill'; subscribeText.textContent = 'Subscribe'; } }
+            function shuffleArray(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } return array; }
+            function showVideoPage() { body.classList.remove('show-profile-page'); if (videoPlayer.paused && currentPlaylist.length > 0) { videoPlayer.play(); } }
+            function loadAndPlayVideo(index) { if (currentPlaylist.length === 0) return; currentVideoIndex = index; videoPlayer.src = currentPlaylist[currentVideoIndex]; videoPlayer.loop = true; videoPlayer.load(); videoPlayer.play().catch(e => console.error("Error playing video:", e)); videoPlayer.style.display = 'block'; }
+            function preloadNextVideo(index) { if (currentPlaylist.length <= 1) return; const nextIndex = (index + 1) % currentPlaylist.length; preloadVideoPlayer.src = currentPlaylist[nextIndex]; preloadVideoPlayer.load(); }
+            function playVideo(index) { if (!currentPlaylist || currentPlaylist.length === 0) return; const prevIndex = currentVideoIndex; currentVideoIndex = index; setCaptionForVideo(currentVideoIndex); setProfileForVideo(currentVideoIndex); updateInteractionStates(currentVideoIndex); if (preloadVideoPlayer.src && index === (prevIndex + 1) % currentPlaylist.length) { videoPlayer.src = preloadVideoPlayer.src; videoPlayer.play().catch(e => console.error("Error playing preloaded video:", e)); } else { loadAndPlayVideo(currentVideoIndex); } preloadNextVideo(currentVideoIndex); }
+            async function fetchAndPlayVideos() { videoCaptionElement.textContent = "Mencari video di GitHub..."; const apiUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${GITHUB_VIDEO_PATH}?ref=${GITHUB_BRANCH}`; try { const response = await fetch(apiUrl); if (!response.ok) throw new Error(`Gagal: ${response.statusText}`); const data = await response.json(); const videoUrls = data.filter(item => item.type === 'file' && ['.mp4', '.webm', '.mov'].some(ext => item.name.toLowerCase().endsWith(ext))).map(item => item.download_url); if (videoUrls.length > 0) { allVideoUrls = videoUrls; currentPlaylist = shuffleArray([...allVideoUrls]); playVideo(0); } else { videoCaptionElement.textContent = "Tidak ada video yang ditemukan."; alert('Tidak ada file video yang valid ditemukan di repositori GitHub.'); } } catch (error) { console.error("Error fetching from GitHub:", error); videoCaptionElement.textContent = "Gagal memuat video."; alert(`Terjadi kesalahan: ${error.message}`); } }
+            function playNextVideo() { if (currentPlaylist.length === 0) return; playVideo((currentVideoIndex + 1) % currentPlaylist.length); }
+            function playPreviousVideo() { if (currentPlaylist.length === 0) return; playVideo((currentVideoIndex - 1 + currentPlaylist.length) % currentPlaylist.length); }
+            function handleSwipe() { if (currentPlaylist.length <= 1 || isScrolling) return; isScrolling = true; if (touchendY < touchstartY - swipeThreshold) { playNextVideo(); } else if (touchendY > touchstartY + swipeThreshold) { playPreviousVideo(); } setTimeout(() => { isScrolling = false; }, 500); }
+
+            // Event Listeners
+            reloadButton.addEventListener('click', (e) => { e.preventDefault(); fetchAndPlayVideos(); });
+            refreshButtons.forEach(button => { button.addEventListener('click', (e) => { e.preventDefault(); showVideoPage(); if (currentPlaylist.length > 0 && currentVideoIndex !== 0) { playVideo(0); } }); });
+            profileButton.addEventListener('click', (e) => { e.preventDefault(); body.classList.add('show-profile-page'); videoPlayer.pause(); });
+            likeButton.addEventListener('click', (e) => { e.preventDefault(); likeStateMap[currentVideoIndex] = !likeStateMap[currentVideoIndex]; if (likeStateMap[currentVideoIndex]) { dislikeStateMap[currentVideoIndex] = false; likeEffectContainer.classList.add('active'); setTimeout(() => { likeEffectContainer.classList.remove('active'); }, 1500); } updateInteractionStates(currentVideoIndex); });
+            dislikeButton.addEventListener('click', (e) => { e.preventDefault(); dislikeStateMap[currentVideoIndex] = !dislikeStateMap[currentVideoIndex]; if (dislikeStateMap[currentVideoIndex]) { likeStateMap[currentVideoIndex] = false; dislikeEffectContainer.classList.add('active'); setTimeout(() => { dislikeEffectContainer.classList.remove('active'); }, 1500); } updateInteractionStates(currentVideoIndex); });
+            subscribeButton.addEventListener('click', (e) => { e.preventDefault(); subscribeStateMap[currentVideoIndex] = !subscribeStateMap[currentVideoIndex]; updateInteractionStates(currentVideoIndex); });
+            commentButton.addEventListener('click', (e) => { e.preventDefault(); if (currentPlaylist.length === 0) return; if (!commentMap[currentVideoIndex]) { commentMap[currentVideoIndex] = comments[Math.floor(Math.random() * comments.length)]; } const comment = commentMap[currentVideoIndex]; commentDisplay.innerHTML = `<p><b>${comment.user}</b><br>${comment.text}</p>`; new bootstrap.Modal(commentModal).show(); });
+            window.addEventListener('wheel', (e) => { if (currentPlaylist.length <= 1 || isScrolling || body.classList.contains('show-profile-page')) return; isScrolling = true; if (e.deltaY > 0) { playNextVideo(); } else if (e.deltaY < 0) { playPreviousVideo(); } setTimeout(() => { isScrolling = false; }, 500); });
             window.addEventListener('touchstart', (e) => { touchstartY = e.changedTouches[0].screenY; });
-            window.addEventListener('touchend', (e) => {
-                if (currentPlaylist.length <= 1 || isScrolling || body.classList.contains('show-profile-page')) return;
-                touchendY = e.changedTouches[0].screenY;
-                handleSwipe();
-            });
-
-            function handleSwipe() {
-                if (currentPlaylist.length <= 1 || isScrolling) return;
-                isScrolling = true;
-                if (touchendY < touchstartY - swipeThreshold) { playNextVideo(); } 
-                else if (touchendY > touchstartY + swipeThreshold) { playPreviousVideo(); }
-                setTimeout(() => { isScrolling = false; }, 500);
-            }
-
+            window.addEventListener('touchend', (e) => { if (currentPlaylist.length <= 1 || isScrolling || body.classList.contains('show-profile-page')) return; touchendY = e.changedTouches[0].screenY; handleSwipe(); });
+            
+            // --- BLOK YANG DIPERBAIKI ---
             fullscreenVideoContainer.addEventListener('click', () => { if (videoPlayer.paused) { videoPlayer.play(); } else { videoPlayer.pause(); } });
-            fullscreenVideoContainer.addEventListener('mouseover', () => { if (videoPlayer.paused) { playPauseBtnContainer.classList.add('show'); } });
+            fullscreenVideoContainer.addEventListener('mouseover', () => { playPauseBtnContainer.classList.add('show'); });
             fullscreenVideoContainer.addEventListener('mouseout', () => { if (!videoPlayer.paused) { playPauseBtnContainer.classList.remove('show'); } });
-            videoPlayer.addEventListener('play', () => { playPauseIcon.className = 'bi bi-pause-fill'; });
+            videoPlayer.addEventListener('play', () => { playPauseIcon.className = 'bi bi-pause-fill'; playPauseBtnContainer.classList.remove('show'); });
             videoPlayer.addEventListener('pause', () => { playPauseIcon.className = 'bi bi-play-fill'; playPauseBtnContainer.classList.add('show'); });
             videoPlayer.addEventListener('ended', () => { playNextVideo(); });
 
-            // Inisialisasi pengambilan video dari GitHub saat halaman dimuat
+            // Inisialisasi
             fetchAndPlayVideos();
         });
     </script>
