@@ -98,10 +98,10 @@
             margin-bottom: 0.8rem;
         }
         /* Mengatur display section */
-        #projects-section, #blog-section, #contact-form-section {
+        #all-projects-page, #blog-section, #contact-form-section {
             display: none;
         }
-        #projects-section {
+        #all-projects-page {
             display: block; /* Menampilkan Projects sebagai default */
         }
         .blog-title {
@@ -195,6 +195,21 @@
             justify-content: center;
             gap: 0.5rem;
         }
+        .popular-badge {
+            background-color: #ffc107;
+            color: #343a40;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin-left: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .popular-badge .bi {
+            color: #000;
+        }
         @media (max-width: 767.98px) {
             section { padding: 32px 0; }
             .brand-title { font-size: 1.2rem; }
@@ -214,17 +229,18 @@
     </style>
 </head>
 <body>
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow">
         <div class="container">
-            <a class="navbar-brand fw-bold nav-link-custom" href="#projects-section" id="brand-link">SoftWill</a>
+            <a class="navbar-brand fw-bold nav-link-custom" href="#all-projects-page" id="brand-link">SoftWill</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigasi">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item"><a class="nav-link nav-link-custom active" href="#projects-section">Home</a></li>
-                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#projects-section">Proyek</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom active" href="#all-projects-page">Home</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#all-projects-page">Proyek</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="#blog-section">Blog</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="#contact-form-section">Kontak</a></li>
                     <li class="nav-item">
@@ -237,9 +253,41 @@
         </div>
     </nav>
     <main>
-        <section id="projects-section">
+        <!-- Halaman Proyek -->
+        <section id="all-projects-page">
             <div class="container">
-                <h2 class="text-center mb-4">Proyek-Proyek Saya</h2>
+                <h2 class="text-center mb-4">Ringkasan Proyek Saya</h2>
+                
+                <h3 class="mt-5 mb-3">Proyek Populer</h3>
+                <div>
+                    <!-- Proyek Populer 1 -->
+                    <div class="smooth-card project-item" style="animation-delay:.2s;">
+                        <div class="project-title">
+                            <i class="bi bi-star-fill text-warning"></i>
+                            Portofolio Website
+                            <span class="popular-badge">
+                                <i class="bi bi-fire"></i> Populer
+                            </span>
+                        </div>
+                        <a href="https://example.com/portfolio-project" class="project-link" target="_blank">Lihat Proyek</a>
+                        <p class="mt-2 mb-0 text-muted">Deskripsi singkat: Website portofolio ini dibangun dengan Bootstrap 5, fokus pada desain responsif dan fitur dark mode.</p>
+                    </div>
+                    <div class="project-divider"></div>
+                    <!-- Proyek Populer 2 -->
+                    <div class="smooth-card project-item" style="animation-delay:.4s;">
+                        <div class="project-title">
+                            <i class="bi bi-star-fill text-warning"></i>
+                            Aplikasi To-Do List Sederhana
+                            <span class="popular-badge">
+                                <i class="bi bi-fire"></i> Populer
+                            </span>
+                        </div>
+                        <a href="https://example.com/todo-list" class="project-link" target="_blank">Lihat Proyek</a>
+                        <p class="mt-2 mb-0 text-muted">Deskripsi singkat: Aplikasi web untuk manajemen tugas harian, dibuat menggunakan JavaScript murni.</p>
+                    </div>
+                </div>
+
+                <h3 class="mt-5 mb-3">Semua Proyek</h3>
                 <div>
                     <div class="smooth-card project-item" style="animation-delay:.2s;">
                         <div class="project-title">
@@ -247,6 +295,7 @@
                             Proyek 1
                         </div>
                         <a href="[LINK_KE_PROYEK_ANDA_1]" class="project-link" target="_blank">proyek</a>
+                        <p class="mt-2 mb-0 text-muted">Deskripsi singkat: Jelaskan proyek ini dalam satu atau dua kalimat.</p>
                     </div>
                     <div class="project-divider"></div>
                     <div class="smooth-card project-item" style="animation-delay:.4s;">
@@ -255,6 +304,7 @@
                             Proyek 2
                         </div>
                         <a href="[LINK_KE_PROYEK_ANDA_2]" class="project-link" target="_blank">proyek</a>
+                        <p class="mt-2 mb-0 text-muted">Deskripsi singkat: Jelaskan proyek ini dalam satu atau dua kalimat.</p>
                     </div>
                     <div class="project-divider"></div>
                     <div class="smooth-card project-item" style="animation-delay:.6s;">
@@ -263,10 +313,12 @@
                             Proyek 3
                         </div>
                         <a href="[LINK_KE_PROYEK_ANDA_3]" class="project-link" target="_blank">proyek</a>
+                        <p class="mt-2 mb-0 text-muted">Deskripsi singkat: Jelaskan proyek ini dalam satu atau dua kalimat.</p>
                     </div>
                 </div>
             </div>
         </section>
+        <!-- Bagian Blog -->
         <section id="blog-section">
             <div class="container">
                 <h2 class="text-center mb-5">Blog / Artikel</h2>
@@ -304,6 +356,7 @@
                 </div>
             </div>
         </section>
+        <!-- Bagian Form Kontak -->
         <section id="contact-form-section">
             <div class="container">
                 <h2 class="text-center mb-4">Hubungi Saya</h2>
@@ -374,7 +427,7 @@
 
         // Tampilkan/Sembunyikan Bagian
         const sections = {
-            'projects': document.getElementById('projects-section'),
+            'projects': document.getElementById('all-projects-page'),
             'blog': document.getElementById('blog-section'),
             'contact': document.getElementById('contact-form-section')
         };
@@ -431,7 +484,7 @@
             });
         });
         
-        showSection('projects', document.querySelector('a[href="#projects-section"]'));
+        showSection('projects', document.querySelector('a[href="#all-projects-page"]'));
 
         // Formspree handling
         const form = document.getElementById('contact-form');
@@ -467,18 +520,6 @@
                 formStatus.classList.remove('d-none');
             }
         });
-    </script>
-    <script>
-      var _paq = window._paq = window._paq || [];
-      _paq.push(['trackPageView']);
-      _paq.push(['enableLinkTracking']);
-      (function() {
-        var u="https://williyanto.matomo.cloud/";
-        _paq.push(['setTrackerUrl', u+'matomo.php']);
-        _paq.push(['setSiteId', '1']);
-        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-        g.async=true; g.src='https://cdn.matomo.cloud/williyanto.matomo.cloud/matomo.js'; s.parentNode.insertBefore(g,s);
-      })();
     </script>
 </body>
 </html>
