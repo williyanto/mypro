@@ -7,9 +7,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <title>Portofolio Saya</title>
     <style>
-        html, body {
-            height: 100%;
-        }
+        html, body { height: 100%; }
         body {
             min-height: 100vh;
             display: flex;
@@ -18,45 +16,11 @@
             transition: background 0.3s, color 0.3s;
             scroll-behavior: smooth;
         }
-        main {
-            flex: 1 0 auto;
-        }
+        main { flex: 1 0 auto; }
         section {
             padding: 60px 0;
             transition: background 0.3s, color 0.3s;
-        }
-        .brand-container {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            margin-bottom: 2rem;
-        }
-        .brand-title {
-            font-weight: bold;
-            font-size: 2rem;
-            margin-bottom: 0;
-            line-height: 1;
-            opacity: 0;
-            transform: translateX(-40px);
-            animation: fadeInLeft 1s forwards 0.3s;
-        }
-        .brand-subtitle {
-            font-size: 0.85rem;
-            color: #adb5bd;
-            margin-top: 0;
-            margin-bottom: 0;
-            line-height: 1;
-            position: relative;
-            top: -2px;
-            opacity: 0;
-            transform: translateX(-40px);
-            animation: fadeInLeft 1s forwards 0.5s;
-        }
-        @keyframes fadeInLeft {
-            to {
-                opacity: 1;
-                transform: none;
-            }
+            display: none; /* semua section disembunyikan default */
         }
         .smooth-card {
             opacity: 0;
@@ -65,164 +29,46 @@
             transition: background 0.3s, color 0.3s, box-shadow 0.3s;
         }
         @keyframes fadeInSmooth {
-            to {
-                opacity: 1;
-                transform: none;
-            }
+            to { opacity: 1; transform: none; }
         }
-        .project-title {
-            font-weight: bold;
-            margin-bottom: 0.1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .project-title .bi {
-            font-size: 1.2em;
-            color: #0d6efd;
-        }
-        .project-link {
-            text-decoration: underline;
-            color: #0d6efd;
-            margin-bottom: 0.1rem;
-            display: inline-block;
-        }
-        .project-link:hover {
-            color: #0a58ca;
-        }
-        .project-divider {
-            border-top: 1px solid #dee2e6;
-            margin: 0.5rem 0;
-        }
-        .project-item {
-            margin-bottom: 0.8rem;
-        }
-        /* Mengatur display section */
-        #all-projects-page, #blog-section, #contact-form-section {
-            display: none;
-        }
-        #all-projects-page {
-            display: block; /* Menampilkan Projects sebagai default */
-        }
-        .blog-title {
-            font-weight: bold;
-            font-size: 1.25rem;
-        }
-        .blog-meta {
-            font-size: 0.9rem;
-            color: #6c757d;
-        }
+        .project-title { font-weight: bold; margin-bottom: .1rem; display: flex; align-items: center; gap: .5rem; }
+        .project-title .bi { font-size: 1.2em; color: #0d6efd; }
+        .project-link { text-decoration: underline; color: #0d6efd; margin-bottom: .1rem; display: inline-block; }
+        .project-link:hover { color: #0a58ca; }
+        .project-divider { border-top: 1px solid #dee2e6; margin: .5rem 0; }
+        .project-item { margin-bottom: .8rem; }
+        .blog-title { font-weight: bold; font-size: 1.25rem; }
+        .blog-meta { font-size: .9rem; color: #6c757d; }
         .blog-card {
-            background: #f8f9fa;
-            border-radius: 0.5rem;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 1px 4px rgba(0,0,0,.05);
-            transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+            background: #f8f9fa; border-radius: .5rem; padding: 1.5rem; margin-bottom: 2rem;
+            box-shadow: 0 1px 4px rgba(0,0,0,.05); transition: background .3s, color .3s, box-shadow .3s;
         }
-        .blog-card:hover {
-            background: #e9ecef;
-            box-shadow: 0 4px 20px rgba(0,0,0,.08);
-            transform: scale(1.01);
-        }
-        body.dark-mode .blog-card,
-        body.dark-mode .smooth-card {
-            background: #23272b;
-            color: #f8f9fa;
-        }
-        body.dark-mode .blog-card:hover,
-        body.dark-mode .smooth-card:hover {
-            background: #181a1b;
-        }
-        body.dark-mode .blog-meta {
-            color: #adb5bd;
-        }
-        body.dark-mode {
-            background: #212529;
-            color: #f8f9fa;
-        }
-        body.dark-mode section,
-        body.dark-mode .contact-section {
-            background: #212529;
-            color: #f8f9fa;
-        }
-        body.dark-mode .project-divider {
-            border-top: 1px solid #495057;
-        }
-        body.dark-mode footer {
-            background: #181a1b !important;
-            color: #f8f9fa;
-        }
+        .blog-card:hover { background: #e9ecef; box-shadow: 0 4px 20px rgba(0,0,0,.08); transform: scale(1.01); }
+        body.dark-mode .blog-card, body.dark-mode .smooth-card { background: #23272b; color: #f8f9fa; }
+        body.dark-mode .blog-card:hover, body.dark-mode .smooth-card:hover { background: #181a1b; }
+        body.dark-mode .blog-meta { color: #adb5bd; }
+        body.dark-mode { background: #212529; color: #f8f9fa; }
+        body.dark-mode .project-divider, body.dark-mode hr { border-top-color: #495057; }
+        body.dark-mode footer { background: #181a1b; color: #f8f9fa; }
         .dark-toggle-btn {
-            border: none;
-            background: none;
-            color: #fff;
-            font-size: 1.3rem;
-            margin-left: 0.5rem;
-            cursor: pointer;
-            transition: color 0.3s;
+            border: none; background: none; color: #fff; font-size: 1.3rem; margin-left: .5rem; cursor: pointer; transition: color .3s;
         }
-        body.dark-mode .dark-toggle-btn {
-            color: #f8f9fa;
-        }
-        .navbar {
-            transition: background 0.3s, color 0.3s;
-        }
-        body.dark-mode .navbar {
-            background: #181a1b !important;
-        }
-        .navbar-nav .nav-link {
-            font-size: 1rem;
-        }
-        footer#contact {
-            width: 100%;
-            background: #181a1b !important;
-            color: #f8f9fa;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        footer#contact .container {
-            width: 100%;
-            max-width: 100vw;
-            margin: 0 auto;
-        }
-        .visitor-stat {
-            margin-top: 10px;
-            margin-bottom: -10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
+        body.dark-mode .dark-toggle-btn { color: #f8f9fa; }
+        .navbar { transition: background .3s, color .3s; }
+        body.dark-mode .navbar { background: #181a1b !important; }
         .popular-badge {
-            background-color: #ffc107;
-            color: #343a40;
-            font-weight: bold;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.8em;
-            margin-left: 10px;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
+            background-color: #ffc107; color: #343a40; font-weight: bold; padding: 2px 8px;
+            border-radius: 12px; font-size: .8em; margin-left: 10px; display: inline-flex; align-items: center; gap: 4px;
         }
-        .popular-badge .bi {
-            color: #000;
-        }
+        .popular-badge .bi { color: #000; }
         @media (max-width: 767.98px) {
             section { padding: 32px 0; }
-            .brand-title { font-size: 1.2rem; }
-            .blog-card { padding: 1rem; font-size: 0.98em; }
-            .container { padding-left: 8px; padding-right: 8px; }
-            .visitor-stat { flex-direction: column; font-size: 0.9em; }
-            footer#contact .container { padding-left: 0; padding-right: 0; }
+            h1,h2 { font-size: 1.5rem; }
+            .blog-card { padding: 1rem; font-size: .98em; }
         }
         @media (max-width: 575.98px) {
-            .brand-title { font-size: 1rem; }
-            .brand-subtitle { font-size: 0.6rem; }
             .blog-title { font-size: 1rem; }
-            .blog-card { padding: 0.75rem; }
+            .blog-card { padding: .75rem; }
             .project-title .bi { font-size: 1em; }
             .dark-toggle-btn { font-size: 1.15rem; }
         }
@@ -232,17 +78,16 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow">
         <div class="container">
-            <a class="navbar-brand fw-bold nav-link-custom" href="#all-projects-page" id="brand-link">SoftWill</a>
+            <a class="navbar-brand fw-bold nav-link-custom" href="#projects-section" data-target="projects">SoftWill</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigasi">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item"><a class="nav-link nav-link-custom active" href="#all-projects-page">Home</a></li>
-                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#all-projects-page">Proyek</a></li>
-                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#blog-section">Blog</a></li>
-                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#contact-form-section">Kontak</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom active" href="#projects-section" data-target="projects">Proyek</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#blog-section" data-target="blog">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#contact-form-section" data-target="contact">Kontak</a></li>
                     <li class="nav-item">
                         <button id="darkToggleBtn" class="dark-toggle-btn" title="Toggle Dark Mode">
                             <i class="bi bi-moon"></i>
@@ -252,131 +97,102 @@
             </div>
         </div>
     </nav>
+
+    <!-- Main -->
     <main>
-        <!-- Halaman Proyek -->
-        <section id="all-projects-page">
+        <!-- Proyek -->
+        <section id="projects-section">
             <div class="container">
-                <h2 class="text-center mb-4">Ringkasan Proyek Saya</h2>
-                
-                <h3 class="mt-5 mb-3">Proyek Populer</h3>
+                <h1 class="text-center mb-5">Proyek Saya</h1>
+                <h2 class="mb-3">Proyek Populer</h2>
                 <div>
-                    <!-- Proyek Populer 1 -->
-                    <div class="smooth-card project-item" style="animation-delay:.2s;">
+                    <div class="smooth-card project-item p-3" style="animation-delay:.2s;">
                         <div class="project-title">
-                            <i class="bi bi-star-fill text-warning"></i>
-                            Portofolio Website
-                            <span class="popular-badge">
-                                <i class="bi bi-fire"></i> Populer
-                            </span>
+                            <i class="bi bi-star-fill text-warning"></i> Portofolio Website
+                            <span class="popular-badge"><i class="bi bi-fire"></i> Populer</span>
                         </div>
                         <a href="https://example.com/portfolio-project" class="project-link" target="_blank">Lihat Proyek</a>
-                        <p class="mt-2 mb-0 text-muted">Deskripsi singkat: Website portofolio ini dibangun dengan Bootstrap 5, fokus pada desain responsif dan fitur dark mode.</p>
+                        <p class="mt-2 mb-0 text-muted">Website portofolio dengan Bootstrap 5, responsif dan fitur dark mode.</p>
                     </div>
                     <div class="project-divider"></div>
-                    <!-- Proyek Populer 2 -->
-                    <div class="smooth-card project-item" style="animation-delay:.4s;">
+                    <div class="smooth-card project-item p-3" style="animation-delay:.4s;">
                         <div class="project-title">
-                            <i class="bi bi-star-fill text-warning"></i>
-                            Aplikasi To-Do List Sederhana
-                            <span class="popular-badge">
-                                <i class="bi bi-fire"></i> Populer
-                            </span>
+                            <i class="bi bi-star-fill text-warning"></i> Aplikasi To-Do List
+                            <span class="popular-badge"><i class="bi bi-fire"></i> Populer</span>
                         </div>
                         <a href="https://example.com/todo-list" class="project-link" target="_blank">Lihat Proyek</a>
-                        <p class="mt-2 mb-0 text-muted">Deskripsi singkat: Aplikasi web untuk manajemen tugas harian, dibuat menggunakan JavaScript murni.</p>
+                        <p class="mt-2 mb-0 text-muted">Aplikasi manajemen tugas harian berbasis JavaScript murni.</p>
                     </div>
                 </div>
-
-                <h3 class="mt-5 mb-3">Semua Proyek</h3>
+                <hr class="my-5">
+                <h2 class="mb-3">Semua Proyek</h2>
                 <div>
-                    <div class="smooth-card project-item" style="animation-delay:.2s;">
-                        <div class="project-title">
-                            <i class="bi bi-folder"></i>
-                            Proyek 1
-                        </div>
+                    <div class="smooth-card project-item p-3" style="animation-delay:.2s;">
+                        <div class="project-title"><i class="bi bi-folder"></i> Proyek 1</div>
                         <a href="[LINK_KE_PROYEK_ANDA_1]" class="project-link" target="_blank">proyek</a>
-                        <p class="mt-2 mb-0 text-muted">Deskripsi singkat: Jelaskan proyek ini dalam satu atau dua kalimat.</p>
+                        <p class="mt-2 mb-0 text-muted">Deskripsi singkat proyek ini.</p>
                     </div>
                     <div class="project-divider"></div>
-                    <div class="smooth-card project-item" style="animation-delay:.4s;">
-                        <div class="project-title">
-                            <i class="bi bi-folder"></i>
-                            Proyek 2
-                        </div>
+                    <div class="smooth-card project-item p-3" style="animation-delay:.4s;">
+                        <div class="project-title"><i class="bi bi-folder"></i> Proyek 2</div>
                         <a href="[LINK_KE_PROYEK_ANDA_2]" class="project-link" target="_blank">proyek</a>
-                        <p class="mt-2 mb-0 text-muted">Deskripsi singkat: Jelaskan proyek ini dalam satu atau dua kalimat.</p>
+                        <p class="mt-2 mb-0 text-muted">Deskripsi singkat proyek ini.</p>
                     </div>
                     <div class="project-divider"></div>
-                    <div class="smooth-card project-item" style="animation-delay:.6s;">
-                        <div class="project-title">
-                            <i class="bi bi-folder"></i>
-                            Proyek 3
-                        </div>
+                    <div class="smooth-card project-item p-3" style="animation-delay:.6s;">
+                        <div class="project-title"><i class="bi bi-folder"></i> Proyek 3</div>
                         <a href="[LINK_KE_PROYEK_ANDA_3]" class="project-link" target="_blank">proyek</a>
-                        <p class="mt-2 mb-0 text-muted">Deskripsi singkat: Jelaskan proyek ini dalam satu atau dua kalimat.</p>
+                        <p class="mt-2 mb-0 text-muted">Deskripsi singkat proyek ini.</p>
                     </div>
                 </div>
             </div>
         </section>
-        <!-- Bagian Blog -->
+
+        <!-- Blog -->
         <section id="blog-section">
             <div class="container">
-                <h2 class="text-center mb-5">Blog / Artikel</h2>
+                <h1 class="text-center mb-5">Blog / Artikel</h1>
                 <div class="row gx-3 gy-3">
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="smooth-card blog-card" style="animation-delay:.2s;">
-                            <div class="blog-title">Cara Membuat Website Portofolio Sederhana Dengan Bootstrap</div>
+                            <div class="blog-title">Cara Membuat Website Portofolio</div>
                             <div class="blog-meta mb-2">26 Agustus 2025 | Bootstrap, Tutorial</div>
-                            <div>
-                                Pada artikel ini saya membahas langkah-langkah membuat website portofolio sederhana dan responsif menggunakan Bootstrap versi terbaru. Dilengkapi contoh kode dan tips desain!
-                            </div>
+                            <div>Langkah-langkah membuat website portofolio sederhana dan responsif dengan Bootstrap.</div>
                             <a href="#" class="btn btn-link mt-2 ps-0">Baca selengkapnya</a>
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="smooth-card blog-card" style="animation-delay:.4s;">
-                            <div class="blog-title">Mengaktifkan Fitur Dark Mode Pada Website</div>
-                            <div class="blog-meta mb-2">20 Agustus 2025 | CSS, JavaScript</div>
-                            <div>
-                                Fitur dark mode kini jadi standar di banyak aplikasi. Simak cara mudah menambahkannya ke website statis menggunakan CSS dan sedikit JavaScript.
-                            </div>
-                            <a href="#" class="btn btn-link mt-2 ps-0">Baca selengkapnya</a>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="smooth-card blog-card" style="animation-delay:.6s;">
-                            <div class="blog-title">Tips Membuat Kontak Form Yang Efektif</div>
-                            <div class="blog-meta mb-2">10 Agustus 2025 | Form, UX</div>
-                            <div>
-                                Kontak form adalah bagian penting website portofolio. Saya rangkum kiat agar form mudah digunakan dan meningkatkan peluang pesan masuk.
-                            </div>
+                            <div class="blog-title">Tips Desain Responsif</div>
+                            <div class="blog-meta mb-2">20 Agustus 2025 | Desain, UI/UX</div>
+                            <div>Cara membuat tampilan web tetap rapi di semua perangkat.</div>
                             <a href="#" class="btn btn-link mt-2 ps-0">Baca selengkapnya</a>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-        <!-- Bagian Form Kontak -->
+
+        <!-- Kontak -->
         <section id="contact-form-section">
             <div class="container">
-                <h2 class="text-center mb-4">Hubungi Saya</h2>
+                <h1 class="text-center mb-4">Hubungi Saya</h1>
                 <div class="row justify-content-center">
                     <div class="col-lg-8">
                         <form id="contact-form" action="https://formspree.io/f/xbjnybqb" method="POST" class="smooth-card p-4">
                             <div class="mb-3">
-                                <label for="nama" class="form-label">Nama Anda</label>
-                                <input type="text" class="form-control" id="nama" name="nama" required>
+                                <label for="name" class="form-label">Nama</label>
+                                <input type="text" name="name" id="name" class="form-control" required>
                             </div>
                             <div class="mb-3">
-                                <label for="email" class="form-label">Alamat Email</label>
-                                <input type="email" class="form-control" id="email" name="email" required>
-                                <div class="form-text">Kami tidak akan membagikan email Anda kepada orang lain.</div>
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" name="_replyto" id="email" class="form-control" required>
                             </div>
                             <div class="mb-3">
-                                <label for="pesan" class="form-label">Pesan Anda</label>
-                                <textarea class="form-control" id="pesan" name="pesan" rows="5" required></textarea>
+                                <label for="message" class="form-label">Pesan</label>
+                                <textarea name="message" id="message" rows="4" class="form-control" required></textarea>
                             </div>
-                            <button type="submit" class="btn btn-primary w-100">Kirim Pesan</button>
+                            <button type="submit" class="btn btn-primary">Kirim</button>
                         </form>
                         <div id="form-status" class="mt-3 text-center d-none"></div>
                     </div>
@@ -384,140 +200,97 @@
             </div>
         </section>
     </main>
-    <footer id="contact" class="bg-dark text-white text-center py-4">
-        <div class="container d-flex flex-column align-items-center">
-            <p>&copy; Williyanto Adi 2025</p>
+
+    <!-- Footer -->
+    <footer id="contact" class="text-center py-4">
+        <div class="container">
+            <p class="mb-1">© 2025 SoftWill. All rights reserved.</p>
             <div>
-                <a href="#" class="text-white me-3 fs-4"><i class="bi bi-github"></i></a>
-                <a href="#" class="text-white me-3 fs-4"><i class="bi bi-linkedin"></i></a>
-                <a href="#" class="text-white me-3 fs-4"><i class="bi bi-instagram"></i></a>
-                <span class="me-3 align-middle" style="vertical-align:middle;">
-                    <img src="https://visitor-badge.laobi.icu/badge?page_id=williyanto.portofolio"
-                        alt="visitor badge" style="height:1.5em;vertical-align:middle;">
-                </span>
+                <a href="https://github.com/" class="text-decoration-none me-3"><i class="bi bi-github"></i></a>
+                <a href="https://linkedin.com/" class="text-decoration-none me-3"><i class="bi bi-linkedin"></i></a>
+                <a href="mailto:your@email.com" class="text-decoration-none"><i class="bi bi-envelope"></i></a>
             </div>
         </div>
     </footer>
+
+    <!-- Script -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Dark Mode
         const darkToggleBtn = document.getElementById('darkToggleBtn');
         const body = document.body;
-
         function setDarkMode(on) {
             if(on) {
                 body.classList.add('dark-mode');
                 darkToggleBtn.innerHTML = '<i class="bi bi-brightness-high"></i>';
-                localStorage.setItem('darkMode', 'on');
+                localStorage.setItem('darkMode','on');
             } else {
                 body.classList.remove('dark-mode');
                 darkToggleBtn.innerHTML = '<i class="bi bi-moon"></i>';
-                localStorage.setItem('darkMode', 'off');
+                localStorage.setItem('darkMode','off');
             }
         }
-        darkToggleBtn.addEventListener('click', function(e) {
+        darkToggleBtn.addEventListener('click', e=>{
             e.stopPropagation();
             setDarkMode(!body.classList.contains('dark-mode'));
         });
-        window.addEventListener('DOMContentLoaded', function() {
-            if(localStorage.getItem('darkMode') === 'on') {
-                setDarkMode(true);
-            }
+        window.addEventListener('DOMContentLoaded', ()=>{
+            if(localStorage.getItem('darkMode')==='on'){ setDarkMode(true); }
         });
 
-        // Tampilkan/Sembunyikan Bagian
+        // Navigasi Section
         const sections = {
-            'projects': document.getElementById('all-projects-page'),
+            'projects': document.getElementById('projects-section'),
             'blog': document.getElementById('blog-section'),
             'contact': document.getElementById('contact-form-section')
         };
         const navLinks = document.querySelectorAll('.nav-link-custom');
         const navbarCollapse = document.getElementById('navbarNav');
-
-        function showSection(sectionId, element) {
-            for (let id in sections) {
-                sections[id].style.display = 'none';
-            }
-            sections[sectionId].style.display = 'block';
-
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-            });
-            if (element) {
-                element.classList.add('active');
-            }
-            
-            if (navbarCollapse.classList.contains('show')) {
-                const bsCollapse = new bootstrap.Collapse(navbarCollapse, {
-                    toggle: false
-                });
+        function showSection(sectionId, element){
+            for(let id in sections){ sections[id].style.display='none'; }
+            if(sections[sectionId]) sections[sectionId].style.display='block';
+            navLinks.forEach(l=>l.classList.remove('active'));
+            if(element) element.classList.add('active');
+            if(navbarCollapse.classList.contains('show')){
+                const bsCollapse=new bootstrap.Collapse(navbarCollapse,{toggle:false});
                 bsCollapse.hide();
             }
-
-            document.querySelectorAll('.smooth-card').forEach(function(el){
-                el.style.animation = "none";
-                el.offsetHeight;
-                el.style.animation = null;
+            document.querySelectorAll('.smooth-card').forEach(el=>{
+                el.style.animation="none"; el.offsetHeight; el.style.animation=null;
             });
-            
-            setTimeout(() => {
-                const targetSection = document.querySelector(`#${sectionId}-section`);
-                if (targetSection) {
-                    window.scrollTo({
-                        top: targetSection.offsetTop - 70,
-                        behavior: 'smooth'
-                    });
-                }
-            }, 100);
         }
-
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
+        navLinks.forEach(link=>{
+            link.addEventListener('click', e=>{
                 e.preventDefault();
-                let sectionId = 'projects';
-                if (e.target.href.includes('#blog-section')) {
-                    sectionId = 'blog';
-                } else if (e.target.href.includes('#contact-form-section')) {
-                    sectionId = 'contact';
-                }
-                showSection(sectionId, e.target);
+                const sectionId=e.target.dataset.target;
+                if(sectionId && sections[sectionId]) showSection(sectionId, e.target);
             });
         });
-        
-        showSection('projects', document.querySelector('a[href="#all-projects-page"]'));
+        // default ke Proyek
+        showSection('projects', document.querySelector('a[data-target="projects"]'));
 
-        // Formspree handling
-        const form = document.getElementById('contact-form');
-        const formStatus = document.getElementById('form-status');
-
-        form.addEventListener("submit", async (event) => {
+        // Form submit (Formspree)
+        const form=document.getElementById('contact-form');
+        const formStatus=document.getElementById('form-status');
+        form.addEventListener("submit", async(event)=>{
             event.preventDefault();
-            const data = new FormData(event.target);
-            try {
-                const response = await fetch(event.target.action, {
-                    method: form.method,
-                    body: data,
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                });
-                if (response.ok) {
-                    formStatus.innerHTML = '<span class="text-success">Pesan berhasil dikirim! Terima kasih.</span>';
-                    formStatus.classList.remove('d-none');
+            const data=new FormData(form);
+            try{
+                const response=await fetch(form.action,{ method:form.method, body:data, headers:{'Accept':'application/json'} });
+                if(response.ok){
+                    formStatus.textContent="Terima kasih! Pesan berhasil dikirim.";
+                    formStatus.classList.remove('d-none','text-danger');
+                    formStatus.classList.add('text-success');
                     form.reset();
                 } else {
-                    response.json().then(data => {
-                        if (Object.hasOwn(data, 'errors')) {
-                            formStatus.innerHTML = '<span class="text-danger">' + data["errors"].map(error => error["message"]).join(", ") + '</span>';
-                        } else {
-                            formStatus.innerHTML = '<span class="text-danger">Oops! Ada masalah saat mengirim pesan Anda.</span>';
-                        }
-                        formStatus.classList.remove('d-none');
-                    });
+                    formStatus.textContent="Oops! Terjadi kesalahan.";
+                    formStatus.classList.remove('d-none','text-success');
+                    formStatus.classList.add('text-danger');
                 }
-            } catch (error) {
-                formStatus.innerHTML = '<span class="text-danger">Oops! Ada masalah saat mengirim pesan Anda.</span>';
-                formStatus.classList.remove('d-none');
+            } catch(error){
+                formStatus.textContent="Oops! Gagal mengirim.";
+                formStatus.classList.remove('d-none','text-success');
+                formStatus.classList.add('text-danger');
             }
         });
     </script>
