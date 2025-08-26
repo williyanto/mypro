@@ -15,6 +15,8 @@
       padding-top: 56px;
       transition: background 0.3s, color 0.3s;
       scroll-behavior: smooth;
+      background: #ffffff;
+      color: #212529;
     }
     main { flex: 1 0 auto; }
     section {
@@ -58,14 +60,14 @@
     body.dark-mode .project-divider, body.dark-mode hr { border-top-color: #495057; }
     body.dark-mode footer { background: #181a1b; color: #f8f9fa; }
     .dark-toggle-btn {
-      border: none; background: none; color: #fff;
-      font-size: 1.3rem; margin-left: .5rem; cursor: pointer; transition: color 0.3s;
+      border: none; background: none; font-size: 1.3rem; margin-left: .5rem;
+      cursor: pointer; transition: color 0.3s;
     }
-    body.dark-mode .dark-toggle-btn { color: #f8f9fa; }
-    .navbar { transition: background 0.3s, color 0.3s; }
+    .navbar { transition: background 0.3s, color 0.3s; background: #f8f9fa !important; }
+    .navbar .nav-link, .navbar .navbar-brand { color: #212529 !important; }
+    footer { background: #f8f9fa; color: #212529; }
     body.dark-mode .navbar { background: #181a1b !important; }
-    .navbar-nav .nav-link { font-size: 1rem; }
-    footer#contact { width: 100%; background: #181a1b; color: #f8f9fa; text-align: center; }
+    body.dark-mode .navbar .nav-link, body.dark-mode .navbar .navbar-brand { color: #f8f9fa !important; }
     @media (max-width: 767.98px) {
       section { padding: 32px 0; }
       h1, h2 { font-size: 1.5rem; }
@@ -81,7 +83,7 @@
 </head>
 <body>
   <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow">
+  <nav class="navbar navbar-expand-lg fixed-top shadow">
     <div class="container">
       <a class="navbar-brand fw-bold nav-link-custom" href="#projects-section" data-target="projects">SoftWill</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -109,37 +111,12 @@
         <p class="text-center project-time" id="currentDateTime"></p>
         <hr>
 
-        <div class="row g-3">
-          <!-- Ulangi card proyek -->
-          <div class="col-md-4 col-sm-6">
-            <div class="smooth-card p-3 h-100">
-              <div class="project-title"><i class="bi bi-folder"></i> Proyek 1</div>
-              <a href="#" class="project-link" target="_blank">Lihat Proyek</a>
-              <div class="project-divider"></div>
-            </div>
-          </div>
-          <div class="col-md-4 col-sm-6">
-            <div class="smooth-card p-3 h-100">
-              <div class="project-title"><i class="bi bi-folder"></i> Proyek 2</div>
-              <a href="#" class="project-link" target="_blank">Lihat Proyek</a>
-              <div class="project-divider"></div>
-            </div>
-          </div>
-          <div class="col-md-4 col-sm-6">
-            <div class="smooth-card p-3 h-100">
-              <div class="project-title"><i class="bi bi-folder"></i> Proyek 3</div>
-              <a href="#" class="project-link" target="_blank">Lihat Proyek</a>
-              <div class="project-divider"></div>
-            </div>
-          </div>
-          <!-- tambahkan sampai Proyek 10 -->
-          <div class="col-md-4 col-sm-6"><div class="smooth-card p-3 h-100"><div class="project-title"><i class="bi bi-folder"></i> Proyek 4</div><a href="#" class="project-link">Lihat Proyek</a><div class="project-divider"></div></div></div>
-          <div class="col-md-4 col-sm-6"><div class="smooth-card p-3 h-100"><div class="project-title"><i class="bi bi-folder"></i> Proyek 5</div><a href="#" class="project-link">Lihat Proyek</a><div class="project-divider"></div></div></div>
-          <div class="col-md-4 col-sm-6"><div class="smooth-card p-3 h-100"><div class="project-title"><i class="bi bi-folder"></i> Proyek 6</div><a href="#" class="project-link">Lihat Proyek</a><div class="project-divider"></div></div></div>
-          <div class="col-md-4 col-sm-6"><div class="smooth-card p-3 h-100"><div class="project-title"><i class="bi bi-folder"></i> Proyek 7</div><a href="#" class="project-link">Lihat Proyek</a><div class="project-divider"></div></div></div>
-          <div class="col-md-4 col-sm-6"><div class="smooth-card p-3 h-100"><div class="project-title"><i class="bi bi-folder"></i> Proyek 8</div><a href="#" class="project-link">Lihat Proyek</a><div class="project-divider"></div></div></div>
-          <div class="col-md-4 col-sm-6"><div class="smooth-card p-3 h-100"><div class="project-title"><i class="bi bi-folder"></i> Proyek 9</div><a href="#" class="project-link">Lihat Proyek</a><div class="project-divider"></div></div></div>
-          <div class="col-md-4 col-sm-6"><div class="smooth-card p-3 h-100"><div class="project-title"><i class="bi bi-folder"></i> Proyek 10</div><a href="#" class="project-link">Lihat Proyek</a><div class="project-divider"></div></div></div>
+        <div class="row g-3" id="projects-container">
+          <!-- Proyek akan ditambahkan lewat JS -->
+        </div>
+
+        <div class="text-center mt-4">
+          <button id="loadMoreBtn" class="btn btn-primary">Tampilkan Lebih Banyak</button>
         </div>
       </div>
     </section>
@@ -210,8 +187,19 @@
         localStorage.setItem('darkMode', 'off');
       }
     }
-    darkToggleBtn.addEventListener('click', (e)=>{e.stopPropagation(); setDarkMode(!body.classList.contains('dark-mode'));});
-    window.addEventListener('DOMContentLoaded', ()=>{if(localStorage.getItem('darkMode')==='on') setDarkMode(true);});
+    window.addEventListener('DOMContentLoaded', ()=>{
+      const saved = localStorage.getItem('darkMode');
+      if(saved){
+        setDarkMode(saved==='on');
+      } else {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        setDarkMode(prefersDark);
+      }
+    });
+    darkToggleBtn.addEventListener('click', e=>{
+      e.stopPropagation();
+      setDarkMode(!body.classList.contains('dark-mode'));
+    });
 
     // Navbar & section switching
     const sections = {
@@ -253,10 +241,8 @@
 
     // EmailJS init
     (function(){ emailjs.init("NJZHmQ8Fgjg2mx0ov"); })();
-
     const form = document.getElementById("contactForm");
     const formStatus = document.getElementById("form-status");
-
     form.addEventListener("submit", function(e){
       e.preventDefault();
       formStatus.innerHTML = "⏳ Mengirim pesan...";
@@ -265,6 +251,40 @@
         .then(()=>{ formStatus.innerHTML="✅ Pesan berhasil dikirim!"; formStatus.classList.add("text-success"); form.reset(); })
         .catch(err=>{ formStatus.innerHTML="❌ Gagal mengirim pesan."; formStatus.classList.add("text-danger"); console.error(err); });
     });
+
+    // PROYEK: tampil 100 tapi load 20 per klik
+    const totalProjects = 100;
+    const projectsPerPage = 20;
+    let currentIndex = 0;
+    const container = document.getElementById('projects-container');
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+
+    function createProjectCard(index){
+      const col = document.createElement('div');
+      col.className = "col-md-4 col-sm-6";
+      col.innerHTML = `
+        <div class="smooth-card p-3 h-100">
+          <div class="project-title"><i class="bi bi-folder"></i> Proyek ${index}</div>
+          <a href="#" class="project-link" target="_blank">Lihat Proyek</a>
+          <div class="project-divider"></div>
+        </div>
+      `;
+      return col;
+    }
+
+    function loadProjects(){
+      const nextIndex = Math.min(currentIndex + projectsPerPage, totalProjects);
+      for(let i=currentIndex+1; i<=nextIndex; i++){
+        container.appendChild(createProjectCard(i));
+      }
+      currentIndex = nextIndex;
+      if(currentIndex >= totalProjects){
+        loadMoreBtn.style.display = "none";
+      }
+    }
+
+    loadProjects();
+    loadMoreBtn.addEventListener("click", loadProjects);
   </script>
 </body>
 </html>
