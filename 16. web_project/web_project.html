@@ -216,17 +216,17 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="#projects-section" id="brand-link">SoftWill</a>
+            <a class="navbar-brand fw-bold nav-link-custom" href="#projects-section" id="brand-link">SoftWill</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigasi">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item"><a class="nav-link active" href="#projects-section">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#projects-section">Proyek</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#blog-section">Blog</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contact-form-section">Kontak</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom active" href="#projects-section">Home</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#projects-section">Proyek</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#blog-section">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#contact-form-section">Kontak</a></li>
                     <li class="nav-item">
                         <button id="darkToggleBtn" class="dark-toggle-btn" title="Toggle Dark Mode">
                             <i class="bi bi-moon"></i>
@@ -373,26 +373,20 @@
         });
 
         // Tampilkan/Sembunyikan Bagian
-        const projectsSection = document.getElementById('projects-section');
-        const blogSection = document.getElementById('blog-section');
-        const contactFormSection = document.getElementById('contact-form-section');
-        const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+        const sections = {
+            'projects': document.getElementById('projects-section'),
+            'blog': document.getElementById('blog-section'),
+            'contact': document.getElementById('contact-form-section')
+        };
+        const navLinks = document.querySelectorAll('.nav-link-custom');
         const navbarCollapse = document.getElementById('navbarNav');
 
         function showSection(sectionId, element) {
-            projectsSection.style.display = 'none';
-            blogSection.style.display = 'none';
-            contactFormSection.style.display = 'none';
-
-            if (sectionId === 'projects') {
-                projectsSection.style.display = 'block';
-            } else if (sectionId === 'blog') {
-                blogSection.style.display = 'block';
-            } else if (sectionId === 'contact') {
-                contactFormSection.style.display = 'block';
+            for (let id in sections) {
+                sections[id].style.display = 'none';
             }
+            sections[sectionId].style.display = 'block';
 
-            // Atur kelas 'active' pada nav link
             navLinks.forEach(link => {
                 link.classList.remove('active');
             });
@@ -400,7 +394,6 @@
                 element.classList.add('active');
             }
             
-            // Tutup navbar di perangkat seluler
             if (navbarCollapse.classList.contains('show')) {
                 const bsCollapse = new bootstrap.Collapse(navbarCollapse, {
                     toggle: false
@@ -408,48 +401,36 @@
                 bsCollapse.hide();
             }
 
-            // Atur animasi ulang pada smooth-card
             document.querySelectorAll('.smooth-card').forEach(function(el){
                 el.style.animation = "none";
-                el.offsetHeight; // memicu reflow
+                el.offsetHeight;
                 el.style.animation = null;
             });
             
-            // Scroll ke bagian yang dipilih setelah menampilkan
             setTimeout(() => {
                 const targetSection = document.querySelector(`#${sectionId}-section`);
                 if (targetSection) {
                     window.scrollTo({
-                        top: targetSection.offsetTop - 70, // Sesuaikan dengan tinggi navbar
+                        top: targetSection.offsetTop - 70,
                         behavior: 'smooth'
                     });
                 }
             }, 100);
         }
 
-        // Event listeners untuk tombol navigasi
-        document.getElementById('brand-link').addEventListener('click', (e) => {
-            e.preventDefault();
-            const homeLink = document.querySelector('a[href="#projects-section"]');
-            showSection('projects', homeLink);
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                let sectionId = 'projects';
+                if (e.target.href.includes('#blog-section')) {
+                    sectionId = 'blog';
+                } else if (e.target.href.includes('#contact-form-section')) {
+                    sectionId = 'contact';
+                }
+                showSection(sectionId, e.target);
+            });
         });
         
-        document.querySelector('a[href="#projects-section"]').addEventListener('click', (e) => {
-            e.preventDefault();
-            showSection('projects', e.target);
-        });
-
-        document.querySelector('a[href="#blog-section"]').addEventListener('click', (e) => {
-            e.preventDefault();
-            showSection('blog', e.target);
-        });
-
-        document.querySelector('a[href="#contact-form-section"]').addEventListener('click', (e) => {
-            e.preventDefault();
-            showSection('contact', e.target);
-        });
-        
-        // Atur halaman awal
         showSection('projects', document.querySelector('a[href="#projects-section"]'));
 
         // Formspree handling
