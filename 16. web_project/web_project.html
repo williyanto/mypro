@@ -284,6 +284,29 @@
                 font-size: 1em;
             }
         }
+        /* Tambahan agar card pada ringkasan proyek ikut dark mode */
+        body.dark-mode #projects-summary-section .card {
+            background: #23272b;
+            color: #f8f9fa;
+            border-color: #495057;
+        }
+        body.dark-mode #projects-summary-section .card .card-title,
+        body.dark-mode #projects-summary-section .card .card-text {
+            color: #f8f9fa;
+        }
+        body.dark-mode #projects-summary-section .card .btn-outline-primary {
+            color: #f8f9fa;
+            border-color: #0d6efd;
+        }
+        body.dark-mode #projects-summary-section .card .btn-outline-primary:hover {
+            background: #0d6efd;
+            color: #fff;
+            border-color: #0d6efd;
+        }
+        body.dark-mode #projects-summary-section .badge.bg-success {
+            background: #198754;
+            color: #fff;
+        }
     </style>
 </head>
 <body>
@@ -322,6 +345,7 @@
     </nav>
 
     <main>
+        <!-- Section detail proyek di Home -->
         <section id="projects-section">
             <div class="container">
                 <h2 class="text-center mb-4">Proyek-Proyek Saya</h2>
@@ -353,7 +377,53 @@
             </div>
         </section>
 
-        <!-- Blog Section, hidden by default -->
+        <!-- Section ringkasan proyek (navbar Proyek) -->
+        <section id="projects-summary-section" style="display:none;">
+            <div class="container">
+                <h2 class="text-center mb-4">Ringkasan Proyek & Proyek Populer</h2>
+                <div class="row gx-3 gy-3">
+                    <!-- Proyek 1 (populer) -->
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card shadow-sm h-100 animate__animated" style="--anim-delay:.2s;">
+                            <div class="card-body">
+                                <h5 class="card-title d-flex align-items-center gap-2">
+                                    <i class="bi bi-folder"></i> Proyek 1
+                                    <span class="badge bg-success ms-2">Populer</span>
+                                </h5>
+                                <p class="card-text small mb-2">Deskripsi ringkas proyek 1 yang sedang populer dan banyak digunakan.</p>
+                                <a href="[LINK_KE_PROYEK_ANDA_1]" target="_blank" class="btn btn-sm btn-outline-primary">Detail</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Proyek 2 -->
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card shadow-sm h-100 animate__animated" style="--anim-delay:.4s;">
+                            <div class="card-body">
+                                <h5 class="card-title d-flex align-items-center gap-2">
+                                    <i class="bi bi-folder"></i> Proyek 2
+                                </h5>
+                                <p class="card-text small mb-2">Deskripsi ringkas proyek 2, misal aplikasi sederhana atau tools.</p>
+                                <a href="[LINK_KE_PROYEK_ANDA_2]" target="_blank" class="btn btn-sm btn-outline-primary">Detail</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Proyek 3 -->
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card shadow-sm h-100 animate__animated" style="--anim-delay:.6s;">
+                            <div class="card-body">
+                                <h5 class="card-title d-flex align-items-center gap-2">
+                                    <i class="bi bi-folder"></i> Proyek 3
+                                </h5>
+                                <p class="card-text small mb-2">Deskripsi ringkas proyek 3, misal library atau API.</p>
+                                <a href="[LINK_KE_PROYEK_ANDA_3]" target="_blank" class="btn btn-sm btn-outline-primary">Detail</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Blog -->
         <section id="blog-section">
             <div class="container">
                 <h2 class="text-center mb-5">Blog / Artikel</h2>
@@ -449,6 +519,15 @@
         const contactModal = document.getElementById('contactModal');
         const contactModalContent = document.getElementById('contactModalContent');
 
+        // Navbar collapse on menu click (mobile)
+        function closeNavbarOnMenuClick() {
+            const navbarCollapse = document.getElementById('navbarNav');
+            const bsCollapse = bootstrap.Collapse.getOrCreateInstance(navbarCollapse);
+            if (navbarCollapse.classList.contains('show')) {
+                bsCollapse.hide();
+            }
+        }
+
         function setDarkMode(on) {
             if(on) {
                 body.classList.add('dark-mode');
@@ -470,7 +549,7 @@
                 setDarkMode(true);
             }
             setTimeout(function(){
-                document.querySelectorAll('.project-item, .project-title, .project-divider, .blog-card, .blog-title, .blog-meta').forEach(function(el, i){
+                document.querySelectorAll('.project-item, .project-title, .project-divider, .blog-card, .blog-title, .blog-meta, #projects-summary-section .card').forEach(function(el, i){
                     el.style.animationPlayState = "running";
                 });
             }, 100);
@@ -483,31 +562,44 @@
             }
         });
 
-        // Blog/Proyek Section Navigation
+        // Blog/Proyek Section Navigation (Proyek menampilkan ringkasan, bukan detail)
         const blogMenu = document.getElementById('blogMenu');
         const projectsMenu = document.getElementById('projectsMenu');
         const homeMenu = document.getElementById('homeMenu');
         const blogSection = document.getElementById('blog-section');
         const projectsSection = document.getElementById('projects-section');
+        const projectsSummarySection = document.getElementById('projects-summary-section');
 
         function showSection(sectionToShow) {
             if (sectionToShow === 'blog') {
                 blogSection.style.display = 'block';
                 projectsSection.style.display = 'none';
+                projectsSummarySection.style.display = 'none';
                 setTimeout(function(){
                     document.querySelectorAll('#blog-section .blog-card, #blog-section .blog-title, #blog-section .blog-meta').forEach(function(el, i){
+                        el.style.animationPlayState = "running";
+                    });
+                }, 50);
+            } else if (sectionToShow === 'projects-summary') {
+                blogSection.style.display = 'none';
+                projectsSection.style.display = 'none';
+                projectsSummarySection.style.display = 'block';
+                setTimeout(function(){
+                    document.querySelectorAll('#projects-summary-section .card').forEach(function(el){
                         el.style.animationPlayState = "running";
                     });
                 }, 50);
             } else {
                 blogSection.style.display = 'none';
                 projectsSection.style.display = 'block';
+                projectsSummarySection.style.display = 'none';
                 setTimeout(function(){
                     document.querySelectorAll('.project-item, .project-title, .project-divider').forEach(function(el, i){
                         el.style.animationPlayState = "running";
                     });
                 }, 50);
             }
+            closeNavbarOnMenuClick(); // Tutup navbar setelah klik menu
         }
         blogMenu.addEventListener('click', function(e){
             e.preventDefault();
@@ -515,7 +607,7 @@
         });
         projectsMenu.addEventListener('click', function(e){
             e.preventDefault();
-            showSection('projects');
+            showSection('projects-summary');
         });
         homeMenu.addEventListener('click', function(e){
             e.preventDefault();
