@@ -14,7 +14,7 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            padding-top: 0;
+            padding-top: 56px;
             transition: background 0.3s, color 0.3s;
             scroll-behavior: smooth;
         }
@@ -97,7 +97,6 @@
         .project-item {
             margin-bottom: 0.8rem;
         }
-        /* Blog section */
         #blog-section {
             display: none;
         }
@@ -154,17 +153,22 @@
             border: none;
             background: none;
             color: #fff;
-            font-size: 1.8rem;
-            margin-left: 1rem;
+            font-size: 1.3rem;
+            margin-left: 0.5rem;
             cursor: pointer;
-            position: fixed;
-            top: 1rem;
-            right: 1.5rem;
-            z-index: 1000;
             transition: color 0.3s;
         }
         body.dark-mode .dark-toggle-btn {
             color: #f8f9fa;
+        }
+        .navbar {
+            transition: background 0.3s, color 0.3s;
+        }
+        body.dark-mode .navbar {
+            background: #181a1b !important;
+        }
+        .navbar-nav .nav-link {
+            font-size: 1rem;
         }
         footer#contact {
             width: 100%;
@@ -201,17 +205,36 @@
             .blog-title { font-size: 1rem; }
             .blog-card { padding: 0.75rem; }
             .project-title .bi { font-size: 1em; }
-            .dark-toggle-btn { font-size: 1.3rem; right: 1rem; }
+            .dark-toggle-btn { font-size: 1.15rem; }
         }
     </style>
 </head>
 <body>
-    <!-- Tombol Dark Mode -->
-    <button id="darkToggleBtn" class="dark-toggle-btn" title="Toggle Dark Mode">
-        <i class="bi bi-moon"></i>
-    </button>
-    <main>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow">
         <div class="container">
+            <a class="navbar-brand fw-bold" href="#">SoftWill</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigasi">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="#projects-section">Proyek</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#blog-section">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Kontak</a></li>
+                    <li class="nav-item">
+                        <!-- Tombol dark mode dipindahkan ke menu navigasi -->
+                        <button id="darkToggleBtn" class="dark-toggle-btn" title="Toggle Dark Mode">
+                            <i class="bi bi-moon"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <main>
+        <div class="container" style="padding-top:80px">
             <div class="brand-container">
                 <span class="brand-title text-dark">SoftWill</span>
                 <span class="brand-subtitle">software oleh williyanto</span>
@@ -316,7 +339,8 @@
                 localStorage.setItem('darkMode', 'off');
             }
         }
-        darkToggleBtn.addEventListener('click', function() {
+        darkToggleBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
             setDarkMode(!body.classList.contains('dark-mode'));
         });
         window.addEventListener('DOMContentLoaded', function() {
