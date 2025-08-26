@@ -21,7 +21,6 @@
         padding: 0.25rem 0.65rem;
         margin-bottom: 0.5rem;
         font-size: 0.9em;
-        /* Mencegah item terpotong dan pindah ke kolom lain */
         break-inside: avoid;
       }
       .item-number {
@@ -38,10 +37,9 @@
         color: #6c757d;
       }
 
-      /* DIUBAH: Mengaktifkan kembali layout multi-kolom yang responsif */
+      /* DIUBAH: Properti multi-kolom dihapus dari sini */
       #hasilGenerator {
-        column-width: 130px; /* Atur lebar ideal per kolom */
-        column-gap: 1rem;   /* Atur jarak antar kolom */
+        /* Dibiarkan kosong agar kembali ke default (vertikal) */
       }
 
     </style>
@@ -157,7 +155,7 @@
         for (let i = 0; i < jumlahAngka; i++) {
           const angkaAcak = Math.random() * (nilaiMax - nilaiMin) + nilaiMin;
           hasilAngka.push(angkaAcak.toFixed(jumlahDigit));
-          totalAngka += angkaAcak;
+          totalAngka += parseFloat(angkaAcak);
         }
 
         generatedNumbers = [...hasilAngka];
@@ -189,7 +187,13 @@
             hasilContainer.appendChild(item);
         });
 
-        if (generatedNumbers.length > s.length === 0) return;
+        if (generatedNumbers.length > 0) {
+            tombolSalin.style.display = 'block';
+        }
+      });
+
+      document.getElementById('tombolSalin').addEventListener('click', function() {
+        if (generatedNumbers.length === 0) return;
 
         const textToCopy = generatedNumbers.join('\n');
 
