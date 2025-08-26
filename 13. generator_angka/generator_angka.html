@@ -13,7 +13,6 @@
       body {
         background-color: #f8f9fa;
       }
-      /* BARU: Style untuk nomor urut */
       .result-item {
         display: flex;
         align-items: center;
@@ -25,12 +24,12 @@
         font-size: 0.9em;
       }
       .item-number {
-        font-weight: 600;
         color: #6c757d;
         margin-right: 0.4rem;
       }
       .item-value {
         color: #212529;
+        font-weight: 600;
       }
       .footer {
         text-align: center;
@@ -145,15 +144,18 @@
         hasilFooter.style.display = 'block';
         
         let hasilAngka = [];
-        let totalAngka = 0;
+        let totalAngka = 0; // Tetap gunakan angka asli untuk kalkulasi yg akurat
 
         for (let i = 0; i < jumlahAngka; i++) {
           const angkaAcak = Math.random() * (nilaiMax - nilaiMin) + nilaiMin;
-          hasilAngka.push(parseFloat(angkaAcak.toFixed(jumlahDigit)));
-          totalAngka += angkaAcak;
+          
+          // DIUBAH 1: Simpan sebagai Teks (String), bukan Angka (Number)
+          // Hapus parseFloat() agar "0.860" tetap "0.860"
+          hasilAngka.push(angkaAcak.toFixed(jumlahDigit));
+
+          totalAngka += angkaAcak; // Untuk kalkulasi, tetap gunakan angka asli
         }
 
-        // Simpan hanya angkanya saja untuk disalin
         generatedNumbers = [...hasilAngka];
 
         const rataRata = totalAngka / jumlahAngka;
@@ -164,31 +166,26 @@
         hasilMinContainer.textContent = nilaiMinHasil.toFixed(jumlahDigit);
         hasilMaxContainer.textContent = nilaiMaxHasil.toFixed(jumlahDigit);
         
-        // --- BAGIAN YANG DIPERBARUI DIMULAI DI SINI ---
-        hasilContainer.innerHTML = ''; // Kosongkan kontainer
+        hasilContainer.innerHTML = '';
         hasilAngka.forEach((angka, index) => {
-            // Buat elemen div untuk setiap item
             const item = document.createElement('div');
             item.className = 'result-item';
 
-            // Buat elemen span untuk nomor urut
             const numberSpan = document.createElement('span');
             numberSpan.className = 'item-number';
-            numberSpan.textContent = `${index + 1}.`; // index + 1 agar mulai dari 1
+            numberSpan.textContent = `${index + 1}.`;
 
-            // Buat elemen span untuk nilai angka
             const valueSpan = document.createElement('span');
             valueSpan.className = 'item-value';
-            valueSpan.textContent = angka.toFixed(jumlahDigit);
 
-            // Gabungkan nomor dan nilai ke dalam item
+            // DIUBAH 2: Karena 'angka' sudah berupa teks, tidak perlu .toFixed() lagi
+            valueSpan.textContent = angka; 
+
             item.appendChild(numberSpan);
             item.appendChild(valueSpan);
 
-            // Masukkan item ke dalam kontainer hasil
             hasilContainer.appendChild(item);
         });
-        // --- AKHIR BAGIAN YANG DIPERBARUI ---
 
         if (generatedNumbers.length > 0) {
             tombolSalin.style.display = 'block';
@@ -198,7 +195,8 @@
       document.getElementById('tombolSalin').addEventListener('click', function() {
         if (generatedNumbers.length === 0) return;
 
-        // Data yang disalin tetap sama (hanya angka, tanpa nomor)
+        // Karena generatedNumbers sekarang berisi teks yang sudah benar,
+        // fungsi copy akan bekerja dengan sempurna.
         const textToCopy = generatedNumbers.join('\n');
 
         copyToClipboard(textToCopy).then(() => {
