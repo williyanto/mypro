@@ -19,9 +19,10 @@
         background-color: #e9ecef;
         border-radius: 0.375rem;
         padding: 0.25rem 0.65rem;
-        margin-right: 0.5rem;
         margin-bottom: 0.5rem;
         font-size: 0.9em;
+        /* Mencegah item terpotong dan pindah ke kolom lain */
+        break-inside: avoid;
       }
       .item-number {
         color: #6c757d;
@@ -36,6 +37,13 @@
         padding: 1rem 0;
         color: #6c757d;
       }
+
+      /* DIUBAH: Mengaktifkan kembali layout multi-kolom yang responsif */
+      #hasilGenerator {
+        column-width: 130px; /* Atur lebar ideal per kolom */
+        column-gap: 1rem;   /* Atur jarak antar kolom */
+      }
+
     </style>
   </head>
   <body>
@@ -51,7 +59,7 @@
               <div class="row g-3">
                 <div class="col-6"><label for="nilaiTerkecil" class="form-label">Batas Bawah</label><input type="text" class="form-control" id="nilaiTerkecil" value="0.820"></div>
                 <div class="col-6"><label for="nilaiTerbesar" class="form-label">Batas Atas</label><input type="text" class="form-control" id="nilaiTerbesar" value="0.870"></div>
-                <div class="col-6"><label for="banyaknya" class="form-label">Jumlah</label><input type="number" class="form-control" id="banyaknya" value="50"></div>
+                <div class="col-6"><label for="banyaknya" class="form-label">Jumlah</label><input type="number" class="form-control" id="banyaknya" value="60"></div>
                 <div class="col-6"><label for="jumlahDigit" class="form-label">Digit Desimal</label><input type="number" class="form-control" id="jumlahDigit" value="3"></div>
               </div>
               
@@ -77,7 +85,7 @@
                         <i class="bi bi-clipboard"></i> Salin
                     </button>
                 </div>
-                <div id="hasilGenerator" class="p-2 border rounded bg-light d-flex flex-wrap" style="max-height: 250px; overflow-y: auto;">
+                <div id="hasilGenerator" class="p-2 border rounded bg-light" style="max-height: 250px; overflow-y: auto;">
                   </div>
               </div>
             </div>
@@ -181,13 +189,7 @@
             hasilContainer.appendChild(item);
         });
 
-        if (generatedNumbers.length > 0) {
-            tombolSalin.style.display = 'block';
-        }
-      });
-
-      document.getElementById('tombolSalin').addEventListener('click', function() {
-        if (generatedNumbers.length === 0) return;
+        if (generatedNumbers.length > s.length === 0) return;
 
         const textToCopy = generatedNumbers.join('\n');
 
