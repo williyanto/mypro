@@ -77,7 +77,7 @@
                         <i class="bi bi-clipboard"></i> Salin
                     </button>
                 </div>
-                <div id="hasilGenerator" class="p-2 border rounded bg-light d-flex flex-wrap" style="max-height: 150px; overflow-y: auto;">
+                <div id="hasilGenerator" class="p-2 border rounded bg-light d-flex flex-wrap" style="max-height: 250px; overflow-y: auto;">
                   </div>
               </div>
             </div>
@@ -144,16 +144,12 @@
         hasilFooter.style.display = 'block';
         
         let hasilAngka = [];
-        let totalAngka = 0; // Tetap gunakan angka asli untuk kalkulasi yg akurat
+        let totalAngka = 0;
 
         for (let i = 0; i < jumlahAngka; i++) {
           const angkaAcak = Math.random() * (nilaiMax - nilaiMin) + nilaiMin;
-          
-          // DIUBAH 1: Simpan sebagai Teks (String), bukan Angka (Number)
-          // Hapus parseFloat() agar "0.860" tetap "0.860"
           hasilAngka.push(angkaAcak.toFixed(jumlahDigit));
-
-          totalAngka += angkaAcak; // Untuk kalkulasi, tetap gunakan angka asli
+          totalAngka += angkaAcak;
         }
 
         generatedNumbers = [...hasilAngka];
@@ -177,9 +173,7 @@
 
             const valueSpan = document.createElement('span');
             valueSpan.className = 'item-value';
-
-            // DIUBAH 2: Karena 'angka' sudah berupa teks, tidak perlu .toFixed() lagi
-            valueSpan.textContent = angka; 
+            valueSpan.textContent = angka;
 
             item.appendChild(numberSpan);
             item.appendChild(valueSpan);
@@ -195,8 +189,6 @@
       document.getElementById('tombolSalin').addEventListener('click', function() {
         if (generatedNumbers.length === 0) return;
 
-        // Karena generatedNumbers sekarang berisi teks yang sudah benar,
-        // fungsi copy akan bekerja dengan sempurna.
         const textToCopy = generatedNumbers.join('\n');
 
         copyToClipboard(textToCopy).then(() => {
