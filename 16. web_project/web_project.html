@@ -10,16 +10,35 @@
     html, body { height: 100%; }
     body { min-height: 100vh; display: flex; flex-direction: column; padding-top: 56px; transition: background .3s, color .3s; scroll-behavior: smooth; }
     main { flex: 1 0 auto; }
-    section { padding: 60px 0; display: none; transition: background .3s, color .3s; }
-    .smooth-card { opacity:0; transform: translateY(40px) scale(.98); animation: fadeIn .8s forwards; border-radius: 12px; border:1px solid #dee2e6; transition: all .3s ease; }
-    .smooth-card:hover { transform: translateY(-5px); box-shadow: 0 6px 15px rgba(0,0,0,.15); }
+    section { padding: 50px 0; display: none; transition: background .3s, color .3s; }
+
+    /* Kartu Proyek */
+    .smooth-card {
+      opacity:0;
+      transform: translateY(20px);
+      animation: fadeIn .6s forwards;
+      border-bottom: 1px solid #dee2e6;
+      padding: 12px 10px;
+      transition: all .2s ease;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+    .smooth-card:hover {
+      background: #f8f9fa;
+    }
     @keyframes fadeIn { to { opacity:1; transform:none; } }
-    .project-title { font-weight: bold; display:flex; align-items:center; gap:.5rem; font-size:1.1rem; }
-    .project-link { text-decoration:none; color:#0d6efd; font-weight:500; }
+
+    .project-title { font-weight: 500; font-size: 1rem; display:flex; align-items:center; gap:.5rem; }
+    .project-link { font-size:.9rem; text-decoration:none; color:#0d6efd; font-weight:500; }
     .project-link:hover { text-decoration:underline; }
-    .popular-badge { background:#ffc107; padding:2px 8px; border-radius:12px; font-size:.8em; margin-left:10px; }
+
+    /* Mode Gelap */
     body.dark-mode { background:#212529; color:#f8f9fa; }
-    body.dark-mode .smooth-card { background:#23272b; border-color:#343a40; }
+    body.dark-mode .smooth-card { border-color:#444; }
+    body.dark-mode .smooth-card:hover { background:#2a2e32; }
+    
+    .popular-badge { background:#ffc107; padding:2px 8px; border-radius:12px; font-size:.75em; margin-left:10px; }
     .dark-toggle-btn { border:none; background:none; color:#fff; font-size:1.3rem; margin-left:.5rem; cursor:pointer; }
   </style>
 </head>
@@ -49,19 +68,19 @@
     <!-- Semua Proyek -->
     <section id="projects-section">
       <div class="container">
-        <h1 class="text-center mb-5">Semua Proyek</h1>
-        <div class="row g-4">
+        <h1 class="text-center mb-4">Semua Proyek</h1>
+        <div class="row">
           <!-- 10 Proyek -->
-          <div class="col-12 col-md-6 col-lg-4"><div class="smooth-card p-3 h-100"><div class="project-title"><i class="bi bi-folder"></i> Proyek 1</div><a href="#" class="project-link" target="_blank">Lihat Proyek</a></div></div>
-          <div class="col-12 col-md-6 col-lg-4"><div class="smooth-card p-3 h-100"><div class="project-title"><i class="bi bi-folder"></i> Proyek 2</div><a href="#" class="project-link" target="_blank">Lihat Proyek</a></div></div>
-          <div class="col-12 col-md-6 col-lg-4"><div class="smooth-card p-3 h-100"><div class="project-title"><i class="bi bi-folder"></i> Proyek 3</div><a href="#" class="project-link" target="_blank">Lihat Proyek</a></div></div>
-          <div class="col-12 col-md-6 col-lg-4"><div class="smooth-card p-3 h-100"><div class="project-title"><i class="bi bi-folder"></i> Proyek 4</div><a href="#" class="project-link" target="_blank">Lihat Proyek</a></div></div>
-          <div class="col-12 col-md-6 col-lg-4"><div class="smooth-card p-3 h-100"><div class="project-title"><i class="bi bi-folder"></i> Proyek 5</div><a href="#" class="project-link" target="_blank">Lihat Proyek</a></div></div>
-          <div class="col-12 col-md-6 col-lg-4"><div class="smooth-card p-3 h-100"><div class="project-title"><i class="bi bi-folder"></i> Proyek 6</div><a href="#" class="project-link" target="_blank">Lihat Proyek</a></div></div>
-          <div class="col-12 col-md-6 col-lg-4"><div class="smooth-card p-3 h-100"><div class="project-title"><i class="bi bi-folder"></i> Proyek 7</div><a href="#" class="project-link" target="_blank">Lihat Proyek</a></div></div>
-          <div class="col-12 col-md-6 col-lg-4"><div class="smooth-card p-3 h-100"><div class="project-title"><i class="bi bi-folder"></i> Proyek 8</div><a href="#" class="project-link" target="_blank">Lihat Proyek</a></div></div>
-          <div class="col-12 col-md-6 col-lg-4"><div class="smooth-card p-3 h-100"><div class="project-title"><i class="bi bi-folder"></i> Proyek 9</div><a href="#" class="project-link" target="_blank">Lihat Proyek</a></div></div>
-          <div class="col-12 col-md-6 col-lg-4"><div class="smooth-card p-3 h-100"><div class="project-title"><i class="bi bi-folder"></i> Proyek 10</div><a href="#" class="project-link" target="_blank">Lihat Proyek</a></div></div>
+          <div class="col-12 col-md-6 col-lg-4"><div class="smooth-card"><div class="project-title"><i class="bi bi-folder"></i> Proyek 1</div><a href="#" class="project-link">Lihat Proyek</a></div></div>
+          <div class="col-12 col-md-6 col-lg-4"><div class="smooth-card"><div class="project-title"><i class="bi bi-folder"></i> Proyek 2</div><a href="#" class="project-link">Lihat Proyek</a></div></div>
+          <div class="col-12 col-md-6 col-lg-4"><div class="smooth-card"><div class="project-title"><i class="bi bi-folder"></i> Proyek 3</div><a href="#" class="project-link">Lihat Proyek</a></div></div>
+          <div class="col-12 col-md-6 col-lg-4"><div class="smooth-card"><div class="project-title"><i class="bi bi-folder"></i> Proyek 4</div><a href="#" class="project-link">Lihat Proyek</a></div></div>
+          <div class="col-12 col-md-6 col-lg-4"><div class="smooth-card"><div class="project-title"><i class="bi bi-folder"></i> Proyek 5</div><a href="#" class="project-link">Lihat Proyek</a></div></div>
+          <div class="col-12 col-md-6 col-lg-4"><div class="smooth-card"><div class="project-title"><i class="bi bi-folder"></i> Proyek 6</div><a href="#" class="project-link">Lihat Proyek</a></div></div>
+          <div class="col-12 col-md-6 col-lg-4"><div class="smooth-card"><div class="project-title"><i class="bi bi-folder"></i> Proyek 7</div><a href="#" class="project-link">Lihat Proyek</a></div></div>
+          <div class="col-12 col-md-6 col-lg-4"><div class="smooth-card"><div class="project-title"><i class="bi bi-folder"></i> Proyek 8</div><a href="#" class="project-link">Lihat Proyek</a></div></div>
+          <div class="col-12 col-md-6 col-lg-4"><div class="smooth-card"><div class="project-title"><i class="bi bi-folder"></i> Proyek 9</div><a href="#" class="project-link">Lihat Proyek</a></div></div>
+          <div class="col-12 col-md-6 col-lg-4"><div class="smooth-card"><div class="project-title"><i class="bi bi-folder"></i> Proyek 10</div><a href="#" class="project-link">Lihat Proyek</a></div></div>
         </div>
       </div>
     </section>
@@ -69,20 +88,20 @@
     <!-- Proyek Populer -->
     <section id="popular-section">
       <div class="container">
-        <h1 class="text-center mb-5">Proyek Populer</h1>
-        <div class="row g-4">
+        <h1 class="text-center mb-4">Proyek Populer</h1>
+        <div class="row g-3">
           <div class="col-12 col-md-6">
-            <div class="smooth-card p-3 h-100">
+            <div class="smooth-card">
               <div class="project-title"><i class="bi bi-star-fill text-warning"></i> Portofolio Website <span class="popular-badge"><i class="bi bi-fire"></i> Populer</span></div>
               <a href="#" class="project-link">Lihat Proyek</a>
-              <p class="mt-2 mb-0 text-muted">Website portofolio Bootstrap 5 dengan dark mode.</p>
+              <p class="mb-0 text-muted small">Website portofolio Bootstrap 5 dengan dark mode.</p>
             </div>
           </div>
           <div class="col-12 col-md-6">
-            <div class="smooth-card p-3 h-100">
+            <div class="smooth-card">
               <div class="project-title"><i class="bi bi-star-fill text-warning"></i> Aplikasi To-Do List <span class="popular-badge"><i class="bi bi-fire"></i> Populer</span></div>
               <a href="#" class="project-link">Lihat Proyek</a>
-              <p class="mt-2 mb-0 text-muted">Aplikasi manajemen tugas dengan JavaScript.</p>
+              <p class="mb-0 text-muted small">Aplikasi manajemen tugas dengan JavaScript.</p>
             </div>
           </div>
         </div>
@@ -92,13 +111,13 @@
     <!-- Blog -->
     <section id="blog-section">
       <div class="container">
-        <h1 class="text-center mb-5">Blog / Artikel</h1>
-        <div class="row gx-3 gy-3">
+        <h1 class="text-center mb-4">Blog / Artikel</h1>
+        <div class="row g-3">
           <div class="col-12 col-md-6 col-lg-4">
-            <div class="smooth-card p-3 h-100">
-              <div class="blog-title">Cara Membuat Website Portofolio</div>
-              <div class="text-muted mb-2">26 Agustus 2025 | Bootstrap</div>
-              <p>Langkah-langkah membuat website portofolio responsif.</p>
+            <div class="smooth-card">
+              <div class="blog-title fw-bold">Cara Membuat Website Portofolio</div>
+              <div class="text-muted small mb-1">26 Agustus 2025 | Bootstrap</div>
+              <p class="small">Langkah-langkah membuat website portofolio responsif.</p>
             </div>
           </div>
         </div>
@@ -109,18 +128,18 @@
     <section id="contact-form-section">
       <div class="container">
         <h1 class="text-center mb-4">Hubungi Saya</h1>
-        <form class="smooth-card p-4">
-          <div class="mb-3"><label class="form-label">Nama</label><input type="text" class="form-control"></div>
-          <div class="mb-3"><label class="form-label">Email</label><input type="email" class="form-control"></div>
-          <div class="mb-3"><label class="form-label">Pesan</label><textarea class="form-control"></textarea></div>
-          <button class="btn btn-primary">Kirim</button>
+        <form class="smooth-card p-3">
+          <div class="mb-2"><label class="form-label">Nama</label><input type="text" class="form-control form-control-sm"></div>
+          <div class="mb-2"><label class="form-label">Email</label><input type="email" class="form-control form-control-sm"></div>
+          <div class="mb-2"><label class="form-label">Pesan</label><textarea class="form-control form-control-sm"></textarea></div>
+          <button class="btn btn-primary btn-sm">Kirim</button>
         </form>
       </div>
     </section>
   </main>
 
-  <footer class="text-center py-4">
-    <p>© 2025 SoftWill</p>
+  <footer class="text-center py-3">
+    <p class="mb-0">© 2025 SoftWill</p>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -153,8 +172,6 @@
       showSection(l.dataset.target,l);
       closeNavbar(); // auto close di mobile
     }));
-
-    // klik logo juga menutup navbar
     document.querySelector(".navbar-brand").addEventListener("click",e=>{
       e.preventDefault();
       showSection("projects",document.querySelector("a[data-target='projects']"));
