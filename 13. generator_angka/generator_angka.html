@@ -33,13 +33,14 @@
         color: #212529;
         font-weight: 600;
       }
-      .footer {
+      /* BARU: Style untuk footer di dalam card */
+      .card-app-footer {
         text-align: center;
-        padding: 1rem 0;
+        padding-top: 1rem;
+        margin-top: 1.5rem;
+        border-top: 1px solid #dee2e6;
         color: #6c757d;
-      }
-      #hasilGenerator {
-        /* Dibiarkan kosong agar daftar vertikal */
+        font-size: 0.9em;
       }
 
       #hasilMin {
@@ -81,6 +82,10 @@
                   <button type="button" class="btn btn-outline-danger w-100" id="tombolReset">Reset</button>
                 </div>
               </div>
+              
+              <div class="card-app-footer" id="footer-awal">
+                <span>Williyanto Adi 2025</span>
+              </div>
 
             </div>
 
@@ -114,51 +119,40 @@
                   </div>
               </div>
             </div>
-
+            
+            <div class="card-app-footer" id="footer-akhir" style="display: none;">
+                <span>Williyanto Adi 2025</span>
+            </div>
+            
           </div>
         </div>
       </div>
     </div>
 
-    <footer class="footer mt-auto py-3">
-        <div class="container">
-            <span>Williyanto Adi 2025</span>
-        </div>
-    </footer>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script>
       let generatedNumbers = [];
 
-      // --- BAGIAN BARU: Fungsi dan event listener untuk validasi input ---
-
-      // Fungsi ini menghapus semua karakter kecuali angka dan satu titik desimal
+      // --- BAGIAN BARU: Fungsi validasi input ---
       function validateDecimal(event) {
           const input = event.target;
-          // Ganti semua karakter non-digit/non-titik dengan string kosong
           let value = input.value.replace(/[^\d.]/g, '');
-          // Pastikan hanya ada satu titik desimal
           const parts = value.split('.');
           if (parts.length > 2) {
               value = parts[0] + '.' + parts.slice(1).join('');
           }
           input.value = value;
       }
-
-      // Fungsi ini menghapus semua karakter kecuali angka (untuk integer)
       function validateInteger(event) {
           const input = event.target;
           input.value = input.value.replace(/[^\d]/g, '');
       }
-
-      // Terapkan listener ke setiap kolom input
       document.getElementById('nilaiTerkecil').addEventListener('input', validateDecimal);
       document.getElementById('nilaiTerbesar').addEventListener('input', validateDecimal);
       document.getElementById('banyaknya').addEventListener('input', validateInteger);
       document.getElementById('jumlahDigit').addEventListener('input', validateInteger);
-
-      // --- AKHIR BAGIAN BARU ---
-
+      
+      // --- Fungsi copy universal ---
       function copyToClipboard(text) {
         if (navigator.clipboard && window.isSecureContext) {
           return navigator.clipboard.writeText(text);
@@ -178,12 +172,13 @@
         }
       }
 
+      // --- Event listener untuk tombol Generate ---
       document.getElementById('tombolEksekusi').addEventListener('click', function() {
+        // ... (kode validasi dan generate angka tetap sama) ...
         const nilaiMin = parseFloat(document.getElementById('nilaiTerkecil').value);
         const nilaiMax = parseFloat(document.getElementById('nilaiTerbesar').value);
         const jumlahAngka = parseInt(document.getElementById('banyaknya').value);
         const jumlahDigit = parseInt(document.getElementById('jumlahDigit').value);
-        
         const hasilContainer = document.getElementById('hasilGenerator');
         const hasilRataRataContainer = document.getElementById('hasilRataRata');
         const hasilMinContainer = document.getElementById('hasilMin');
@@ -191,41 +186,41 @@
         const hasilFooter = document.getElementById('hasilFooter');
         const tombolSalin = document.getElementById('tombolSalin');
         const tombolUnduh = document.getElementById('tombolUnduh');
-
+        const footerAwal = document.getElementById('footer-awal'); // BARU
+        const footerAkhir = document.getElementById('footer-akhir'); // BARU
         tombolSalin.style.display = 'none';
         tombolUnduh.style.display = 'none';
-        
+
         if (isNaN(nilaiMin) || isNaN(nilaiMax) || isNaN(jumlahAngka) || isNaN(jumlahDigit) || jumlahAngka <= 0 || nilaiMin >= nilaiMax || jumlahDigit < 0) {
-          hasilFooter.style.display = 'block';
-          hasilContainer.innerHTML = '<span class="text-danger p-2">Input tidak valid.</span>';
-          hasilMinContainer.textContent = '-';
-          hasilRataRataContainer.textContent = '-';
-          hasilMaxContainer.textContent = '-';
-          generatedNumbers = [];
-          return;
+            hasilFooter.style.display = 'block';
+            hasilContainer.innerHTML = '<span class="text-danger p-2">Input tidak valid.</span>';
+            hasilMinContainer.textContent = '-';
+            hasilRataRataContainer.textContent = '-';
+            hasilMaxContainer.textContent = '-';
+            generatedNumbers = [];
+            footerAwal.style.display = 'none'; // Sembunyikan footer awal
+            footerAkhir.style.display = 'block'; // Tampilkan footer akhir
+            return;
         }
 
         hasilFooter.style.display = 'block';
-        
+        footerAwal.style.display = 'none'; // Sembunyikan footer awal
+        footerAkhir.style.display = 'block'; // Tampilkan footer akhir
+
         let hasilAngka = [];
         let totalAngka = 0;
-
         for (let i = 0; i < jumlahAngka; i++) {
           const angkaAcak = Math.random() * (nilaiMax - nilaiMin) + nilaiMin;
           hasilAngka.push(angkaAcak.toFixed(jumlahDigit));
           totalAngka += parseFloat(angkaAcak);
         }
-
         generatedNumbers = [...hasilAngka];
-
         const rataRata = totalAngka / jumlahAngka;
         const nilaiMinHasil = Math.min(...hasilAngka);
         const nilaiMaxHasil = Math.max(...hasilAngka);
-        
         hasilRataRataContainer.textContent = rataRata.toFixed(jumlahDigit);
         hasilMinContainer.textContent = nilaiMinHasil.toFixed(jumlahDigit);
         hasilMaxContainer.textContent = nilaiMaxHasil.toFixed(jumlahDigit);
-        
         hasilContainer.innerHTML = '';
         hasilAngka.forEach((angka, index) => {
             const item = document.createElement('div');
@@ -247,35 +242,37 @@
         }
       });
       
+      // --- Event listener untuk tombol Reset ---
       document.getElementById('tombolReset').addEventListener('click', function() {
         document.getElementById('nilaiTerkecil').value = '';
         document.getElementById('nilaiTerbesar').value = '';
         document.getElementById('banyaknya').value = '';
         document.getElementById('jumlahDigit').value = '';
-
         const hasilFooter = document.getElementById('hasilFooter');
         hasilFooter.style.display = 'none';
-
         document.getElementById('hasilMin').textContent = '-';
         document.getElementById('hasilRataRata').textContent = '-';
         document.getElementById('hasilMax').textContent = '-';
         document.getElementById('hasilGenerator').innerHTML = '';
         document.getElementById('tombolSalin').style.display = 'none';
         document.getElementById('tombolUnduh').style.display = 'none';
-
         generatedNumbers = [];
+        
+        // BARU: Atur ulang visibilitas footer
+        document.getElementById('footer-awal').style.display = 'block';
+        document.getElementById('footer-akhir').style.display = 'none';
       });
 
+      // --- Event listener untuk tombol Salin ---
       document.getElementById('tombolSalin').addEventListener('click', function() {
         if (generatedNumbers.length === 0) return;
         const textToCopy = generatedNumbers.join('\n');
         copyToClipboard(textToCopy).then(() => {
-            const originalHtml = this.innerHTML;
             this.innerHTML = `<i class="bi bi-check-lg"></i> Disalin!`;
             this.classList.add('btn-success');
             this.classList.remove('btn-outline-secondary');
             setTimeout(() => {
-                this.innerHTML = originalHtml;
+                this.innerHTML = `<i class="bi bi-clipboard"></i> Salin`;
                 this.classList.remove('btn-success');
                 this.classList.add('btn-outline-secondary');
             }, 2000);
@@ -285,14 +282,13 @@
         });
       });
 
+      // --- Event listener untuk tombol Download ---
       document.getElementById('tombolUnduh').addEventListener('click', function() {
         if (generatedNumbers.length === 0) return;
-
         const data = [
           ["No", "Angka"],
           ...generatedNumbers.map((angka, index) => [index + 1, parseFloat(angka)])
         ];
-
         const ws = XLSX.utils.aoa_to_sheet(data);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Hasil Angka");
