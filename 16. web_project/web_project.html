@@ -89,7 +89,6 @@
             opacity: 0;
             animation: fadeInUp 1s forwards;
         }
-        /* Blog section */
         #blog-section {
             display: none;
         }
@@ -242,7 +241,6 @@
         .project-item, .project-title, .project-divider, .blog-card {
             animation-delay: var(--anim-delay, 0.3s);
         }
-        /* Responsive tweaks */
         @media (max-width: 767.98px) {
             section {
                 padding: 32px 0;
@@ -284,7 +282,6 @@
                 font-size: 1em;
             }
         }
-        /* Tambahan agar card pada ringkasan proyek ikut dark mode */
         body.dark-mode #projects-summary-section .card {
             background: #23272b;
             color: #f8f9fa;
@@ -334,7 +331,6 @@
                         <a class="nav-link" href="#" id="contactMenu" data-bs-toggle="modal" data-bs-target="#contactModal">Kontak</a>
                     </li>
                     <li class="nav-item">
-                        <!-- Tombol Toggle Dark Mode -->
                         <button id="darkToggleBtn" class="dark-toggle-btn" title="Toggle Dark Mode">
                             <i class="bi bi-moon"></i>
                         </button>
@@ -345,7 +341,6 @@
     </nav>
 
     <main>
-        <!-- Section detail proyek di Home -->
         <section id="projects-section">
             <div class="container">
                 <h2 class="text-center mb-4">Proyek-Proyek Saya</h2>
@@ -377,12 +372,10 @@
             </div>
         </section>
 
-        <!-- Section ringkasan proyek (navbar Proyek) -->
         <section id="projects-summary-section" style="display:none;">
             <div class="container">
                 <h2 class="text-center mb-4">Ringkasan Proyek & Proyek Populer</h2>
                 <div class="row gx-3 gy-3">
-                    <!-- Proyek 1 (populer) -->
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="card shadow-sm h-100 animate__animated" style="--anim-delay:.2s;">
                             <div class="card-body">
@@ -395,7 +388,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Proyek 2 -->
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="card shadow-sm h-100 animate__animated" style="--anim-delay:.4s;">
                             <div class="card-body">
@@ -407,7 +399,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Proyek 3 -->
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="card shadow-sm h-100 animate__animated" style="--anim-delay:.6s;">
                             <div class="card-body">
@@ -423,7 +414,6 @@
             </div>
         </section>
 
-        <!-- Section Blog -->
         <section id="blog-section">
             <div class="container">
                 <h2 class="text-center mb-5">Blog / Artikel</h2>
@@ -463,7 +453,6 @@
         </section>
     </main>
 
-    <!-- Kontak Form Modal -->
     <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content" id="contactModalContent">
@@ -502,7 +491,6 @@
                 <a href="#" class="text-white me-3 fs-4"><i class="bi bi-github"></i></a>
                 <a href="#" class="text-white me-3 fs-4"><i class="bi bi-linkedin"></i></a>
                 <a href="#" class="text-white me-3 fs-4"><i class="bi bi-instagram"></i></a>
-                <!-- Icon visitor badge di deretan sosmed -->
                 <span class="me-3 align-middle" style="vertical-align:middle;">
                     <img src="https://visitor-badge.laobi.icu/badge?page_id=williyanto.portofolio"
                         alt="visitor badge" style="height:1.5em;vertical-align:middle;">
@@ -513,13 +501,11 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Toggle dark mode
         const darkToggleBtn = document.getElementById('darkToggleBtn');
         const body = document.body;
         const contactModal = document.getElementById('contactModal');
         const contactModalContent = document.getElementById('contactModalContent');
 
-        // Navbar collapse on menu click (mobile)
         function closeNavbarOnMenuClick() {
             const navbarCollapse = document.getElementById('navbarNav');
             const bsCollapse = bootstrap.Collapse.getOrCreateInstance(navbarCollapse);
@@ -553,6 +539,7 @@
                     el.style.animationPlayState = "running";
                 });
             }, 100);
+            // Tidak membuka navbar/collapse di awal load!
         });
         contactModal.addEventListener('show.bs.modal', function () {
             if(body.classList.contains('dark-mode')) {
@@ -562,7 +549,6 @@
             }
         });
 
-        // Blog/Proyek Section Navigation (Proyek menampilkan ringkasan, bukan detail)
         const blogMenu = document.getElementById('blogMenu');
         const projectsMenu = document.getElementById('projectsMenu');
         const homeMenu = document.getElementById('homeMenu');
@@ -599,7 +585,7 @@
                     });
                 }, 50);
             }
-            closeNavbarOnMenuClick(); // Tutup navbar setelah klik menu
+            closeNavbarOnMenuClick();
         }
         blogMenu.addEventListener('click', function(e){
             e.preventDefault();
@@ -614,10 +600,8 @@
             showSection('projects');
         });
 
-        // Pada awal load, tampilkan projects section saja
-        showSection('projects');
+        showSection('projects'); // Section awal ditampilkan, navbar tetap tertutup di mobile
     </script>
-    <!-- Matomo -->
     <script>
       var _paq = window._paq = window._paq || [];
       _paq.push(['trackPageView']);
@@ -630,6 +614,5 @@
         g.async=true; g.src='https://cdn.matomo.cloud/williyanto.matomo.cloud/matomo.js'; s.parentNode.insertBefore(g,s);
       })();
     </script>
-    <!-- End Matomo Code -->
 </body>
 </html>
