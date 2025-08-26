@@ -14,23 +14,26 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            padding-top: 56px;
+            padding-top: 0;
             transition: background 0.3s, color 0.3s;
+            scroll-behavior: smooth;
         }
         main {
             flex: 1 0 auto;
         }
         section {
             padding: 60px 0;
+            transition: background 0.3s, color 0.3s;
         }
         .brand-container {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
+            margin-bottom: 2rem;
         }
         .brand-title {
             font-weight: bold;
-            font-size: 1.5rem;
+            font-size: 2rem;
             margin-bottom: 0;
             line-height: 1;
             opacity: 0;
@@ -38,7 +41,7 @@
             animation: fadeInLeft 1s forwards 0.3s;
         }
         .brand-subtitle {
-            font-size: 0.65rem;
+            font-size: 0.85rem;
             color: #adb5bd;
             margin-top: 0;
             margin-bottom: 0;
@@ -55,15 +58,24 @@
                 transform: none;
             }
         }
+        .smooth-card {
+            opacity: 0;
+            transform: translateY(40px) scale(0.98);
+            animation: fadeInSmooth 0.8s forwards;
+            transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+        }
+        @keyframes fadeInSmooth {
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
         .project-title {
             font-weight: bold;
             margin-bottom: 0.1rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            opacity: 0;
-            transform: translateY(40px);
-            animation: fadeInUp 0.8s forwards;
         }
         .project-title .bi {
             font-size: 1.2em;
@@ -81,29 +93,21 @@
         .project-divider {
             border-top: 1px solid #dee2e6;
             margin: 0.5rem 0;
-            opacity: 0;
-            animation: fadeInUp 1s forwards;
         }
         .project-item {
-            margin-bottom: 0.2rem;
-            opacity: 0;
-            animation: fadeInUp 1s forwards;
+            margin-bottom: 0.8rem;
         }
+        /* Blog section */
         #blog-section {
             display: none;
         }
         .blog-title {
             font-weight: bold;
             font-size: 1.25rem;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 1s forwards;
         }
         .blog-meta {
             font-size: 0.9rem;
             color: #6c757d;
-            opacity: 0;
-            animation: fadeInUp 1s forwards;
         }
         .blog-card {
             background: #f8f9fa;
@@ -111,65 +115,28 @@
             padding: 1.5rem;
             margin-bottom: 2rem;
             box-shadow: 0 1px 4px rgba(0,0,0,.05);
-            transition: background 0.3s;
-            opacity: 0;
-            transform: scale(0.95);
-            animation: fadeInZoom 0.8s forwards;
+            transition: background 0.3s, color 0.3s, box-shadow 0.3s;
         }
         .blog-card:hover {
             background: #e9ecef;
             box-shadow: 0 4px 20px rgba(0,0,0,.08);
             transform: scale(1.01);
         }
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: none;
-            }
-        }
-        @keyframes fadeInZoom {
-            to {
-                opacity: 1;
-                transform: none;
-            }
-        }
-        body.dark-mode .blog-card {
+        body.dark-mode .blog-card,
+        body.dark-mode .smooth-card {
             background: #23272b;
             color: #f8f9fa;
         }
-        body.dark-mode .blog-card:hover {
+        body.dark-mode .blog-card:hover,
+        body.dark-mode .smooth-card:hover {
             background: #181a1b;
         }
         body.dark-mode .blog-meta {
             color: #adb5bd;
         }
-        .modal-content.dark-mode {
-            background: #212529;
-            color: #f8f9fa;
-        }
-        .modal-content.dark-mode .form-control {
-            background: #343a40;
-            color: #f8f9fa;
-            border-color: #495057;
-        }
-        .modal-content.dark-mode .form-control:focus {
-            background: #212529;
-            color: #f8f9fa;
-            border-color: #0d6efd;
-        }
-        .modal-content.dark-mode .form-label {
-            color: #f8f9fa;
-        }
         body.dark-mode {
             background: #212529;
             color: #f8f9fa;
-        }
-        body.dark-mode .navbar {
-            background: #181a1b !important;
-        }
-        body.dark-mode .brand-title,
-        body.dark-mode .brand-subtitle {
-            color: #f8f9fa !important;
         }
         body.dark-mode section,
         body.dark-mode .contact-section {
@@ -183,36 +150,18 @@
             background: #181a1b !important;
             color: #f8f9fa;
         }
-        body.dark-mode .form-control {
-            background: #343a40;
-            color: #f8f9fa;
-            border-color: #495057;
-        }
-        body.dark-mode .form-control:focus {
-            background: #212529;
-            color: #f8f9fa;
-            border-color: #0d6efd;
-        }
-        body.dark-mode .form-label {
-            color: #f8f9fa;
-        }
-        body.dark-mode .modal-content {
-            background: #212529;
-            color: #f8f9fa;
-        }
-        body.dark-mode .btn-close {
-            filter: invert(1);
-        }
-        body.dark-mode .form-text a {
-            color: #0d6efd;
-        }
         .dark-toggle-btn {
             border: none;
             background: none;
             color: #fff;
-            font-size: 1.25rem;
+            font-size: 1.8rem;
             margin-left: 1rem;
             cursor: pointer;
+            position: fixed;
+            top: 1rem;
+            right: 1.5rem;
+            z-index: 1000;
+            transition: color 0.3s;
         }
         body.dark-mode .dark-toggle-btn {
             color: #f8f9fa;
@@ -238,131 +187,58 @@
             justify-content: center;
             gap: 0.5rem;
         }
-        .project-item, .project-title, .project-divider, .blog-card {
-            animation-delay: var(--anim-delay, 0.3s);
-        }
         @media (max-width: 767.98px) {
-            section {
-                padding: 32px 0;
-            }
-            .brand-title {
-                font-size: 1.2rem;
-            }
-            .blog-card {
-                padding: 1rem;
-                font-size: 0.98em;
-            }
-            .container {
-                padding-left: 8px;
-                padding-right: 8px;
-            }
-            .visitor-stat {
-                flex-direction: column;
-                font-size: 0.9em;
-            }
-            footer#contact .container {
-                padding-left: 0;
-                padding-right: 0;
-            }
+            section { padding: 32px 0; }
+            .brand-title { font-size: 1.2rem; }
+            .blog-card { padding: 1rem; font-size: 0.98em; }
+            .container { padding-left: 8px; padding-right: 8px; }
+            .visitor-stat { flex-direction: column; font-size: 0.9em; }
+            footer#contact .container { padding-left: 0; padding-right: 0; }
         }
         @media (max-width: 575.98px) {
-            .brand-title {
-                font-size: 1rem;
-            }
-            .brand-subtitle {
-                font-size: 0.6rem;
-            }
-            .blog-title {
-                font-size: 1rem;
-            }
-            .blog-card {
-                padding: 0.75rem;
-            }
-            .project-title .bi {
-                font-size: 1em;
-            }
-        }
-        body.dark-mode #projects-summary-section .card {
-            background: #23272b;
-            color: #f8f9fa;
-            border-color: #495057;
-        }
-        body.dark-mode #projects-summary-section .card .card-title,
-        body.dark-mode #projects-summary-section .card .card-text {
-            color: #f8f9fa;
-        }
-        body.dark-mode #projects-summary-section .card .btn-outline-primary {
-            color: #f8f9fa;
-            border-color: #0d6efd;
-        }
-        body.dark-mode #projects-summary-section .card .btn-outline-primary:hover {
-            background: #0d6efd;
-            color: #fff;
-            border-color: #0d6efd;
-        }
-        body.dark-mode #projects-summary-section .badge.bg-success {
-            background: #198754;
-            color: #fff;
+            .brand-title { font-size: 1rem; }
+            .brand-subtitle { font-size: 0.6rem; }
+            .blog-title { font-size: 1rem; }
+            .blog-card { padding: 0.75rem; }
+            .project-title .bi { font-size: 1em; }
+            .dark-toggle-btn { font-size: 1.3rem; right: 1rem; }
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow">
-        <div class="container d-flex align-items-center">
+    <!-- Tombol Dark Mode -->
+    <button id="darkToggleBtn" class="dark-toggle-btn" title="Toggle Dark Mode">
+        <i class="bi bi-moon"></i>
+    </button>
+    <main>
+        <div class="container">
             <div class="brand-container">
-                <span class="brand-title text-white">SoftWill</span>
+                <span class="brand-title text-dark">SoftWill</span>
                 <span class="brand-subtitle">software oleh williyanto</span>
             </div>
-            <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#" id="homeMenu">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" id="projectsMenu">Proyek</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" id="blogMenu">Blog</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" id="contactMenu" data-bs-toggle="modal" data-bs-target="#contactModal">Kontak</a>
-                    </li>
-                    <li class="nav-item">
-                        <button id="darkToggleBtn" class="dark-toggle-btn" title="Toggle Dark Mode">
-                            <i class="bi bi-moon"></i>
-                        </button>
-                    </li>
-                </ul>
-            </div>
         </div>
-    </nav>
-
-    <main>
         <section id="projects-section">
             <div class="container">
                 <h2 class="text-center mb-4">Proyek-Proyek Saya</h2>
                 <div>
-                    <div class="project-item" style="--anim-delay: .2s;">
-                        <div class="project-title" style="--anim-delay: .3s;">
+                    <div class="smooth-card project-item" style="animation-delay:.2s;">
+                        <div class="project-title">
                             <i class="bi bi-folder"></i>
                             Proyek 1
                         </div>
                         <a href="[LINK_KE_PROYEK_ANDA_1]" class="project-link" target="_blank">proyek</a>
                     </div>
-                    <div class="project-divider" style="--anim-delay: .4s;"></div>
-                    <div class="project-item" style="--anim-delay: .5s;">
-                        <div class="project-title" style="--anim-delay: .6s;">
+                    <div class="project-divider"></div>
+                    <div class="smooth-card project-item" style="animation-delay:.4s;">
+                        <div class="project-title">
                             <i class="bi bi-folder"></i>
                             Proyek 2
                         </div>
                         <a href="[LINK_KE_PROYEK_ANDA_2]" class="project-link" target="_blank">proyek</a>
                     </div>
-                    <div class="project-divider" style="--anim-delay: .7s;"></div>
-                    <div class="project-item" style="--anim-delay: .8s;">
-                        <div class="project-title" style="--anim-delay: .9s;">
+                    <div class="project-divider"></div>
+                    <div class="smooth-card project-item" style="animation-delay:.6s;">
+                        <div class="project-title">
                             <i class="bi bi-folder"></i>
                             Proyek 3
                         </div>
@@ -371,57 +247,14 @@
                 </div>
             </div>
         </section>
-
-        <section id="projects-summary-section" style="display:none;">
-            <div class="container">
-                <h2 class="text-center mb-4">Ringkasan Proyek & Proyek Populer</h2>
-                <div class="row gx-3 gy-3">
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="card shadow-sm h-100 animate__animated" style="--anim-delay:.2s;">
-                            <div class="card-body">
-                                <h5 class="card-title d-flex align-items-center gap-2">
-                                    <i class="bi bi-folder"></i> Proyek 1
-                                    <span class="badge bg-success ms-2">Populer</span>
-                                </h5>
-                                <p class="card-text small mb-2">Deskripsi ringkas proyek 1 yang sedang populer dan banyak digunakan.</p>
-                                <a href="[LINK_KE_PROYEK_ANDA_1]" target="_blank" class="btn btn-sm btn-outline-primary">Detail</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="card shadow-sm h-100 animate__animated" style="--anim-delay:.4s;">
-                            <div class="card-body">
-                                <h5 class="card-title d-flex align-items-center gap-2">
-                                    <i class="bi bi-folder"></i> Proyek 2
-                                </h5>
-                                <p class="card-text small mb-2">Deskripsi ringkas proyek 2, misal aplikasi sederhana atau tools.</p>
-                                <a href="[LINK_KE_PROYEK_ANDA_2]" target="_blank" class="btn btn-sm btn-outline-primary">Detail</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="card shadow-sm h-100 animate__animated" style="--anim-delay:.6s;">
-                            <div class="card-body">
-                                <h5 class="card-title d-flex align-items-center gap-2">
-                                    <i class="bi bi-folder"></i> Proyek 3
-                                </h5>
-                                <p class="card-text small mb-2">Deskripsi ringkas proyek 3, misal library atau API.</p>
-                                <a href="[LINK_KE_PROYEK_ANDA_3]" target="_blank" class="btn btn-sm btn-outline-primary">Detail</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <section id="blog-section">
             <div class="container">
                 <h2 class="text-center mb-5">Blog / Artikel</h2>
                 <div class="row gx-3 gy-3">
                     <div class="col-12 col-md-6 col-lg-4">
-                        <div class="blog-card" style="--anim-delay: .2s;">
-                            <div class="blog-title" style="--anim-delay: .3s;">Cara Membuat Website Portofolio Sederhana Dengan Bootstrap</div>
-                            <div class="blog-meta mb-2" style="--anim-delay: .4s;">26 Agustus 2025 | Bootstrap, Tutorial</div>
+                        <div class="smooth-card blog-card" style="animation-delay:.2s;">
+                            <div class="blog-title">Cara Membuat Website Portofolio Sederhana Dengan Bootstrap</div>
+                            <div class="blog-meta mb-2">26 Agustus 2025 | Bootstrap, Tutorial</div>
                             <div>
                                 Pada artikel ini saya membahas langkah-langkah membuat website portofolio sederhana dan responsif menggunakan Bootstrap versi terbaru. Dilengkapi contoh kode dan tips desain!
                             </div>
@@ -429,9 +262,9 @@
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4">
-                        <div class="blog-card" style="--anim-delay: .5s;">
-                            <div class="blog-title" style="--anim-delay: .6s;">Mengaktifkan Fitur Dark Mode Pada Website</div>
-                            <div class="blog-meta mb-2" style="--anim-delay: .7s;">20 Agustus 2025 | CSS, JavaScript</div>
+                        <div class="smooth-card blog-card" style="animation-delay:.4s;">
+                            <div class="blog-title">Mengaktifkan Fitur Dark Mode Pada Website</div>
+                            <div class="blog-meta mb-2">20 Agustus 2025 | CSS, JavaScript</div>
                             <div>
                                 Fitur dark mode kini jadi standar di banyak aplikasi. Simak cara mudah menambahkannya ke website statis menggunakan CSS dan sedikit JavaScript.
                             </div>
@@ -439,9 +272,9 @@
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4">
-                        <div class="blog-card" style="--anim-delay: .8s;">
-                            <div class="blog-title" style="--anim-delay: .9s;">Tips Membuat Kontak Form Yang Efektif</div>
-                            <div class="blog-meta mb-2" style="--anim-delay: 1s;">10 Agustus 2025 | Form, UX</div>
+                        <div class="smooth-card blog-card" style="animation-delay:.6s;">
+                            <div class="blog-title">Tips Membuat Kontak Form Yang Efektif</div>
+                            <div class="blog-meta mb-2">10 Agustus 2025 | Form, UX</div>
                             <div>
                                 Kontak form adalah bagian penting website portofolio. Saya rangkum kiat agar form mudah digunakan dan meningkatkan peluang pesan masuk.
                             </div>
@@ -452,38 +285,6 @@
             </div>
         </section>
     </main>
-
-    <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content" id="contactModalContent">
-          <div class="modal-header">
-            <h5 class="modal-title" id="contactModalLabel">Kontak Saya</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-          </div>
-          <div class="modal-body">
-            <form action="https://formspree.io/f/{YOUR_FORM_ID}" method="POST">
-                <div class="mb-3">
-                    <label for="name" class="form-label">Nama</label>
-                    <input type="text" class="form-control" name="name" id="name" required>
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" name="email" id="email" required>
-                </div>
-                <div class="mb-3">
-                    <label for="message" class="form-label">Pesan</label>
-                    <textarea class="form-control" name="message" id="message" rows="4" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Kirim Pesan</button>
-            </form>
-            <div class="form-text text-center mt-2">
-                Atau kontak langsung via email: <a href="mailto:williyanto@email.com">williyanto@email.com</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <footer id="contact" class="bg-dark text-white text-center py-4">
         <div class="container d-flex flex-column align-items-center">
             <p>&copy; Williyanto Adi 2025</p>
@@ -498,31 +299,19 @@
             </div>
         </div>
     </footer>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Dark Mode
         const darkToggleBtn = document.getElementById('darkToggleBtn');
         const body = document.body;
-        const contactModal = document.getElementById('contactModal');
-        const contactModalContent = document.getElementById('contactModalContent');
-
-        function closeNavbarOnMenuClick() {
-            const navbarCollapse = document.getElementById('navbarNav');
-            const bsCollapse = bootstrap.Collapse.getOrCreateInstance(navbarCollapse);
-            if (navbarCollapse.classList.contains('show')) {
-                bsCollapse.hide();
-            }
-        }
 
         function setDarkMode(on) {
             if(on) {
                 body.classList.add('dark-mode');
-                contactModalContent.classList.add('dark-mode');
                 darkToggleBtn.innerHTML = '<i class="bi bi-brightness-high"></i>';
                 localStorage.setItem('darkMode', 'on');
             } else {
                 body.classList.remove('dark-mode');
-                contactModalContent.classList.remove('dark-mode');
                 darkToggleBtn.innerHTML = '<i class="bi bi-moon"></i>';
                 localStorage.setItem('darkMode', 'off');
             }
@@ -534,73 +323,13 @@
             if(localStorage.getItem('darkMode') === 'on') {
                 setDarkMode(true);
             }
+            // Efek smooth: jalankan animasi pada card saat halaman siap
             setTimeout(function(){
-                document.querySelectorAll('.project-item, .project-title, .project-divider, .blog-card, .blog-title, .blog-meta, #projects-summary-section .card').forEach(function(el, i){
+                document.querySelectorAll('.smooth-card').forEach(function(el){
                     el.style.animationPlayState = "running";
                 });
             }, 100);
-            // Tidak membuka navbar/collapse di awal load!
         });
-        contactModal.addEventListener('show.bs.modal', function () {
-            if(body.classList.contains('dark-mode')) {
-                contactModalContent.classList.add('dark-mode');
-            } else {
-                contactModalContent.classList.remove('dark-mode');
-            }
-        });
-
-        const blogMenu = document.getElementById('blogMenu');
-        const projectsMenu = document.getElementById('projectsMenu');
-        const homeMenu = document.getElementById('homeMenu');
-        const blogSection = document.getElementById('blog-section');
-        const projectsSection = document.getElementById('projects-section');
-        const projectsSummarySection = document.getElementById('projects-summary-section');
-
-        function showSection(sectionToShow) {
-            if (sectionToShow === 'blog') {
-                blogSection.style.display = 'block';
-                projectsSection.style.display = 'none';
-                projectsSummarySection.style.display = 'none';
-                setTimeout(function(){
-                    document.querySelectorAll('#blog-section .blog-card, #blog-section .blog-title, #blog-section .blog-meta').forEach(function(el, i){
-                        el.style.animationPlayState = "running";
-                    });
-                }, 50);
-            } else if (sectionToShow === 'projects-summary') {
-                blogSection.style.display = 'none';
-                projectsSection.style.display = 'none';
-                projectsSummarySection.style.display = 'block';
-                setTimeout(function(){
-                    document.querySelectorAll('#projects-summary-section .card').forEach(function(el){
-                        el.style.animationPlayState = "running";
-                    });
-                }, 50);
-            } else {
-                blogSection.style.display = 'none';
-                projectsSection.style.display = 'block';
-                projectsSummarySection.style.display = 'none';
-                setTimeout(function(){
-                    document.querySelectorAll('.project-item, .project-title, .project-divider').forEach(function(el, i){
-                        el.style.animationPlayState = "running";
-                    });
-                }, 50);
-            }
-            closeNavbarOnMenuClick();
-        }
-        blogMenu.addEventListener('click', function(e){
-            e.preventDefault();
-            showSection('blog');
-        });
-        projectsMenu.addEventListener('click', function(e){
-            e.preventDefault();
-            showSection('projects-summary');
-        });
-        homeMenu.addEventListener('click', function(e){
-            e.preventDefault();
-            showSection('projects');
-        });
-
-        showSection('projects'); // Section awal ditampilkan, navbar tetap tertutup di mobile
     </script>
     <script>
       var _paq = window._paq = window._paq || [];
