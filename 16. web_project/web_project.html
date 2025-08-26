@@ -1,393 +1,204 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <title>Portofolio Saya</title>
-    <style>
-        html, body {
-            height: 100%;
-        }
-        body {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            padding-top: 56px;
-            transition: background 0.3s, color 0.3s;
-            scroll-behavior: smooth;
-            background: #ffffff;
-            color: #212529;
-        }
-        main {
-            flex: 1 0 auto;
-        }
-        section {
-            padding: 60px 0;
-            transition: background 0.3s, color 0.3s;
-        }
-        .smooth-card {
-            opacity: 0;
-            transform: translateY(40px) scale(0.98);
-            animation: fadeInSmooth 0.8s forwards;
-            transition: background 0.3s, color 0.3s, box-shadow 0.3s;
-            background: #ffffff;
-            color: #212529;
-        }
-        @keyframes fadeInSmooth {
-            to {
-                opacity: 1;
-                transform: none;
-            }
-        }
-        .project-title {
-            font-weight: bold;
-            margin-bottom: 0.1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .project-title .bi {
-            font-size: 1.2em;
-            color: #0d6efd;
-        }
-        .project-link {
-            text-decoration: underline;
-            color: #0d6efd;
-            margin-bottom: 0.1rem;
-            display: inline-block;
-        }
-        .project-link:hover {
-            color: #0a58ca;
-        }
-        .project-divider {
-            border-top: 1px solid #dee2e6;
-            margin: 0.5rem 0;
-        }
-        #projects-section, #blog-section, #contact-form-section {
-            display: none;
-        }
-        #projects-section {
-            display: block; /* default */
-        }
-        .blog-title {
-            font-weight: bold;
-            font-size: 1.25rem;
-        }
-        .blog-meta {
-            font-size: 0.9rem;
-            color: #6c757d;
-        }
-        .blog-card {
-            background: #f8f9fa;
-            border-radius: 0.5rem;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 1px 4px rgba(0,0,0,.05);
-            transition: background 0.3s, color 0.3s, box-shadow 0.3s;
-            color: #212529;
-        }
-        .blog-card:hover {
-            background: #e9ecef;
-            box-shadow: 0 4px 20px rgba(0,0,0,.08);
-            transform: scale(1.01);
-        }
-        /* DARK MODE */
-        body.dark-mode {
-            background: #212529;
-            color: #f8f9fa;
-        }
-        body.dark-mode section {
-            background: #212529;
-            color: #f8f9fa;
-        }
-        body.dark-mode .smooth-card,
-        body.dark-mode .blog-card {
-            background: #2c3034;
-            color: #f8f9fa;
-        }
-        body.dark-mode .blog-card:hover,
-        body.dark-mode .smooth-card:hover {
-            background: #181a1b;
-        }
-        body.dark-mode .blog-meta {
-            color: #adb5bd;
-        }
-        body.dark-mode .project-divider {
-            border-top: 1px solid #495057;
-        }
-        body.dark-mode footer {
-            background: #181a1b !important;
-            color: #f8f9fa;
-        }
-        .dark-toggle-btn {
-            border: none;
-            background: none;
-            color: #fff;
-            font-size: 1.3rem;
-            margin-left: 0.5rem;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-        body.dark-mode .dark-toggle-btn {
-            color: #f8f9fa;
-        }
-        .navbar {
-            transition: background 0.3s, color 0.3s;
-        }
-        body.dark-mode .navbar {
-            background: #181a1b !important;
-        }
-        .navbar-nav .nav-link {
-            font-size: 1rem;
-        }
-        footer#contact {
-            width: 100%;
-            background: #181a1b !important;
-            color: #f8f9fa;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        footer#contact .container {
-            width: 100%;
-            max-width: 100vw;
-            margin: 0 auto;
-        }
-        .visitor-stat {
-            margin-top: 10px;
-            margin-bottom: -10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-        @media (max-width: 767.98px) {
-            section { padding: 32px 0; }
-            .blog-card { padding: 1rem; font-size: 0.98em; }
-            .container { padding-left: 8px; padding-right: 8px; }
-            .visitor-stat { flex-direction: column; font-size: 0.9em; }
-            footer#contact .container { padding-left: 0; padding-right: 0; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <title>Portofolio Saya</title>
+  <style>
+    html, body { height: 100%; }
+    body { min-height: 100vh; display: flex; flex-direction: column; padding-top: 56px; transition: background .3s, color .3s; scroll-behavior: smooth; }
+    main { flex: 1 0 auto; }
+    section { padding: 60px 0; display: none; transition: background .3s, color .3s; }
+    .smooth-card { opacity:0; transform: translateY(40px) scale(.98); animation: fadeIn .8s forwards; border-radius: 12px; border:1px solid #dee2e6; transition: all .3s ease; }
+    .smooth-card:hover { transform: translateY(-5px); box-shadow: 0 6px 15px rgba(0,0,0,.15); }
+    @keyframes fadeIn { to { opacity:1; transform:none; } }
+    .project-title { font-weight: bold; display:flex; align-items:center; gap:.5rem; font-size:1.1rem; }
+    .project-link { text-decoration:none; color:#0d6efd; font-weight:500; }
+    .project-link:hover { text-decoration:underline; }
+    .popular-badge { background:#ffc107; padding:2px 8px; border-radius:12px; font-size:.8em; margin-left:10px; }
+    body.dark-mode { background:#212529; color:#f8f9fa; }
+    body.dark-mode .smooth-card { background:#23272b; border-color:#343a40; }
+    .dark-toggle-btn { border:none; background:none; color:#fff; font-size:1.3rem; margin-left:.5rem; cursor:pointer; }
+  </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow">
-        <div class="container">
-            <a class="navbar-brand fw-bold nav-link-custom" href="#projects-section" id="brand-link">SoftWill</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigasi">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item"><a class="nav-link nav-link-custom active" href="#projects-section">Home</a></li>
-                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#projects-section">Proyek</a></li>
-                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#blog-section">Blog</a></li>
-                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#contact-form-section">Kontak</a></li>
-                    <li class="nav-item">
-                        <button id="darkToggleBtn" class="dark-toggle-btn" title="Toggle Dark Mode">
-                            <i class="bi bi-moon"></i>
-                        </button>
-                    </li>
-                </ul>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow">
+    <div class="container">
+      <a class="navbar-brand fw-bold nav-link-custom" href="#projects-section" data-target="projects">SoftWill</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-center">
+          <li class="nav-item"><a class="nav-link nav-link-custom active" href="#projects-section" data-target="projects">Proyek</a></li>
+          <li class="nav-item"><a class="nav-link nav-link-custom" href="#popular-section" data-target="popular">Populer</a></li>
+          <li class="nav-item"><a class="nav-link nav-link-custom" href="#blog-section" data-target="blog">Blog</a></li>
+          <li class="nav-item"><a class="nav-link nav-link-custom" href="#contact-form-section" data-target="contact">Kontak</a></li>
+          <li class="nav-item">
+            <button id="darkToggleBtn" class="dark-toggle-btn"><i class="bi bi-moon"></i></button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Semua Proyek -->
+    <section id="projects-section">
+      <div class="container">
+        <h1 class="text-center mb-5">Semua Proyek</h1>
+        <div class="row g-4">
+          <!-- 10 Proyek -->
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="smooth-card p-3 h-100">
+              <div class="project-title"><i class="bi bi-folder"></i> Proyek 1</div>
+              <a href="#" class="project-link" target="_blank">Lihat Proyek</a>
             </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="smooth-card p-3 h-100">
+              <div class="project-title"><i class="bi bi-folder"></i> Proyek 2</div>
+              <a href="#" class="project-link" target="_blank">Lihat Proyek</a>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="smooth-card p-3 h-100">
+              <div class="project-title"><i class="bi bi-folder"></i> Proyek 3</div>
+              <a href="#" class="project-link" target="_blank">Lihat Proyek</a>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="smooth-card p-3 h-100">
+              <div class="project-title"><i class="bi bi-folder"></i> Proyek 4</div>
+              <a href="#" class="project-link" target="_blank">Lihat Proyek</a>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="smooth-card p-3 h-100">
+              <div class="project-title"><i class="bi bi-folder"></i> Proyek 5</div>
+              <a href="#" class="project-link" target="_blank">Lihat Proyek</a>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="smooth-card p-3 h-100">
+              <div class="project-title"><i class="bi bi-folder"></i> Proyek 6</div>
+              <a href="#" class="project-link" target="_blank">Lihat Proyek</a>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="smooth-card p-3 h-100">
+              <div class="project-title"><i class="bi bi-folder"></i> Proyek 7</div>
+              <a href="#" class="project-link" target="_blank">Lihat Proyek</a>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="smooth-card p-3 h-100">
+              <div class="project-title"><i class="bi bi-folder"></i> Proyek 8</div>
+              <a href="#" class="project-link" target="_blank">Lihat Proyek</a>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="smooth-card p-3 h-100">
+              <div class="project-title"><i class="bi bi-folder"></i> Proyek 9</div>
+              <a href="#" class="project-link" target="_blank">Lihat Proyek</a>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="smooth-card p-3 h-100">
+              <div class="project-title"><i class="bi bi-folder"></i> Proyek 10</div>
+              <a href="#" class="project-link" target="_blank">Lihat Proyek</a>
+            </div>
+          </div>
         </div>
-    </nav>
-    <main>
-        <section id="projects-section">
-            <div class="container">
-                <h2 class="text-center mb-4">Proyek-Proyek Saya</h2>
-                <div>
-                    <div class="smooth-card project-item p-3 mb-3" style="animation-delay:.2s;">
-                        <div class="project-title"><i class="bi bi-folder"></i> Proyek 1</div>
-                        <a href="[LINK_KE_PROYEK_ANDA_1]" class="project-link" target="_blank">proyek</a>
-                    </div>
-                    <div class="smooth-card project-item p-3 mb-3" style="animation-delay:.4s;">
-                        <div class="project-title"><i class="bi bi-folder"></i> Proyek 2</div>
-                        <a href="[LINK_KE_PROYEK_ANDA_2]" class="project-link" target="_blank">proyek</a>
-                    </div>
-                    <div class="smooth-card project-item p-3 mb-3" style="animation-delay:.6s;">
-                        <div class="project-title"><i class="bi bi-folder"></i> Proyek 3</div>
-                        <a href="[LINK_KE_PROYEK_ANDA_3]" class="project-link" target="_blank">proyek</a>
-                    </div>
-                </div>
+      </div>
+    </section>
+
+    <!-- Proyek Populer -->
+    <section id="popular-section">
+      <div class="container">
+        <h1 class="text-center mb-5">Proyek Populer</h1>
+        <div class="row g-4">
+          <div class="col-12 col-md-6">
+            <div class="smooth-card p-3 h-100">
+              <div class="project-title"><i class="bi bi-star-fill text-warning"></i> Portofolio Website 
+                <span class="popular-badge"><i class="bi bi-fire"></i> Populer</span>
+              </div>
+              <a href="#" class="project-link">Lihat Proyek</a>
+              <p class="mt-2 mb-0 text-muted">Website portofolio Bootstrap 5 dengan dark mode.</p>
             </div>
-        </section>
-        <section id="blog-section">
-            <div class="container">
-                <h2 class="text-center mb-5">Blog / Artikel</h2>
-                <div class="row gx-3 gy-3">
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="smooth-card blog-card" style="animation-delay:.2s;">
-                            <div class="blog-title">Cara Membuat Website Portofolio Sederhana Dengan Bootstrap</div>
-                            <div class="blog-meta mb-2">26 Agustus 2025 | Bootstrap, Tutorial</div>
-                            <div>Artikel ini membahas langkah-langkah membuat website portofolio sederhana dengan Bootstrap.</div>
-                            <a href="#" class="btn btn-link mt-2 ps-0">Baca selengkapnya</a>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="smooth-card blog-card" style="animation-delay:.4s;">
-                            <div class="blog-title">Mengaktifkan Fitur Dark Mode Pada Website</div>
-                            <div class="blog-meta mb-2">20 Agustus 2025 | CSS, JavaScript</div>
-                            <div>Fitur dark mode kini jadi standar di banyak aplikasi. Simak cara mudah menambahkannya.</div>
-                            <a href="#" class="btn btn-link mt-2 ps-0">Baca selengkapnya</a>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="smooth-card blog-card" style="animation-delay:.6s;">
-                            <div class="blog-title">Tips Membuat Kontak Form Yang Efektif</div>
-                            <div class="blog-meta mb-2">10 Agustus 2025 | Form, UX</div>
-                            <div>Kontak form adalah bagian penting website portofolio. Simak tips agar lebih efektif.</div>
-                            <a href="#" class="btn btn-link mt-2 ps-0">Baca selengkapnya</a>
-                        </div>
-                    </div>
-                </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="smooth-card p-3 h-100">
+              <div class="project-title"><i class="bi bi-star-fill text-warning"></i> Aplikasi To-Do List 
+                <span class="popular-badge"><i class="bi bi-fire"></i> Populer</span>
+              </div>
+              <a href="#" class="project-link">Lihat Proyek</a>
+              <p class="mt-2 mb-0 text-muted">Aplikasi manajemen tugas dengan JavaScript.</p>
             </div>
-        </section>
-        <section id="contact-form-section">
-            <div class="container">
-                <h2 class="text-center mb-4">Hubungi Saya</h2>
-                <div class="row justify-content-center">
-                    <div class="col-lg-8">
-                        <form id="contact-form" action="https://formspree.io/f/xbjnybqb" method="POST" class="smooth-card p-4">
-                            <div class="mb-3">
-                                <label for="nama" class="form-label">Nama Anda</label>
-                                <input type="text" class="form-control" id="nama" name="nama" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Alamat Email</label>
-                                <input type="email" class="form-control" id="email" name="email" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="pesan" class="form-label">Pesan Anda</label>
-                                <textarea class="form-control" id="pesan" name="pesan" rows="5" required></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Kirim Pesan</button>
-                        </form>
-                        <div id="form-status" class="mt-3 text-center d-none"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-    <footer id="contact" class="bg-dark text-white text-center py-4">
-        <div class="container d-flex flex-column align-items-center">
-            <p>&copy; Williyanto Adi 2025</p>
-            <div>
-                <a href="#" class="text-white me-3 fs-4"><i class="bi bi-github"></i></a>
-                <a href="#" class="text-white me-3 fs-4"><i class="bi bi-linkedin"></i></a>
-                <a href="#" class="text-white me-3 fs-4"><i class="bi bi-instagram"></i></a>
-                <span class="me-3 align-middle">
-                    <img src="https://visitor-badge.laobi.icu/badge?page_id=williyanto.portofolio" alt="visitor badge" style="height:1.5em;">
-                </span>
-            </div>
+          </div>
         </div>
-    </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        const darkToggleBtn = document.getElementById('darkToggleBtn');
-        const body = document.body;
+      </div>
+    </section>
 
-        function setDarkMode(on, save = true) {
-            if(on) {
-                body.classList.add('dark-mode');
-                darkToggleBtn.innerHTML = '<i class="bi bi-brightness-high"></i>';
-                if(save) localStorage.setItem('darkMode', 'on');
-            } else {
-                body.classList.remove('dark-mode');
-                darkToggleBtn.innerHTML = '<i class="bi bi-moon"></i>';
-                if(save) localStorage.setItem('darkMode', 'off');
-            }
-        }
+    <!-- Blog -->
+    <section id="blog-section">
+      <div class="container">
+        <h1 class="text-center mb-5">Blog / Artikel</h1>
+        <div class="row gx-3 gy-3">
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="smooth-card p-3 h-100">
+              <div class="blog-title">Cara Membuat Website Portofolio</div>
+              <div class="text-muted mb-2">26 Agustus 2025 | Bootstrap</div>
+              <p>Langkah-langkah membuat website portofolio responsif.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-        darkToggleBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            setDarkMode(!body.classList.contains('dark-mode'));
-        });
+    <!-- Kontak -->
+    <section id="contact-form-section">
+      <div class="container">
+        <h1 class="text-center mb-4">Hubungi Saya</h1>
+        <form class="smooth-card p-4">
+          <div class="mb-3"><label class="form-label">Nama</label><input type="text" class="form-control"></div>
+          <div class="mb-3"><label class="form-label">Email</label><input type="email" class="form-control"></div>
+          <div class="mb-3"><label class="form-label">Pesan</label><textarea class="form-control"></textarea></div>
+          <button class="btn btn-primary">Kirim</button>
+        </form>
+      </div>
+    </section>
+  </main>
 
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+  <footer class="text-center py-4">
+    <p>© 2025 SoftWill</p>
+  </footer>
 
-        window.addEventListener('DOMContentLoaded', function() {
-            const saved = localStorage.getItem('darkMode');
-            if(saved === 'on') {
-                setDarkMode(true, false);
-            } else if(saved === 'off') {
-                setDarkMode(false, false);
-            } else {
-                setDarkMode(prefersDark.matches, false);
-            }
-        });
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Dark mode toggle
+    const btn=document.getElementById("darkToggleBtn");
+    btn.addEventListener("click",()=>document.body.classList.toggle("dark-mode"));
 
-        prefersDark.addEventListener('change', (e) => {
-            const saved = localStorage.getItem('darkMode');
-            if(!saved) {
-                setDarkMode(e.matches, false);
-            }
-        });
-
-        // NAVIGATION
-        const sections = {
-            'projects': document.getElementById('projects-section'),
-            'blog': document.getElementById('blog-section'),
-            'contact': document.getElementById('contact-form-section')
-        };
-        const navLinks = document.querySelectorAll('.nav-link-custom');
-        const navbarCollapse = document.getElementById('navbarNav');
-
-        function showSection(sectionId, element) {
-            for (let id in sections) {
-                sections[id].style.display = 'none';
-            }
-            sections[sectionId].style.display = 'block';
-            navLinks.forEach(link => link.classList.remove('active'));
-            if (element) element.classList.add('active');
-            if (navbarCollapse.classList.contains('show')) {
-                const bsCollapse = new bootstrap.Collapse(navbarCollapse, { toggle: false });
-                bsCollapse.hide();
-            }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                let sectionId = 'projects';
-                if (e.target.href.includes('#blog-section')) sectionId = 'blog';
-                else if (e.target.href.includes('#contact-form-section')) sectionId = 'contact';
-                showSection(sectionId, e.target);
-            });
-        });
-
-        showSection('projects', document.querySelector('a[href="#projects-section"]'));
-
-        // FORMSPREE
-        const form = document.getElementById('contact-form');
-        const formStatus = document.getElementById('form-status');
-
-        form.addEventListener("submit", async (event) => {
-            event.preventDefault();
-            const data = new FormData(event.target);
-            try {
-                const response = await fetch(event.target.action, {
-                    method: form.method,
-                    body: data,
-                    headers: { 'Accept': 'application/json' }
-                });
-                if (response.ok) {
-                    formStatus.innerHTML = '<span class="text-success">Pesan berhasil dikirim!</span>';
-                    formStatus.classList.remove('d-none');
-                    form.reset();
-                } else {
-                    formStatus.innerHTML = '<span class="text-danger">Oops! Ada masalah.</span>';
-                    formStatus.classList.remove('d-none');
-                }
-            } catch (error) {
-                formStatus.innerHTML = '<span class="text-danger">Oops! Ada masalah.</span>';
-                formStatus.classList.remove('d-none');
-            }
-        });
-    </script>
+    // Show/hide sections
+    const sections={
+      projects:document.getElementById("projects-section"),
+      popular:document.getElementById("popular-section"),
+      blog:document.getElementById("blog-section"),
+      contact:document.getElementById("contact-form-section")
+    };
+    const links=document.querySelectorAll(".nav-link-custom");
+    function showSection(id,el){
+      for(const s in sections) sections[s].style.display="none";
+      sections[id].style.display="block";
+      links.forEach(l=>l.classList.remove("active"));
+      el.classList.add("active");
+    }
+    links.forEach(l=>l.addEventListener("click",e=>{
+      e.preventDefault(); showSection(l.dataset.target,l);
+    }));
+    showSection("projects",document.querySelector("a[data-target='projects']"));
+  </script>
 </body>
 </html>
