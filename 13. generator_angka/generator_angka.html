@@ -67,10 +67,10 @@
             <div class="card-body">
               <p class="card-text text-muted">Isi form di bawah ini untuk menghasilkan angka acak.</p>
               <div class="row g-3">
-                <div class="col-6"><label for="nilaiTerkecil" class="form-label">Batas Bawah</label><input type="text" class="form-control" id="nilaiTerkecil" value="0.820"></div>
-                <div class="col-6"><label for="nilaiTerbesar" class="form-label">Batas Atas</label><input type="text" class="form-control" id="nilaiTerbesar" value="0.870"></div>
-                <div class="col-6"><label for="banyaknya" class="form-label">Jumlah</label><input type="number" class="form-control" id="banyaknya" value="60"></div>
-                <div class="col-6"><label for="jumlahDigit" class="form-label">Digit Desimal</label><input type="number" class="form-control" id="jumlahDigit" value="3"></div>
+                <div class="col-6"><label for="nilaiTerkecil" class="form-label">Batas Bawah</label><input type="text" class="form-control" id="nilaiTerkecil" placeholder="Contoh: 1"></div>
+                <div class="col-6"><label for="nilaiTerbesar" class="form-label">Batas Atas</label><input type="text" class="form-control" id="nilaiTerbesar" placeholder="Contoh: 100"></div>
+                <div class="col-6"><label for="banyaknya" class="form-label">Jumlah</label><input type="number" class="form-control" id="banyaknya" placeholder="Contoh: 50"></div>
+                <div class="col-6"><label for="jumlahDigit" class="form-label">Digit Desimal</label><input type="number" class="form-control" id="jumlahDigit" placeholder="Contoh: 3"></div>
               </div>
               
               <div class="row g-2 mt-4">
@@ -161,11 +161,10 @@
         const hasilMaxContainer = document.getElementById('hasilMax');
         const hasilFooter = document.getElementById('hasilFooter');
         const tombolSalin = document.getElementById('tombolSalin');
-        const tombolUnduh = document.getElementById('tombolUnduh'); // BARU
+        const tombolUnduh = document.getElementById('tombolUnduh');
 
-        // Sembunyikan tombol aksi
         tombolSalin.style.display = 'none';
-        tombolUnduh.style.display = 'none'; // BARU
+        tombolUnduh.style.display = 'none';
         
         if (isNaN(nilaiMin) || isNaN(nilaiMax) || isNaN(jumlahAngka) || isNaN(jumlahDigit) || jumlahAngka <= 0 || nilaiMin >= nilaiMax || jumlahDigit < 0) {
           hasilFooter.style.display = 'block';
@@ -214,16 +213,17 @@
         });
 
         if (generatedNumbers.length > 0) {
-            tombolSalin.style.display = 'block';
-            tombolUnduh.style.display = 'block'; // BARU
+            tombolSalin.style.display = 'inline-block';
+            tombolUnduh.style.display = 'inline-block';
         }
       });
       
       document.getElementById('tombolReset').addEventListener('click', function() {
-        document.getElementById('nilaiTerkecil').value = '0.820';
-        document.getElementById('nilaiTerbesar').value = '0.870';
-        document.getElementById('banyaknya').value = '60';
-        document.getElementById('jumlahDigit').value = '3';
+        // DIUBAH: Mengosongkan nilai form
+        document.getElementById('nilaiTerkecil').value = '';
+        document.getElementById('nilaiTerbesar').value = '';
+        document.getElementById('banyaknya').value = '';
+        document.getElementById('jumlahDigit').value = '';
 
         const hasilFooter = document.getElementById('hasilFooter');
         hasilFooter.style.display = 'none';
@@ -233,7 +233,7 @@
         document.getElementById('hasilMax').textContent = '-';
         document.getElementById('hasilGenerator').innerHTML = '';
         document.getElementById('tombolSalin').style.display = 'none';
-        document.getElementById('tombolUnduh').style.display = 'none'; // BARU
+        document.getElementById('tombolUnduh').style.display = 'none';
 
         generatedNumbers = [];
       });
@@ -257,26 +257,17 @@
         });
       });
 
-      // --- BARU: Event listener untuk tombol download ---
       document.getElementById('tombolUnduh').addEventListener('click', function() {
         if (generatedNumbers.length === 0) return;
 
-        // 1. Siapkan data: Header + baris data
         const data = [
-          ["No", "Angka"], // Header kolom
-          ...generatedNumbers.map((angka, index) => [index + 1, parseFloat(angka)]) // Baris data
+          ["No", "Angka"],
+          ...generatedNumbers.map((angka, index) => [index + 1, parseFloat(angka)])
         ];
 
-        // 2. Buat Worksheet dari data
         const ws = XLSX.utils.aoa_to_sheet(data);
-
-        // 3. Buat Workbook baru
         const wb = XLSX.utils.book_new();
-
-        // 4. Tambahkan Worksheet ke Workbook
-        XLSX.utils.book_append_sheet(wb, ws, "Hasil Angka"); // "Hasil Angka" adalah nama sheet
-
-        // 5. Tulis file dan picu unduhan
+        XLSX.utils.book_append_sheet(wb, ws, "Hasil Angka");
         XLSX.writeFile(wb, "HasilGenerateAngka.xlsx");
       });
       
