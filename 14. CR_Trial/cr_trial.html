@@ -1,64 +1,69 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
-    <title>Pembacaan Alat</title>
-</head>
-<body>
+    <title>Form Input Data</title>
+  </head>
+  <body class="d-flex flex-column min-vh-100">
 
-    <div class="container mt-5">
-        <h1 class="mb-4">Data Pembacaan Alat</h1>
-        <div class="table-responsive">
-            <table class="table table-striped table-bordered">
-                <thead class="table-dark">
-                    <tr>
-                        <th scope="col">Pembacaan Alat</th>
-                        <th scope="col">Panjang</th>
-                        <th scope="col">Penghantar</th>
-                        <th scope="col">Penampang</th>
-                        <th scope="col">Suhu</th>
-                        <th scope="col">Faktor Koreksi Suhu</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Data 1</td>
-                        <td>100 m</td>
-                        <td>Tembaga</td>
-                        <td>2.5 mm²</td>
-                        <td>25°C</td>
-                        <td>1.0</td>
-                    </tr>
-                    <tr>
-                        <td>Data 2</td>
-                        <td>150 m</td>
-                        <td>Aluminium</td>
-                        <td>4 mm²</td>
-                        <td>30°C</td>
-                        <td>0.98</td>
-                    </tr>
-                    <tr>
-                        <td>Data 3</td>
-                        <td>200 m</td>
-                        <td>Tembaga</td>
-                        <td>6 mm²</td>
-                        <td>28°C</td>
-                        <td>0.99</td>
-                    </tr>
-                    </tbody>
-            </table>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Aplikasi Sensor</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Home</a>
+            </li>
+          </ul>
         </div>
+      </div>
+    </nav>
+
+    <div class="container mt-4">
+      <h1 class="mb-4">Input Data Pengukuran</h1>
+      <form>
+        <div class="mb-3">
+          <label for="pembacaanAlat" class="form-label">Pembacaan Alat</label>
+          <input type="text" class="form-control" id="pembacaanAlat" placeholder="Masukkan nilai pembacaan">
+        </div>
+        <div class="mb-3">
+          <label for="panjang" class="form-label">Panjang (meter)</label>
+          <input type="number" class="form-control" id="panjang" placeholder="Masukkan panjang">
+        </div>
+        <div class="mb-3">
+          <label for="penghantar" class="form-label">Penghantar</label>
+          <input type="text" class="form-control" id="penghantar" placeholder="Contoh: Tembaga, Aluminium">
+        </div>
+        <div class="mb-3">
+          <label for="penampang" class="form-label">Penampang (mm²)</label>
+          <input type="number" class="form-control" id="penampang" placeholder="Masukkan luas penampang">
+        </div>
+        <div class="mb-3">
+          <label for="suhu" class="form-label">Suhu (°C)</label>
+          <input type="number" class="form-control" id="suhu" placeholder="Masukkan suhu lingkungan">
+        </div>
+        <div class="mb-3">
+          <label for="faktorKoreksi" class="form-label">Faktor Koreksi Suhu</label>
+          <input type="text" class="form-control" id="faktorKoreksi" placeholder="Masukkan nilai faktor koreksi">
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Submit</button>
+      </form>
     </div>
 
-    <footer class="bg-dark text-white text-center p-3 mt-5">
-        <p class="mb-0">Williyanto Adi</p>
+    <footer class="mt-auto py-3 bg-light text-center">
+      <div class="container">
+        <span class="text-muted">Williyanto Adi</span>
+      </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
-</body>
+  </body>
 </html>
