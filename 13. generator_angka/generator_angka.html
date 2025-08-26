@@ -36,11 +36,24 @@
         padding: 1rem 0;
         color: #6c757d;
       }
-
-      /* DIUBAH: Properti multi-kolom dihapus dari sini */
       #hasilGenerator {
-        /* Dibiarkan kosong agar kembali ke default (vertikal) */
+        /* Dibiarkan kosong agar daftar vertikal */
       }
+
+      /* --- BARU: Menambahkan warna pada hasil statistik --- */
+      #hasilMin {
+        color: red;
+        font-weight: bold;
+      }
+      #hasilRataRata {
+        color: green;
+        font-weight: bold;
+      }
+      #hasilMax {
+        color: blue;
+        font-weight: bold;
+      }
+      /* --- AKHIR BAGIAN BARU --- */
 
     </style>
   </head>
@@ -73,7 +86,11 @@
                   <tr><th>Terkecil</th><th>Rata-Rata</th><th>Terbesar</th></tr>
                 </thead>
                 <tbody>
-                  <tr><td id="hasilMin">-</td><td id="hasilRataRata">-</td><td id="hasilMax">-</td></tr>
+                  <tr>
+                    <td id="hasilMin">-</td>
+                    <td id="hasilRataRata">-</td>
+                    <td id="hasilMax">-</td>
+                  </tr>
                 </tbody>
               </table>
               <div class="mt-3">
