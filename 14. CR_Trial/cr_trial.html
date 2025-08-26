@@ -31,52 +31,60 @@
             <legend class="float-none w-auto px-2 h6">Data Pengukuran</legend>
 
             <div class="row">
-              <div class="col-md-6">
+              <div class="col-6">
                 <div class="mb-3">
                   <label for="pembacaanAlat" class="form-label">Pembacaan Alat</label>
-                  <input type="text" class="form-control" id="pembacaanAlat" placeholder="Masukkan nilai pembacaan">
+                  <input type="text" class="form-control" id="pembacaanAlat" placeholder="Nilai">
                 </div>
               </div>
-              <div class="col-md-6">
+              <div class="col-6">
                 <div class="mb-3">
-                  <label for="panjang" class="form-label">Panjang (meter)</label>
-                  <input type="number" class="form-control" id="panjang" placeholder="Masukkan panjang">
+                  <label for="panjang" class="form-label">Panjang (m)</label>
+                  <input type="number" class="form-control" id="panjang" placeholder="Nilai">
                 </div>
               </div>
             </div>
 
             <div class="row">
-              <div class="col-md-6">
+              <div class="col-6">
                 <div class="mb-3">
                   <label for="suhu" class="form-label">Suhu (°C)</label>
-                  <input type="number" class="form-control" id="suhu" placeholder="Masukkan suhu lingkungan">
+                  <input type="number" class="form-control" id="suhu" placeholder="Nilai">
                 </div>
               </div>
-              <div class="col-md-6">
+              <div class="col-6">
                 <div class="mb-3">
-                  <label for="faktorKoreksi" class="form-label">Faktor Koreksi Suhu</label>
-                  <input type="text" class="form-control" id="faktorKoreksi" placeholder="Masukkan nilai faktor koreksi">
+                  <label for="faktorKoreksi" class="form-label">Faktor Koreksi</label>
+                  <input type="text" class="form-control" id="faktorKoreksi" placeholder="Nilai">
                 </div>
               </div>
             </div>
             
             <div class="row">
-              <div class="col-md-4">
+              <div class="col-4">
                 <div class="mb-3">
                   <label for="penghantar" class="form-label">Penghantar</label>
-                  <input type="text" class="form-control" id="penghantar" placeholder="Contoh: Tembaga">
+                  <select class="form-select" id="penghantar">
+                    <option selected>Pilih...</option>
+                    <option value="CU">CU</option>
+                    <option value="AL">AL</option>
+                  </select>
                 </div>
               </div>
-              <div class="col-md-4">
+              <div class="col-4">
                 <div class="mb-3">
-                  <label for="penampang" class="form-label">Penampang (mm²)</label>
-                  <input type="number" class="form-control" id="penampang" placeholder="Masukkan luas penampang">
+                  <label for="penampang" class="form-label">Penampang</label>
+                  <select class="form-select" id="penampang">
+                    <option selected>Pilih...</option>
+                    <option value="0.5">0.5</option>
+                    <option value="0.75">0.75</option>
+                  </select>
                 </div>
               </div>
-              <div class="col-md-4">
+              <div class="col-4">
                 <div class="mb-3">
                   <label for="spekMax" class="form-label">Spek Max</label>
-                  <input type="text" class="form-control" id="spekMax" placeholder="Masukkan spek maksimal">
+                  <input type="text" class="form-control" id="spekMax" placeholder="Nilai">
                 </div>
               </div>
             </div>
